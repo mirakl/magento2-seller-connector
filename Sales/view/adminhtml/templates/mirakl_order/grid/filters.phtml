@@ -1,0 +1,32 @@
+<?php
+/** @var \MiraklSeller\Sales\Block\Adminhtml\MiraklOrder\Grid\Filters $block */
+$pendingOrdersCount = $block->getPendingOrdersCount();
+$incidentOrdersCount = $block->getOrdersWithIncidentCount();
+?>
+<?php echo $this->getChildHtml('messages') ?>
+<div class="page-main-actions">
+    <span><?php echo __('Orders waiting for your acceptance: ') ?></span>
+    <a href="#" title="<?php echo $block->escapeHtml(__('Filter by orders waiting for your acceptance')) ?>"
+       onclick="addOrdersGridFilter('<?php echo $block->escapeJs(json_encode(['status' => \Mirakl\MMP\Common\Domain\Order\OrderState::WAITING_ACCEPTANCE])) ?>');">
+        <strong><?php echo __('%1 order%2', $pendingOrdersCount, $pendingOrdersCount > 1 ? 's' : ''); ?></strong>
+    </a>
+    <br>
+    <span><?php echo __('Orders with opened incident: ') ?></span>
+    <a href="#" title="<?php echo $block->escapeHtml(__('Filter by orders having opened incidents')) ?>"
+       onclick="addOrdersGridFilter('<?php echo $block->escapeJs(json_encode(['has_incident' => 'true'])) ?>');">
+        <strong><?php echo __('%1 order%2', $incidentOrdersCount, $incidentOrdersCount > 1 ? 's' : ''); ?></strong>
+    </a>
+</div>
+<script type="application/javascript">
+    //<![CDATA[
+    function addOrdersGridFilter(params) {
+        require(['uiRegistry'], function (uiRegistry) {
+            uiRegistry.get('mirakl_seller_order_listing.mirakl_seller_order_listing.listing_top.listing_filters', function (element) {
+                element.setData(JSON.parse(params));
+                element.apply();
+            });
+        });
+        return false;
+    }
+    //]]>
+</script>

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="default">
+        <job name="mirakl_refresh_all_listings" instance="MiraklSeller\Core\Cron\Listing\RefreshAll" method="execute">
+            <schedule>0 * * * *</schedule>
+        </job>
+        <job name="mirakl_export_all_products" instance="MiraklSeller\Core\Cron\Listing\ExportAllProducts" method="execute">
+            <schedule>15 */4 * * *</schedule>
+        </job>
+        <job name="mirakl_export_all_offers" instance="MiraklSeller\Core\Cron\Listing\ExportAllOffers" method="execute">
+            <schedule>45 4 * * *</schedule>
+        </job>
+        <job name="mirakl_export_delta_offers" instance="MiraklSeller\Core\Cron\Listing\ExportDeltaOffers" method="execute">
+            <schedule>*/15 * * * *</schedule>
+        </job>
+        <job name="mirakl_update_all_trackings" instance="MiraklSeller\Core\Cron\Tracking\UpdateAll" method="execute">
+            <schedule>*/15 * * * *</schedule>
+        </job>
+    </group>
+</config>

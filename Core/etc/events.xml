@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="catalog_product_delete_before">
+        <observer name="mirakl_seller" instance="MiraklSeller\Core\Observer\Product\DeleteBeforeObserver" />
+    </event>
+    <event name="controller_action_predispatch_catalog_product_massDelete">
+        <observer name="mirakl_seller" instance="MiraklSeller\Core\Observer\Product\MassDeleteBeforeObserver" />
+    </event>
+</config>

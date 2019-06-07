@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <listingToolbar name="listing_top">
+        <filters name="listing_filters">
+            <filterSelect name="mirakl_seller_order_source" class="MiraklSeller\Sales\Ui\Component\Filters\Type\OrderSource" provider="${ $.parentName }">
+                <settings>
+                    <options class="MiraklSeller\Sales\Ui\Component\Sales\Order\Grid\Column\OrderSource\Options"/>
+                    <caption translate="true">Select...</caption>
+                    <label translate="true">Source</label>
+                    <dataScope>mirakl_seller_order_source</dataScope>
+                </settings>
+            </filterSelect>
+        </filters>
+    </listingToolbar>
+    <columns name="sales_order_columns">
+        <column name="mirakl_seller_order_source" class="MiraklSeller\Sales\Ui\Component\Sales\Order\Grid\Column\OrderSource">
+            <settings>
+                <sortable>false</sortable>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <label translate="true">Source</label>
+            </settings>
+        </column>
+    </columns>
+</listing>

@@ -1,0 +1,247 @@
+<?php
+/** @var \Magento\Framework\View\TemplateEngine\Php $this **/
+/** @var \MiraklSeller\Sales\Block\Adminhtml\MiraklOrder\View $block */
+$_miraklOrder = $block->getMiraklOrder();
+$_customer = $_miraklOrder->getCustomer();
+$_billingAddress = $_customer->getBillingAddress();
+$_shippingAddress = $_customer->getShippingAddress();
+$_currencyCode = $_miraklOrder->getCurrencyIsoCode();
+/** @var \MiraklSeller\Sales\Helper\Data $_miraklSalesHelper */
+$_miraklSalesHelper = $this->helper('MiraklSeller\Sales\Helper\Data');
+?>
+<section class="admin__page-section order-view-account-information">
+    <div class="admin__page-section-title">
+        <span class="title"><?= $block->escapeHtml(__('Order & Account Information')) ?></span>
+    </div>
+    <div class="admin__page-section-content">
+        <div class="admin__page-section-item order-information">
+            <div class="admin__page-section-title">
+                <span class="title"><?= $block->escapeHtml(__('Order Information')) ?></span>
+            </div>
+            <div class="admin__page-section-item-content">
+                <table class="admin__table-secondary order-information-table">
+                    <tbody>
+                        <tr>
+                            <th><?= __('Connection') ?></th>
+                            <td>
+                                <a href="<?= $block->getConnectionUrl() ?>"
+                                   title="<?= $block->escapeHtml(__("Go to connection '%1'", $block->getConnection()->getName())) ?>">
+                                    <?= $block->escapeHtml($block->getConnection()->getName()) ?>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><?= __('Mirakl Order #') ?></th>
+                            <td><?= $block->escapeHtml($_miraklOrder->getId()) ?> <a href="<?= $block->getMiraklOrderUrl() ?>" title="<?= $block->escapeHtml(__('Show in Mirakl')) ?>" target="_blank"><?= __('Show in Mirakl') ?></a></td>
+                        </tr>
+                        <tr>
+                            <th><?= __('Commercial Id') ?></th>
+                            <td><?= $block->escapeHtml($_miraklOrder->getCommercialId()) ?></td>
+                        </tr>
+                        <tr>
+                            <th><?= __('Order Date') ?></th>
+                            <td><?= $block->formatDate($_miraklOrder->getCreatedDate()->format(\DateTime::ISO8601), \IntlDateFormatter::SHORT, true) ?></td>
+                        </tr>
+                        <tr>
+                            <th><?= __('Status') ?></th>
+                            <td><?= $_miraklSalesHelper->getOrderStatusLabel($_miraklOrder) ?></td>
+                        </tr>
+                        <tr>
+                            <th><?= __('Order Lines') ?></th>
+                            <td><?= $_miraklOrder->getOrderLines()->count() ?></td>
+                        </tr>
+                        <tr>
+                            <th><?= __('Total Price') ?></th>
+                            <td><?= $block->formatPrice($block->getGrandTotal(), $_currencyCode) ?></td>
+                        </tr>
+                        <tr>
+                            <th><?= __('Order Total Commission') ?></th>
+                            <td><?= $block->formatPrice($_miraklOrder->getTotalCommission(), $_currencyCode) ?></td>
+                        </tr>
+                        <tr>
+                            <th><?= __('Magento Order #') ?></th>
+                            <td>
+                                <?php if ($_order = $block->getMagentoOrder()): ?>
+                                    <a href="<?= $block->getUrl('sales/order/view', ['order_id' => $_order->getId()]) ?>"
+                                       title="<?= $block->escapeHtml(__("Go to order '%1'", $_order->getIncrementId())) ?>">
+                                        <?= $_order->getIncrementId() ?>
+                                    </a>
+                                <?php else: ?>
+                                    <em><?= __('Not imported in Magento') ?></em>
+                                <?php endif ?>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="admin__page-section-item order-account-information">
+            <div class="admin__page-section-item-title">
+                <span class="title"><?= $block->escapeHtml(__('Customer Information')) ?></span>
+            </div>
+            <div class="admin__page-section-item-content">
+                <table class="admin__table-secondary order-account-information-table">
+                    <tr>
+                        <th><?= $block->escapeHtml(__('Firstname')) ?></th>
+                        <td><?= $block->escapeHtml($_customer->getFirstname()) ?></td>
+                    </tr>
+                    <tr>
+                        <th><?= $block->escapeHtml(__('Lastname')) ?></th>
+                        <td><?= $block->escapeHtml($_customer->getLastname()) ?></td>
+                    </tr>
+                    <tr>
+                        <th><?= $block->escapeHtml(__('Locale')) ?></th>
+                        <td><?= $block->escapeHtml($_customer->getLocale()) ?></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <?php $_additionalFields = $_miraklOrder->getOrderAdditionalFields() ?>
+        <?php if ($_additionalFields && $_additionalFields->count()): ?>
+            <div class="admin__page-section-item order-account-information">
+                <div class="admin__page-section-item-title">
+                    <span class="title"><?= __('Additional Information') ?></span>
+                </div>
+                <div class="admin__page-section-item-content">
+                    <table class="admin__table-secondary order-account-information-table">
+                        <?php /** @var \Mirakl\MMP\Common\Domain\AdditionalFieldValue $_field */ ?>
+                        <?php foreach ($_additionalFields as $_field): ?>
+                            <tr>
+                                <th><?= $_field->getCode() ?></th>
+                                <td><?= $block->escapeHtml(is_array($_field->getValue()) ? implode(', ', $_field->getValue()) : $_field->getValue()) ?></td>
+                            </tr>
+                        <?php endforeach ?>
+                    </table>
+                </div>
+            </div>
+        <?php endif ?>
+    </div>
+</section>
+
+<?php if ($_billingAddress || $_shippingAddress): ?>
+    <section class="admin__page-section order-addresses">
+        <div class="admin__page-section-title">
+            <span class="title"><?= $block->escapeHtml(__('Address Information')) ?></span>
+        </div>
+        <div class="admin__page-section-content">
+            <?php if ($_billingAddress): ?>
+                <div class="admin__page-section-item order-billing-address">
+                    <div class="admin__page-section-item-title">
+                        <span class="title"><?= $block->escapeHtml(__('Billing Address')) ?></span>
+                    </div>
+                    <address>
+                        <?= $_billingAddress->getFirstname() ?> <?= $_billingAddress->getLastname() ?><br>
+                        <?= $_billingAddress->getStreet1() ?><br>
+                        <?php if ($_street2 = $_billingAddress->getStreet2()): ?>
+                            <?= $_street2 ?><br>
+                        <?php endif ?>
+                        <?= $_billingAddress->getZipCode() ?> <?= $_billingAddress->getCity() ?><br>
+                        <?php if ($_countryCode = $_billingAddress->getCountry()): ?>
+                            <?= $block->getCountry($_countryCode) ?><br>
+                        <?php endif ?>
+                        <?php if ($_phone = $_billingAddress->getPhone()): ?>
+                            <?= __('T: %1', $_phone) ?><br>
+                        <?php endif ?>
+                        <?php if ($_phone = $_billingAddress->getPhoneSecondary()): ?>
+                            <?= __('T: %1', $_phone) ?><br>
+                        <?php endif ?>
+                    </address>
+                </div>
+            <?php endif ?>
+
+            <?php if ($_shippingAddress): ?>
+                <div class="admin__page-section-item order-shipping-address">
+                    <div class="admin__page-section-item-title">
+                        <span class="title"><?= $block->escapeHtml(__('Shipping Address')) ?></span>
+                    </div>
+                    <address>
+                        <?= $_shippingAddress->getFirstname() ?> <?= $_shippingAddress->getLastname() ?><br>
+                        <?= $_shippingAddress->getStreet1() ?><br>
+                        <?php if ($_street2 = $_shippingAddress->getStreet2()): ?>
+                            <?= $_street2 ?><br>
+                        <?php endif ?>
+                        <?= $_shippingAddress->getZipCode() ?> <?= $_shippingAddress->getCity() ?><br>
+                        <?php if ($_countryCode = $_shippingAddress->getCountry()): ?>
+                            <?= $block->getCountry($_countryCode) ?><br>
+                        <?php endif ?>
+                        <?php if ($_phone = $_shippingAddress->getPhone()): ?>
+                            <?= __('T: %1', $_phone) ?><br>
+                        <?php endif ?>
+                        <?php if ($_phone = $_shippingAddress->getPhoneSecondary()): ?>
+                            <?= __('T: %1', $_phone) ?><br>
+                        <?php endif ?>
+                    </address>
+                    <?php if ($_shippingAddress->getAdditionalInfo()): ?>
+                        <div><strong><?= $block->escapeHtml($_shippingAddress->getAdditionalInfo()) ?></strong></div>
+                    <?php endif ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    </section>
+<?php endif ?>
+
+<section class="admin__page-section order-view-billing-shipping">
+    <div class="admin__page-section-title">
+        <span class="title"><?= /* @escapeNotVerified */ __('Payment &amp; Shipping Method') ?></span>
+    </div>
+    <div class="admin__page-section-content">
+        <div class="admin__page-section-item order-payment-method">
+            <div class="admin__page-section-item-title">
+                <span class="title"><?= /* @escapeNotVerified */ __('Payment Information') ?></span>
+            </div>
+            <div class="admin__page-section-item-content">
+                <table class="admin__table-secondary">
+                    <tr>
+                        <th><?= $block->escapeHtml(__('Payment Workflow')) ?></th>
+                        <td><?= $_miraklSalesHelper->getPaymentWorkflowLabel($_miraklOrder) ?></td>
+                    </tr>
+                    <?php if ($_paymentDuration = $block->getPaymentDuration()): ?>
+                        <tr>
+                            <th><?= __('Payment Delay') ?></th>
+                            <td><?= $block->escapeHtml(__('%1 days', $_paymentDuration)) ?></td>
+                        </tr>
+                    <?php endif ?>
+                    <tr>
+                        <th><?= $block->escapeHtml(__('Payment Type')) ?></th>
+                        <td><?= $block->escapeHtml($_miraklOrder->getPaymentType()) ?></td>
+                    </tr>
+                    <tr>
+                        <th><?= $block->escapeHtml(__('Currency')) ?></th>
+                        <td><?= $block->escapeHtml($_currencyCode) ?></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="admin__page-section-item order-shipping-method">
+            <div class="admin__page-section-item-title">
+                <span class="title"><?= /* @escapeNotVerified */ __('Shipping Information') ?></span>
+            </div>
+            <div class="admin__page-section-item-content">
+                <table class="admin__table-secondary">
+                    <tr>
+                        <th><?= $block->escapeHtml(__('Shipping Price Excl. Tax')) ?></th>
+                        <td><?= $block->formatPrice($_miraklOrder->getShipping()->getPrice(), $_currencyCode) ?></td>
+                    </tr>
+                    <tr>
+                        <th><?= $block->escapeHtml(__('Shipping Tax')) ?></th>
+                        <td><?= $block->formatPrice($block->getShippingTaxAmount(), $_currencyCode) ?></td>
+                    </tr>
+                    <?php if ($_type = $_miraklOrder->getShipping()->getType()): ?>
+                        <tr>
+                            <td class="label"><?= __('Shipping Type') ?></td>
+                            <td class="value"><?= $block->escapeHtml($_type->getLabel()) ?> (<?= $_type->getCode() ?>)</td>
+                        </tr>
+                    <?php endif ?>
+                    <?php if ($_zone = $_miraklOrder->getShipping()->getZone()): ?>
+                        <tr>
+                            <td class="label"><?= __('Shipping Zone') ?></td>
+                            <td class="value"><?= $block->escapeHtml($_zone->getLabel()) ?> (<?= $_zone->getCode() ?>)</td>
+                        </tr>
+                    <?php endif ?>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>

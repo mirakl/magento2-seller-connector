@@ -1,0 +1,94 @@
+<?php
+/** @var \Magento\Framework\View\TemplateEngine\Php $this **/
+/** @var \MiraklSeller\Sales\Block\Adminhtml\Connection\Switcher $block **/
+$connections = $block->getConnections();
+$currentConnection = $block->getCurrentConnection();
+?>
+<?php if ($currentConnection->getId()): ?>
+    <div class="mirakl-connection-switcher store-switcher">
+        <span class="store-switcher-label"><?= /* @escapeNotVerified */ __('Switch Connection:') ?></span>
+        <div class="actions dropdown closable">
+            <input type="hidden" name="connection_switcher" id="connection_switcher"
+                   data-role="connection-id" data-param="<?= /* @escapeNotVerified */ $block->getConnectionVarName() ?>"
+                   value="<?= $block->escapeHtml($currentConnection->getId()) ?>"
+                   onchange="switchConnection(this);"<?= /* @escapeNotVerified */ $block->getUiId() ?> />
+            <button
+                type="button"
+                class="admin__action-dropdown"
+                data-mage-init='{"dropdown":{}}'
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                id="connection-change-button">
+                <?= /* @escapeNotVerified */ $currentConnection->getName() ?>
+            </button>
+            <ul class="dropdown-menu" data-role="connections-list">
+                <?php /** @var \MiraklSeller\Api\Model\Connection $_connection */ ?>
+                <?php foreach ($connections as $_connection): ?>
+                    <li <?php if ($_connection->getId() == $currentConnection->getId()): ?>class="current"<?php endif ?>>
+                        <a data-role="connection-id" data-value="<?= $block->escapeHtml($_connection->getId()) ?>" href="#"><?= $block->escapeHtml($_connection->getName()) ?></a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    </div>
+
+<script>
+require([
+    'jquery',
+    'Magento_Ui/js/modal/confirm'
+], function(jQuery, confirm) {
+
+    (function($) {
+        var $connectionsList = $('[data-role=connections-list]');
+        $connectionsList.on('click', '[data-value]', function(event) {
+            var val = $(event.target).data('value');
+            var role = $(event.target).data('role');
+            var switcher = $('[data-role='+role+']');
+
+            event.preventDefault();
+
+            if (!switcher.val() || val !== switcher.val()) {
+                switcher.val(val).trigger('change'); // Set the value & trigger event
+            }
+        });
+    })(jQuery);
+
+    function switchConnection(obj) {
+        var switcher = jQuery(obj);
+        var connectionId = switcher.val();
+        var connectionParams = '';
+
+        if (connectionId) {
+            connectionParams = switcher.data('param') + '/' + connectionId + '/';
+        }
+
+        if (obj.switchParams) {
+            connectionParams += obj.switchParams;
+        }
+
+        <?php if ($block->getUseConfirm()): ?>
+            confirm({
+                content:  "<?= /* @escapeNotVerified */ __('Do you really want to switch Mirakl Marketplace connection?') ?>",
+                actions: {
+                    confirm: function() {
+                        reload();
+                    },
+                    cancel: function() {
+                        obj.value = '<?= $block->escapeHtml($currentConnection->getId()) ?>';
+                    }
+                }
+            });
+        <?php else: ?>
+            reload();
+        <?php endif; ?>
+
+        function reload() {
+            var url = '<?= /* @escapeNotVerified */ $block->getSwitchUrl() ?>' + connectionParams;
+            setLocation(url);
+        }
+    }
+
+    window.switchConnection = switchConnection;
+});
+</script>
+<?php endif ?>

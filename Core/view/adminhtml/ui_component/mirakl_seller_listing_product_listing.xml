@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">mirakl_seller_listing_product_listing.product_listing_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <spinner>mirakl_seller_listing_product_listing_columns</spinner>
+        <deps>
+            <dep>mirakl_seller_listing_product_listing.product_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="product_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="cacheRequests" xsi:type="boolean">false</param>
+            </storageConfig>
+            <filterUrlParams>
+                <param name="listing_id">*</param>
+            </filterUrlParams>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>MiraklSeller_Core::listings</aclResource>
+        <dataProvider class="MiraklSeller\Core\Ui\Component\DataProvider\Listing\Product" name="product_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>entity_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <filters name="listing_filters">
+            <settings>
+                <statefull>
+                    <property name="applied" xsi:type="boolean">false</property>
+                </statefull>
+            </settings>
+            <filterSelect name="store_id" provider="${ $.parentName }">
+                <settings>
+                    <options class="Magento\Store\Ui\Component\Listing\Column\Store\Options"/>
+                    <caption translate="true">All Store Views</caption>
+                    <label translate="true">Store View</label>
+                    <dataScope>store_id</dataScope>
+                </settings>
+            </filterSelect>
+        </filters>
+        <massaction name="listing_massaction" component="MiraklSeller_Core/js/form/components/massactions" class="\MiraklSeller\Core\Ui\Component\Listing\MassAction">
+            <action name="new">
+                <settings>
+                    <confirm>
+                        <message translate="true">Are you sure?</message>
+                        <title translate="true">Confirm</title>
+                    </confirm>
+                    <url path="mirakl_seller/listingProduct/massNewOffer"/>
+                    <type>new</type>
+                    <label translate="true">Mark as Export</label>
+                </settings>
+            </action>
+            <action name="delete">
+                <settings>
+                    <confirm>
+                        <message translate="true">Are you sure?</message>
+                        <title translate="true">Confirm</title>
+                    </confirm>
+                    <url path="mirakl_seller/listingProduct/massDeleteOffer"/>
+                    <type>delete</type>
+                    <label translate="true">Mark as Delete</label>
+                </settings>
+            </action>
+        </massaction>
+        <paging name="listing_paging"/>
+    </listingToolbar>
+    <columns name="mirakl_seller_listing_product_listing_columns" class="Magento\Catalog\Ui\Component\Listing\Columns" component="MiraklSeller_Core/js/form/components/listing">
+        <settings>
+            <childDefaults>
+                <param name="fieldAction" xsi:type="array">
+                    <item name="provider" xsi:type="string">product_listing.product_listing.product_columns.actions</item>
+                    <item name="target" xsi:type="string">applyAction</item>
+                    <item name="params" xsi:type="array">
+                        <item name="0" xsi:type="string">edit</item>
+                        <item name="1" xsi:type="string">${ $.$data.rowIndex }</item>
+                    </item>
+                </param>
+            </childDefaults>
+        </settings>
+        <selectionsColumn name="ids" sortOrder="0">
+            <settings>
+                <indexField>entity_id</indexField>
+            </settings>
+        </selectionsColumn>
+        <column name="entity_id" sortOrder="10">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">ID</label>
+                <sorting>asc</sorting>
+            </settings>
+        </column>
+        <column name="thumbnail" class="Magento\Catalog\Ui\Component\Listing\Columns\Thumbnail" component="Magento_Ui/js/grid/columns/thumbnail" sortOrder="20">
+            <settings>
+                <altField>name</altField>
+                <hasPreview>1</hasPreview>
+                <addField>true</addField>
+                <label translate="true">Thumbnail</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="name" sortOrder="30">
+            <settings>
+                <addField>true</addField>
+                <filter>text</filter>
+                <label translate="true">Name</label>
+            </settings>
+        </column>
+        <column name="product_import_id" sortOrder="32">
+            <settings>
+                <addField>true</addField>
+                <filter>textRange</filter>
+                <label translate="true">Product Import Id</label>
+            </settings>
+        </column>
+        <column name="product_import_status" sortOrder="33" class="\MiraklSeller\Core\Ui\Component\Listing\Product\Column\ImportStatus">
+            <settings>
+                <addField>true</addField>
+                <options class="MiraklSeller\Core\Ui\Component\Offer\Column\ProductStatus"/>
+                <filter>select</filter>
+                <dataType>select</dataType>
+                <label translate="true">Product Status</label>
+                <bodyTmpl>mirakl_seller_core/grid/cells/html-with-overflow</bodyTmpl>
+            </settings>
+        </column>
+        <column name="product_import_message" sortOrder="34" class="\MiraklSeller\Core\Ui\Component\Listing\Product\Column\ImportMessage">
+            <settings>
+                <addField>true</addField>
+                <filter>text</filter>
+                <label translate="true">Product Import Message</label>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+            </settings>
+        </column>
+        <column name="offer_import_id" sortOrder="36">
+            <settings>
+                <addField>true</addField>
+                <filter>textRange</filter>
+                <label translate="true"><![CDATA[Prices & Stocks Import Id]]></label>
+            </settings>
+        </column>
+        <column name="offer_import_status" sortOrder="37" class="\MiraklSeller\Core\Ui\Component\Listing\Product\Column\ImportStatus">
+            <settings>
+                <addField>true</addField>
+                <options class="MiraklSeller\Core\Ui\Component\Offer\Column\OfferStatus"/>
+                <filter>select</filter>
+                <dataType>select</dataType>
+                <label translate="true"><![CDATA[Prices & Stocks Status]]></label>
+                <bodyTmpl>mirakl_seller_core/grid/cells/html-with-overflow</bodyTmpl>
+            </settings>
+        </column>
+        <column name="offer_error_message" sortOrder="38" class="\MiraklSeller\Core\Ui\Component\Listing\Product\Column\ImportMessage">
+            <settings>
+                <addField>true</addField>
+                <filter>text</filter>
+                <label translate="true"><![CDATA[Prices & Stocks Import Message]]></label>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+            </settings>
+        </column>
+        <column name="type_id" component="Magento_Ui/js/grid/columns/select" sortOrder="40">
+            <settings>
+                <options class="Magento\Catalog\Model\Product\Type"/>
+                <filter>select</filter>
+                <dataType>select</dataType>
+                <label translate="true">Type</label>
+            </settings>
+        </column>
+        <column name="attribute_set_id" component="Magento_Ui/js/grid/columns/select" sortOrder="50">
+            <settings>
+                <options class="Magento\Catalog\Model\Product\AttributeSet\Options"/>
+                <filter>select</filter>
+                <dataType>select</dataType>
+                <label translate="true">Attribute Set</label>
+            </settings>
+        </column>
+        <column name="sku" sortOrder="60">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">SKU</label>
+            </settings>
+        </column>
+        <column name="price" class="Magento\Catalog\Ui\Component\Listing\Columns\Price" sortOrder="70">
+            <settings>
+                <addField>true</addField>
+                <filter>textRange</filter>
+                <label translate="true">Price</label>
+            </settings>
+        </column>
+        <column name="discount_price" class="Magento\Catalog\Ui\Component\Listing\Columns\Price" sortOrder="73">
+            <settings>
+                <addField>true</addField>
+                <filter>textRange</filter>
+                <label translate="true">Discount Price</label>
+            </settings>
+        </column>
+        <column name="discount_start_date" sortOrder="75">
+            <settings>
+                <addField>true</addField>
+                <filter>false</filter>
+                <dataType>date</dataType>
+                <label translate="true">Discount Start Date</label>
+            </settings>
+        </column>
+        <column name="discount_end_date" sortOrder="77">
+            <settings>
+                <addField>true</addField>
+                <filter>false</filter>
+                <dataType>date</dataType>
+                <label translate="true">Discount End Date</label>
+            </settings>
+        </column>
+        <column name="qty" sortOrder="77">
+            <settings>
+                <addField>true</addField>
+                <filter>textRange</filter>
+                <label translate="true">Qty</label>
+            </settings>
+        </column>
+        <column name="visibility" component="Magento_Ui/js/grid/columns/select" sortOrder="80">
+            <settings>
+                <addField>true</addField>
+                <options class="Magento\Catalog\Model\Product\Visibility"/>
+                <filter>select</filter>
+                <dataType>select</dataType>
+                <label translate="true">Visibility</label>
+            </settings>
+        </column>
+        <column name="status" component="Magento_Ui/js/grid/columns/select" sortOrder="90">
+            <settings>
+                <addField>true</addField>
+                <options class="Magento\Catalog\Model\Product\Attribute\Source\Status"/>
+                <filter>select</filter>
+                <dataType>select</dataType>
+                <label translate="true">Status</label>
+            </settings>
+        </column>
+        <column name="websites" class="Magento\Catalog\Ui\Component\Listing\Columns\Websites" sortOrder="100">
+            <settings>
+                <addField>true</addField>
+                <options class="Magento\Store\Model\ResourceModel\Website\Collection"/>
+                <dataType>text</dataType>
+                <label translate="true">Websites</label>
+            </settings>
+        </column>
+        <actionsColumn name="actions" class="Magento\Catalog\Ui\Component\Listing\Columns\ProductActions" sortOrder="200">
+            <settings>
+                <indexField>entity_id</indexField>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>

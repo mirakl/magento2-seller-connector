@@ -1,0 +1,107 @@
+<?php
+/**
+ * @var \Magento\Framework\View\TemplateEngine\Php $this
+ * @var \MiraklSeller\Process\Block\Adminhtml\Process\View $block
+ * @var \MiraklSeller\Process\Helper\Data $helper
+ */
+$process = $block->getProcess();
+$helper = $this->helper('MiraklSeller\Process\Helper\Data');
+?>
+<section class="admin__page-section">
+    <div class="admin__page-section-title">
+        <strong class="title"><?php /* @escapeNotVerified */ echo __('Process Information') ?></strong>
+    </div>
+    <div class="admin__page-section-content">
+        <table class="admin__table-secondary">
+            <tbody>
+                <tr>
+                    <th><?php /* @escapeNotVerified */ echo __('Type') ?></th>
+                    <td><?php /* @escapeNotVerified */ echo $process->getType() ?></td>
+                </tr>
+                <tr>
+                    <th><?php /* @escapeNotVerified */ echo __('Name') ?></th>
+                    <td><?php /* @escapeNotVerified */ echo $process->getName() ?></td>
+                </tr>
+                <tr>
+                    <th><?php /* @escapeNotVerified */ echo __('Date') ?></th>
+                    <td><?php /* @escapeNotVerified */ echo $block->formatDate($process->getCreatedAt(), \IntlDateFormatter::MEDIUM, true) ?></td>
+                </tr>
+                <tr>
+                    <th><?php /* @escapeNotVerified */ echo __('Duration') ?></th>
+                    <td><?php /* @escapeNotVerified */ echo $helper->formatDuration($process->getDuration()) ?></td>
+                </tr>
+                <?php if ($url = $process->getDownloadFileUrl()): ?>
+                    <tr>
+                        <td><?php /* @escapeNotVerified */ echo __('File') ?></td>
+                        <td>
+                            <a href="<?php /* @escapeNotVerified */ echo $url ?>" title="<?php /* @escapeNotVerified */ echo $block->escapeHtml(__('Download')) ?>"><?php /* @escapeNotVerified */ echo $block->escapeHtml(__('Download')) ?></a><?php if ($fileSize = $process->getFileSizeFormatted('&nbsp;')): ?>&nbsp;(<?php echo $fileSize ?>)<?php endif ?>
+                            <?php if ($process->canShowFile()): ?>
+                                <?php /* @escapeNotVerified */ echo __('or') ?> <a target="_blank" href="<?php /* @escapeNotVerified */ echo $block->getUrl('*/*/showFile', ['id' => $process->getId()]) ?>" title="<?php /* @escapeNotVerified */ echo $block->escapeHtml(__('Open in Browser')) ?>"><?php /* @escapeNotVerified */ echo $block->escapeHtml(__('open in browser')) ?></a>
+                            <?php endif ?>
+                        </td>
+                    </tr>
+                <?php endif ?>
+                <tr>
+                    <td><?php /* @escapeNotVerified */ echo __('Status') ?></td>
+                    <td><p class="report-status"><span class="<?php /* @escapeNotVerified */ echo $process->getStatusClass() ?>"><span><?php /* @escapeNotVerified */ echo __($process->getStatus()) ?></span></span></p></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="admin__page-section-title">
+        <strong class="title"><?php /* @escapeNotVerified */ echo __('Output') ?></strong>
+    </div>
+    <div class="admin__page-section-content report-output">
+        <?php if (!$process->getOutput()): ?>
+            <?php /* @escapeNotVerified */ echo __('This process has not generated any output.') ?>
+        <?php else: ?>
+            <p class="report-output-actions">
+                <a href="#" onclick="jQuery('.report-output td.line').toggleClass('pre'); return false;"><?php /* @escapeNotVerified */ echo __('Toggle Text Wrapping') ?></a>
+                | <a href="#" onclick="jQuery('#report-output-block').scrollTop(jQuery('#report-output-block')[0].scrollHeight); return false;"><?php /* @escapeNotVerified */ echo __('Scroll to Bottom') ?></a>
+                | <a href="#" onclick="jQuery('#report-output-block').scrollTop(0); return false;"><?php /* @escapeNotVerified */ echo __('Scroll to Top') ?></a>
+            </p>
+            <div id="report-output-block" class="report-output-content">
+                <table>
+                    <?php foreach (explode("\n", $process->getOutput()) as $i => $line): ?>
+                        <tr>
+                            <td class="num"><?php /* @escapeNotVerified */ echo $i + 1 ?></td>
+                            <td class="line"><?php /* @escapeNotVerified */ echo $line ?></td>
+                        </tr>
+                    <?php endforeach ?>
+                </table>
+            </div>
+        <?php endif ?>
+    </div>
+
+    <?php if ($process->getMiraklStatus()): ?>
+        <div class="admin__page-section-title">
+            <strong class="title"><?php /* @escapeNotVerified */ echo __('Mirakl Information') ?></strong>
+        </div>
+        <div class="admin__page-section-content">
+            <table class="admin__table-secondary">
+                <tbody>
+                    <tr>
+                        <th><?php /* @escapeNotVerified */ echo __('Mirakl API Status') ?></th>
+                        <td><p class="report-status"><span class="<?php /* @escapeNotVerified */ echo $process->getStatusClass(true) ?>"><span><?php /* @escapeNotVerified */ echo __($process->getMiraklStatus()) ?></span></span></p></td>
+                    </tr>
+                    <tr>
+                        <th><?php /* @escapeNotVerified */ echo __('Synchro Id') ?></th>
+                        <td><?php /* @escapeNotVerified */ echo __($process->getSynchroId()) ?></td>
+                    </tr>
+                    <?php if ($url = $process->getDownloadFileUrl(true)): ?>
+                        <tr>
+                            <th><?php /* @escapeNotVerified */ echo __('Report File') ?></th>
+                            <td>
+                                <a href="<?php /* @escapeNotVerified */ echo $url ?>" title="<?php /* @escapeNotVerified */ echo $block->escapeHtml(__('Download')) ?>"><?php /* @escapeNotVerified */ echo $block->escapeHtml(__('Download')) ?></a><?php if ($fileSize = $process->getFileSizeFormatted('&nbsp;', true)): ?>&nbsp;(<?php echo $fileSize ?>)<?php endif ?>
+                                <?php if ($process->canShowFile(true)): ?>
+                                    <?php /* @escapeNotVerified */ echo __('or') ?> <a target="_blank" href="<?php /* @escapeNotVerified */ echo $block->getUrl('*/*/showFile', ['id' => $process->getId(), 'mirakl' => true]) ?>" title="<?php /* @escapeNotVerified */ echo $block->escapeHtml(__('Open in Browser')) ?>"><?php /* @escapeNotVerified */ echo $block->escapeHtml(__('open in browser')) ?></a>
+                                <?php endif ?>
+                            </td>
+                        </tr>
+                    <?php endif ?>
+                </tbody>
+            </table>
+        </div>
+    <?php endif ?>
+</section>

@@ -1,0 +1,33 @@
+<a
+        class="action-menu-item"
+        if="$col.isSingle($row()._rowIndex)"
+        repeat="foreach: $col.getVisibleActions($row()._rowIndex), item: '$action'"
+        click="function(){
+            var $cellAction = $action();
+            if ($cellAction.jsAction) {
+                return $parent.executeAction($cellAction.index, $cellAction.jsAction, $row());
+            }else {
+                return $col.getActionHandler($cellAction);
+            }
+        }"
+        text="$action().label"
+        attr="target: $col.getTarget($action()), href: $action().href"/>
+
+<div class="action-select-wrap" if="$col.isMultiple($row()._rowIndex)" collapsible>
+    <button class="action-select" translate="'Select'" toggleCollapsible/>
+    <ul class="action-menu" css="_active: $collapsible.opened">
+        <li repeat="foreach: $col.getVisibleActions($row()._rowIndex), item: '$action'">
+            <a class="action-menu-item"
+               click="function(){
+                    var $cellAction = $action();
+                    if ($cellAction.jsAction) {
+                        return $parent.executeAction($cellAction.index, $cellAction.jsAction, $row());
+                    }else {
+                        return $col.getActionHandler($cellAction);
+                    }
+                }"
+               text="$action().label"
+               attr="target: $col.getTarget($action()), href: $action().href, 'data-action': 'item-' + $action().index"/>
+        </li>
+    </ul>
+</div>

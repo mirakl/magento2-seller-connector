@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">mirakl_seller_listing_tracking_product_listing.mirakl_seller_listing_tracking_product_listing_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <spinner>mirakl_seller_listing_tracking_product_listing_columns</spinner>
+        <deps>
+            <dep>mirakl_seller_listing_tracking_product_listing.mirakl_seller_listing_tracking_product_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="mirakl_seller_listing_tracking_product_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">id</param>
+            </storageConfig>
+            <filterUrlParams>
+                <param name="listing_id">*</param>
+            </filterUrlParams>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>MiraklSeller_Core::listings</aclResource>
+        <dataProvider class="MiraklSeller\Core\Ui\Component\DataProvider\Listing\Tracking\Product" name="mirakl_seller_listing_tracking_product_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <filters name="listing_filters"/>
+        <massaction name="listing_massaction" component="MiraklSeller_Core/js/form/components/massactions" class="\MiraklSeller\Core\Ui\Component\Listing\MassAction">
+            <action name="update">
+                <settings>
+                    <confirm>
+                        <message translate="true">Are you sure?</message>
+                        <title translate="true">Confirm</title>
+                    </confirm>
+                    <url path="mirakl_seller/tracking/massUpdate">
+                        <param name="type">product</param>
+                    </url>
+                    <type>new</type>
+                    <label translate="true">Update</label>
+                </settings>
+            </action>
+            <action name="delete">
+                <settings>
+                    <confirm>
+                        <message translate="true">Are you sure?</message>
+                        <title translate="true">Confirm</title>
+                    </confirm>
+                    <url path="mirakl_seller/tracking/massDelete">
+                        <param name="type">product</param>
+                    </url>
+                    <type>delete</type>
+                    <label translate="true">Delete</label>
+                </settings>
+            </action>
+        </massaction>
+        <paging name="listing_paging"/>
+    </listingToolbar>
+    <columns name="mirakl_seller_listing_tracking_product_listing_columns" component="MiraklSeller_Core/js/form/components/listing">
+        <selectionsColumn name="ids">
+            <settings>
+                <indexField>id</indexField>
+                <resizeEnabled>false</resizeEnabled>
+                <resizeDefaultWidth>55</resizeDefaultWidth>
+            </settings>
+        </selectionsColumn>
+        <column name="id">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">ID</label>
+                <sorting>desc</sorting>
+            </settings>
+        </column>
+        <column name="import_id">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Import Id</label>
+            </settings>
+        </column>
+        <column name="import_status" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <options class="MiraklSeller\Core\Ui\Component\Listing\Tracking\Product\Column\ImportStatus"/>
+                <filter>select</filter>
+                <dataType>select</dataType>
+                <label translate="true">Import Status</label>
+            </settings>
+        </column>
+        <column name="import_status_reason">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Import Status Reason</label>
+            </settings>
+        </column>
+        <column name="transformation_error_report" class="MiraklSeller\Core\Ui\Component\Listing\Tracking\Product\Column\DecorateReport">
+            <settings>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <label translate="true">Transformation Error Report</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="integration_error_report" class="MiraklSeller\Core\Ui\Component\Listing\Tracking\Product\Column\DecorateReport">
+            <settings>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <label translate="true">Integration Error Report</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="integration_success_report" class="MiraklSeller\Core\Ui\Component\Listing\Tracking\Product\Column\DecorateReport">
+            <settings>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <label translate="true">Integration Success Report</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="updated_at">
+            <settings>
+                <filter>dateRange</filter>
+                <label translate="true">Updated At</label>
+            </settings>
+        </column>
+        <actionsColumn name="actions" class="MiraklSeller\Core\Ui\Component\Listing\Tracking\Product\Column\ListingActions">
+            <settings>
+                <bodyTmpl>mirakl_seller_core/form/components/actions</bodyTmpl>
+                <indexField>id</indexField>
+                <resizeEnabled>false</resizeEnabled>
+                <resizeDefaultWidth>107</resizeDefaultWidth>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>

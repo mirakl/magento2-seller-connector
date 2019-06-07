@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <mirakl_seller_core>
+            <listing>
+                <auto_create_tracking>1</auto_create_tracking>
+                <nb_image_exported>5</nb_image_exported>
+                <nb_days_expired>10</nb_days_expired>
+                <nb_days_keep_failed_products>10</nb_days_keep_failed_products>
+            </listing>
+            <offer_fields_mapping>
+                <description/>
+                <internal_description/>
+                <price_additional_info/>
+                <min_quantity_alert/>
+                <available_start_date/>
+                <available_end_date/>
+                <leadtime_to_ship/>
+                <product_tax_code/>
+                <logistic_class/>
+            </offer_fields_mapping>
+            <prices>
+                <enable_promotion_catalog_price_rule>1</enable_promotion_catalog_price_rule>
+                <customer_group>0</customer_group> <!-- NOT LOGGED IN -->
+            </prices>
+        </mirakl_seller_core>
+    </default>
+</config>

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <mirakl_seller_sales>
+            <order_acceptance>
+                <auto_accept>0</auto_accept>
+                <insufficient_stock>1</insufficient_stock> <!-- 1 = Manage order manually -->
+                <backorder>1</backorder> <!-- 1 = Accept order automatically -->
+                <prices_variations>10</prices_variations> <!-- 10% falling price allowed between Mirakl and Magento -->
+            </order_acceptance>
+            <order>
+                <auto_create_invoice>1</auto_create_invoice>
+                <auto_create_shipment>1</auto_create_shipment>
+                <auto_create_refunds>1</auto_create_refunds>
+                <auto_orders_import>1</auto_orders_import>
+            </order>
+        </mirakl_seller_sales>
+        <payment>
+            <mirakl>
+                <active>1</active>
+                <model>MiraklSeller\Sales\Model\Payment\Method\Mirakl</model>
+                <order_status>pending</order_status>
+                <title>Mirakl</title>
+                <allowspecific>0</allowspecific>
+                <group>offline</group>
+            </mirakl>
+        </payment>
+    </default>
+</config>

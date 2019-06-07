@@ -1,0 +1,62 @@
+<?php
+/** @var \MiraklSeller\Sales\Block\Adminhtml\Sales\Order\View\MiraklInfo $block */
+$_miraklOrder = $block->getMiraklOrder();
+?>
+<div class="admin__page-section-item mirakl">
+    <div class="admin__page-section-item-title">
+        <span class="title"><?= __('Mirakl Marketplace Order Information') ?></span>
+    </div>
+    <div class="admin__page-section-item-content">
+        <table class="admin__table-secondary">
+            <tr>
+                <th><?= __('Connection') ?></th>
+                <td><?= $block->getConnection()->getName() ?></td>
+            </tr>
+            <tr>
+                <th><?= __('Commercial Id') ?></th>
+                <td>
+                    <?= $block->getMiraklOrder()->getId() ?><br>
+                    <a href="<?= $block->getViewMiraklOrderUrl() ?>" target="_blank"><?= __('View in Mirakl') ?></a> /
+                    <a href="<?= $block->getViewMiraklOrderInMagentoUrl() ?>"><?= __('View in Magento') ?></a>
+                </td>
+            </tr>
+            <tr>
+                <th><?= __('Status') ?></th>
+                <td><?= $block->getMiraklOrderStatus() ?></td>
+            </tr>
+            <tr>
+                <th><?= __('Customer') ?></th>
+                <td><?= $block->getMiraklOrderCustomerName() ?></td>
+            </tr>
+            <tr>
+                <th><?= __('Incident') ?></th>
+                <td>
+                    <?php if ($_miraklOrder->getHasIncident()): ?>
+                        <span class="incident"><?= __('An incident has been opened on this Mirakl order.') ?></span><br>
+                        <a href="<?= $block->getViewMiraklOrderUrl() ?>" target="_blank"><?= __('See details in Mirakl') ?></a>
+                    <?php else: ?>
+                        <?= __('No incident opened for this Mirakl order.') ?>
+                    <?php endif ?>
+                </td>
+            </tr>
+            <tr>
+                <th><?= __('Refund') ?></th>
+                <td>
+                    <?php if ($block->isMiraklOrderRefunded($_miraklOrder)): ?>
+                        <span class="incident"><?= __('A refund has been issued on this Mirakl order.') ?></span><br>
+                        <a href="<?= $block->getViewMiraklOrderUrl() ?>" target="_blank"><?= __('See details in Mirakl') ?></a>
+                    <?php else: ?>
+                        <?= __('No refund requested for this Mirakl order.') ?>
+                    <?php endif ?>
+                </td>
+            </tr>
+            <?php /** @var \Mirakl\MMP\Common\Domain\AdditionalFieldValue $_field */ ?>
+            <?php foreach ($_miraklOrder->getOrderAdditionalFields() as $_field): ?>
+                <tr>
+                    <th><?= $_field->getCode() ?></th>
+                    <td><?= $block->escapeHtml(is_array($_field->getValue()) ? implode(', ', $_field->getValue()) : $_field->getValue()) ?></td>
+                </tr>
+            <?php endforeach ?>
+        </table>
+    </div>
+</div>

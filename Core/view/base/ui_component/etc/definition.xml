@@ -1,0 +1,7 @@
+<components xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_definition.xsd">
+    <miraklCustomFields class="MiraklSeller\Core\Ui\Component\Listing\MiraklCustomFields" component="MiraklSeller_Core/js/form/components/collection">
+        <argument name="data" xsi:type="array">
+            <item name="template" xsi:type="string">templates/container/default</item>
+        </argument>
+    </miraklCustomFields>
+</components>

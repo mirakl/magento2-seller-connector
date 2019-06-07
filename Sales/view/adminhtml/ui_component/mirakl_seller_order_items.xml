@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">mirakl_seller_order_items.mirakl_seller_order_items_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <spinner>mirakl_seller_order_items_columns</spinner>
+        <deps>
+            <dep>mirakl_seller_order_items.mirakl_seller_order_items_data_source</dep>
+        </deps>
+        <buttons>
+            <button name="back" class="MiraklSeller\Api\Block\Adminhtml\BackButton"/>
+            <button name="cancel" class="MiraklSeller\Sales\Block\Adminhtml\MiraklOrder\View\CancelButton"/>
+            <button name="import" class="MiraklSeller\Sales\Block\Adminhtml\MiraklOrder\View\ImportButton"/>
+            <button name="refuse" class="MiraklSeller\Sales\Block\Adminhtml\MiraklOrder\View\RefuseButton"/>
+        </buttons>
+    </settings>
+    <dataSource name="mirakl_seller_order_items_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>MiraklSeller_Sales::orders</aclResource>
+        <dataProvider class="MiraklSeller\Sales\Ui\Component\DataProvider\ItemsDataProvider" name="mirakl_seller_order_items_data_source">
+            <settings>
+                <requestFieldName>order_id</requestFieldName>
+                <primaryFieldName>order_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <massaction name="listing_massaction" class="MiraklSeller\Sales\Ui\Component\Order\Items\MassAction">
+            <action name="accept" class="MiraklSeller\Sales\Ui\Component\Control\AcceptAction">
+                <settings>
+                    <confirm>
+                        <message translate="true">Selected lines will be ACCEPTED and the others will be REFUSED in Mirakl.</message>
+                        <title translate="true">Accept in Mirakl</title>
+                    </confirm>
+                    <type>accept</type>
+                    <label translate="true">Accept in Mirakl</label>
+                </settings>
+            </action>
+        </massaction>
+    </listingToolbar>
+    <columns name="mirakl_seller_order_items_columns">
+        <selectionsColumn name="ids" class="MiraklSeller\Sales\Ui\Component\Order\Items\MassAction\Column">
+            <settings>
+                <indexField>id</indexField>
+            </settings>
+        </selectionsColumn>
+        <column name="product_image" class="MiraklSeller\Sales\Ui\Component\Order\Items\Column\ProductImage" sortOrder="10">
+            <settings>
+                <sortable>false</sortable>
+                <draggable>false</draggable>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <label translate="true">Image</label>
+            </settings>
+        </column>
+        <column name="status_html" class="MiraklSeller\Sales\Ui\Component\Order\Items\Column\Status" sortOrder="20">
+            <settings>
+                <sortable>false</sortable>
+                <draggable>false</draggable>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <label translate="true">Status</label>
+            </settings>
+        </column>
+        <column name="offer_id" sortOrder="30">
+            <settings>
+                <sortable>false</sortable>
+                <draggable>false</draggable>
+                <label translate="true">Offer Id</label>
+            </settings>
+        </column>
+        <column name="offer_sku_html" class="MiraklSeller\Sales\Ui\Component\Order\Items\Column\OfferSku" sortOrder="40">
+            <settings>
+                <sortable>false</sortable>
+                <draggable>false</draggable>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <label translate="true">Offer SKU</label>
+            </settings>
+        </column>
+        <column name="product_name" sortOrder="50">
+            <settings>
+                <sortable>false</sortable>
+                <draggable>false</draggable>
+                <label translate="true">Product Name</label>
+            </settings>
+        </column>
+        <column name="magento_product" class="MiraklSeller\Sales\Ui\Component\Order\Items\Column\MagentoProduct" sortOrder="60">
+            <settings>
+                <sortable>false</sortable>
+                <draggable>false</draggable>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <label translate="true">Magento Product</label>
+            </settings>
+        </column>
+        <column name="quantity_html" class="MiraklSeller\Sales\Ui\Component\Order\Items\Column\Quantity" sortOrder="70">
+            <settings>
+                <sortable>false</sortable>
+                <draggable>false</draggable>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <label translate="true">Qty</label>
+            </settings>
+        </column>
+        <column name="unit_price" class="MiraklSeller\Sales\Ui\Component\Order\Listing\Column\Price" sortOrder="80">
+            <settings>
+                <sortable>false</sortable>
+                <draggable>false</draggable>
+                <label translate="true">Price Excl. Tax</label>
+            </settings>
+        </column>
+        <column name="subtotal" class="MiraklSeller\Sales\Ui\Component\Order\Listing\Column\Price" sortOrder="90">
+            <settings>
+                <sortable>false</sortable>
+                <draggable>false</draggable>
+                <label translate="true">Subtotal Excl. Tax</label>
+            </settings>
+        </column>
+        <column name="shipping_price" class="MiraklSeller\Sales\Ui\Component\Order\Listing\Column\Price" sortOrder="100">
+            <settings>
+                <sortable>false</sortable>
+                <draggable>false</draggable>
+                <label translate="true">Shipping Price Excl. Tax</label>
+            </settings>
+        </column>
+        <column name="shipping_title" sortOrder="110">
+            <settings>
+                <sortable>false</sortable>
+                <draggable>false</draggable>
+                <label translate="true">Shipping Title</label>
+            </settings>
+        </column>
+        <column name="tax" class="MiraklSeller\Sales\Ui\Component\Order\Listing\Column\Price" sortOrder="120">
+            <settings>
+                <sortable>false</sortable>
+                <draggable>false</draggable>
+                <label translate="true">Tax Amount</label>
+            </settings>
+        </column>
+        <column name="total_price" class="MiraklSeller\Sales\Ui\Component\Order\Listing\Column\Price" sortOrder="130">
+            <settings>
+                <sortable>false</sortable>
+                <draggable>false</draggable>
+                <label translate="true">Total</label>
+            </settings>
+        </column>
+    </columns>
+</listing>

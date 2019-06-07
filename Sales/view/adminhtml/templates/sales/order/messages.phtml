@@ -1,0 +1,33 @@
+<?php
+/** @var \MiraklSeller\Sales\Block\Adminhtml\Sales\Order\Messages $block */
+$_miraklOrder = $block->getMiraklOrder();
+$_messages = $block->getAllOrderMessages();
+?>
+<div class="mirakl-order-messages">
+    <?php if (!$_messages || !$_messages->count()): ?>
+        <p><?= __('No messages found for this order.') ?></p>
+    <?php endif ?>
+
+    <?php if ($_messages->count()): ?>
+        <h3><?= __('Order Messages (%1)', $_messages->count()) ?></h3>
+        <?php /** @var \Mirakl\MMP\Common\Domain\Message\OrderMessage $_message */ ?>
+        <?php foreach ($_messages as $_i => $_message): ?>
+            <?php $_isMagentoComment = $_message->getData('source') === 'magento'; ?>
+            <div class="comment <?= $_isMagentoComment ? 'magento' : '' ?> <?= $this->isCustomerMessage($_message) ? 'comment-left' : 'comment-right' ?> <?= strtolower($_message->getUserSender()->getType()) ?>">
+                <p class="meta">
+                    <?= __(
+                        'By %1 - %2<br><span class="%3">%4</span>',
+                        $this->getSenderName($_message),
+                        $block->formatDate($_message->getDateCreated()->format(\DateTime::ISO8601), \IntlDateFormatter::MEDIUM, true),
+                        $_isMagentoComment ? 'magento' : 'mirakl',
+                        __($_isMagentoComment ? 'Internal' : ($this->isCustomerMessage($_message) ? 'Received from customer through Mirakl' : 'Sent to customer through Mirakl'))
+                    ) ?>
+                </p>
+                <?php if ($_message->getSubject()): ?>
+                    <p class="subject"><?= $_message->getSubject() ?></p>
+                <?php endif ?>
+                <p class="body"><?= nl2br($this->escapeHtml($_message->getBody())) ?></p>
+            </div>
+        <?php endforeach ?>
+    <?php endif ?>
+</div>

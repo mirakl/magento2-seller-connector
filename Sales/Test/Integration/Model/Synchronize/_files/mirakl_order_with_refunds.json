@@ -1,0 +1,320 @@
+{
+    "orders": [
+        {
+            "acceptance_decision_date": "2019-03-13T15:14:25Z",
+            "can_cancel": false,
+            "channel": null,
+            "commercial_id": "1234561",
+            "created_date": "2019-03-13T15:13:29Z",
+            "currency_iso_code": "EUR",
+            "customer": {
+                "billing_address": {
+                    "city": "Paris",
+                    "company": null,
+                    "country": "France",
+                    "country_iso_code": null,
+                    "firstname": "Johann",
+                    "lastname": "Reinké",
+                    "phone": "0987654321",
+                    "state": null,
+                    "street_1": "45 rue de la Bienfaisance",
+                    "street_2": "",
+                    "zip_code": "75008"
+                },
+                "civility": null,
+                "customer_id": "contact@mirakl.com",
+                "firstname": "Guest",
+                "lastname": "Guest",
+                "locale": "en_US",
+                "shipping_address": {
+                    "additional_info": null,
+                    "city": "Paris",
+                    "company": null,
+                    "country": "France",
+                    "country_iso_code": null,
+                    "firstname": "Johann",
+                    "lastname": "Reinké",
+                    "phone": "0987654321",
+                    "state": null,
+                    "street_1": "45 rue de la Bienfaisance",
+                    "street_2": "",
+                    "zip_code": "75008"
+                }
+            },
+            "customer_debited_date": "2019-03-13T15:14:52.264Z",
+            "has_customer_message": false,
+            "has_incident": false,
+            "has_invoice": false,
+            "last_updated_date": "2019-04-02T09:13:52Z",
+            "leadtime_to_ship": 0,
+            "order_additional_fields": [],
+            "order_id": "1234561-A",
+            "order_lines": [
+                {
+                    "can_refund": true,
+                    "cancelations": [],
+                    "category_code": "37",
+                    "category_label": "Eco Friendly",
+                    "commission_fee": 4.45,
+                    "commission_rate_vat": 20.0000,
+                    "commission_taxes": [
+                        {
+                            "amount": 0.89,
+                            "code": "TAXDEFAULT",
+                            "rate": 20.0000
+                        }
+                    ],
+                    "commission_vat": 0.89,
+                    "created_date": "2019-03-13T15:13:29Z",
+                    "debited_date": "2019-03-13T15:14:52Z",
+                    "description": null,
+                    "last_updated_date": "2019-03-29T15:53:57Z",
+                    "offer_id": 2199,
+                    "offer_sku": "24-MB01",
+                    "offer_state_code": "10",
+                    "order_line_additional_fields": [],
+                    "order_line_id": "95",
+                    "order_line_index": 1,
+                    "order_line_state": "SHIPPING",
+                    "order_line_state_reason_code": null,
+                    "order_line_state_reason_label": null,
+                    "price": 11.24,
+                    "price_additional_info": null,
+                    "price_unit": 2.81,
+                    "product_medias": [
+                        {
+                            "media_url": "/media/product/image/3d99d8d8-0e99-461b-a246-50e305a3f5e3",
+                            "mime_type": null,
+                            "type": "ORIGINAL"
+                        }
+                    ],
+                    "product_sku": "24-MB01",
+                    "product_title": "Joust Duffle Bag",
+                    "promotions": [],
+                    "quantity": 4,
+                    "received_date": null,
+                    "refunds": [
+                        {
+                            "amount": 2.81,
+                            "commission_amount": 0.56,
+                            "commission_tax_amount": 0.11,
+                            "commission_taxes": [
+                                {
+                                    "amount": 0.11,
+                                    "code": "TAXDEFAULT"
+                                }
+                            ],
+                            "commission_total_amount": 0.67,
+                            "created_date": "2019-03-29T15:53:56Z",
+                            "id": "1120",
+                            "quantity": 1,
+                            "reason_code": "15",
+                            "shipping_amount": 0.00,
+                            "shipping_taxes": [
+                                {
+                                    "amount": 0.00,
+                                    "code": "FranceTVA5.5"
+                                },
+                                {
+                                    "amount": 0.00,
+                                    "code": "TVA20"
+                                }
+                            ],
+                            "state": "WAITING_REFUND",
+                            "taxes": []
+                        }
+                    ],
+                    "shipped_date": null,
+                    "shipping_price": 11.00,
+                    "shipping_price_additional_unit": null,
+                    "shipping_price_unit": null,
+                    "shipping_taxes": [
+                        {
+                            "amount": 0.73,
+                            "code": "FranceTVA5.5"
+                        },
+                        {
+                            "amount": 2.20,
+                            "code": "TVA20"
+                        }
+                    ],
+                    "taxes": [],
+                    "total_commission": 5.34,
+                    "total_price": 22.24
+                },
+                {
+                    "can_refund": true,
+                    "cancelations": [],
+                    "category_code": "37",
+                    "category_label": "Eco Friendly",
+                    "commission_fee": 18.40,
+                    "commission_rate_vat": 20.0000,
+                    "commission_taxes": [
+                        {
+                            "amount": 3.68,
+                            "code": "TAXDEFAULT",
+                            "rate": 20.0000
+                        }
+                    ],
+                    "commission_vat": 3.68,
+                    "created_date": "2019-03-13T15:13:29Z",
+                    "debited_date": "2019-03-13T15:14:52Z",
+                    "description": null,
+                    "last_updated_date": "2019-04-02T09:13:52Z",
+                    "offer_id": 2208,
+                    "offer_sku": "MH01-XL-Orange",
+                    "offer_state_code": "11",
+                    "order_line_additional_fields": [],
+                    "order_line_id": "96",
+                    "order_line_index": 2,
+                    "order_line_state": "SHIPPING",
+                    "order_line_state_reason_code": null,
+                    "order_line_state_reason_label": null,
+                    "price": 89.00,
+                    "price_additional_info": null,
+                    "price_unit": 89.00,
+                    "product_medias": [
+                        {
+                            "media_url": "/media/product/image/93af11b5-3250-4805-9fd2-64d08f3d24a7",
+                            "mime_type": null,
+                            "type": "ORIGINAL"
+                        }
+                    ],
+                    "product_sku": "MH01-XL-Orange",
+                    "product_title": "Chaz Kangeroo Hoodie-XL-Orange",
+                    "promotions": [],
+                    "quantity": 1,
+                    "received_date": null,
+                    "refunds": [
+                        {
+                            "amount": 20.00,
+                            "commission_amount": 4.04,
+                            "commission_tax_amount": 0.81,
+                            "commission_taxes": [
+                                {
+                                    "amount": 0.81,
+                                    "code": "TAXDEFAULT"
+                                }
+                            ],
+                            "commission_total_amount": 4.85,
+                            "created_date": "2019-03-29T15:53:57Z",
+                            "id": "1121",
+                            "quantity": 1,
+                            "reason_code": "16",
+                            "shipping_amount": 0.20,
+                            "shipping_taxes": [
+                                {
+                                    "amount": 0.05,
+                                    "code": "FranceTVA5.5"
+                                },
+                                {
+                                    "amount": 0.12,
+                                    "code": "TVA20"
+                                }
+                            ],
+                            "state": "WAITING_REFUND",
+                            "taxes": [
+                                {
+                                    "amount": 0.00,
+                                    "code": "FranceTVA5.5"
+                                },
+                                {
+                                    "amount": 10.00,
+                                    "code": "TVA20"
+                                }
+                            ]
+                        },
+                        {
+                            "amount": 0.00,
+                            "commission_amount": 0.00,
+                            "commission_tax_amount": 0.00,
+                            "commission_taxes": [
+                                {
+                                    "amount": 0.00,
+                                    "code": "TAXDEFAULT"
+                                }
+                            ],
+                            "commission_total_amount": 0.00,
+                            "created_date": "2019-04-02T09:13:51Z",
+                            "id": "1122",
+                            "quantity": null,
+                            "reason_code": "18",
+                            "shipping_amount": 0.01,
+                            "shipping_taxes": [
+                                {
+                                    "amount": 0.02,
+                                    "code": "FranceTVA5.5"
+                                },
+                                {
+                                    "amount": 0.03,
+                                    "code": "TVA20"
+                                }
+                            ],
+                            "state": "WAITING_REFUND",
+                            "taxes": [
+                                {
+                                    "amount": 0.00,
+                                    "code": "FranceTVA5.5"
+                                },
+                                {
+                                    "amount": 0.00,
+                                    "code": "TVA20"
+                                }
+                            ]
+                        }
+                    ],
+                    "shipped_date": null,
+                    "shipping_price": 3.00,
+                    "shipping_price_additional_unit": null,
+                    "shipping_price_unit": null,
+                    "shipping_taxes": [
+                        {
+                            "amount": 0.20,
+                            "code": "FranceTVA5.5"
+                        },
+                        {
+                            "amount": 0.60,
+                            "code": "TVA20"
+                        }
+                    ],
+                    "taxes": [
+                        {
+                            "amount": 5.87,
+                            "code": "FranceTVA5.5"
+                        },
+                        {
+                            "amount": 17.80,
+                            "code": "TVA20"
+                        }
+                    ],
+                    "total_commission": 22.08,
+                    "total_price": 92.00
+                }
+            ],
+            "order_state": "SHIPPING",
+            "order_state_reason_code": null,
+            "order_state_reason_label": null,
+            "paymentType": "checkmo",
+            "payment_type": "checkmo",
+            "payment_workflow": "PAY_ON_ACCEPTANCE",
+            "price": 100.24,
+            "promotions": {
+                "applied_promotions": [],
+                "total_deduced_amount": 0
+            },
+            "quote_id": null,
+            "shipping_carrier_code": null,
+            "shipping_company": null,
+            "shipping_price": 14.00,
+            "shipping_tracking": null,
+            "shipping_tracking_url": null,
+            "shipping_type_code": "EXPRESS",
+            "shipping_type_label": "Express",
+            "shipping_zone_code": "FR",
+            "shipping_zone_label": "France",
+            "total_commission": 27.42,
+            "total_price": 114.24
+        }
+    ],
+    "total_count": 1
+}

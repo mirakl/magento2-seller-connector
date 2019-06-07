@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="mirakl_seller_core" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>General</label>
+            <tab>mirakl_seller</tab>
+            <resource>MiraklSeller_Core::config</resource>
+            <group id="mirakl_api_notice" translate="label" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
+                <frontend_model>MiraklSeller\Api\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
+            </group>
+            <group id="listing" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Listing</label>
+                <field id="auto_create_tracking" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Automatic Tracking Creation</label>
+                    <comment><![CDATA[If enabled, a listing tracking is created each time you export products to Mirakl. You can then track the export status directly from Magento.]]></comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="nb_image_exported" translate="label comment" type="text" sortOrder="15" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Number of Exported Images</label>
+                    <comment><![CDATA[Number of images exported per product. Images are selected based on the sort order.]]></comment>
+                    <validate>validate-number</validate>
+                </field>
+                <field id="nb_days_expired" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Number of Days Before Products Expire</label>
+                    <comment><![CDATA[After X days following the export, status of products in "Waiting for integration" will be updated to "Waiting for export" and the export tracking will be changed to "Integration expired".]]></comment>
+                    <frontend_type>text</frontend_type>
+                    <validate>validate-number</validate>
+                </field>
+                <field id="nb_days_keep_failed_products" translate="label comment" type="text" sortOrder="25" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Number of Days For Failed Products To Be Exported Again</label>
+                    <comment><![CDATA[After X days following a product in a failure status ("Transformation failed", "Integration failed", "Invalid report format", "Not found in report") will be updated to "Waiting for export".]]></comment>
+                    <frontend_type>text</frontend_type>
+                    <validate>validate-number</validate>
+                </field>
+            </group>
+            <group id="offer_fields_mapping" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Offer Fields Mapping</label>
+                <field id="description" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Description</label>
+                    <source_model>\MiraklSeller\Core\Model\Config\Source\Attribute\Dropdown</source_model>
+                </field>
+                <field id="internal_description" translate="label" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Internal Description</label>
+                    <source_model>\MiraklSeller\Core\Model\Config\Source\Attribute\Dropdown</source_model>
+                </field>
+                <field id="price_additional_info" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Price Additional Information</label>
+                    <source_model>\MiraklSeller\Core\Model\Config\Source\Attribute\Dropdown</source_model>
+                </field>
+                <field id="min_quantity_alert" translate="label comment" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Min Quantity Alert</label>
+                    <comment><![CDATA[Magento attribute must be of type text field with input validation as integer number.]]></comment>
+                    <source_model>\MiraklSeller\Core\Model\Config\Source\Attribute\DropdownTextNumber</source_model>
+                </field>
+                <field id="available_start_date" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Available Start Date</label>
+                    <comment><![CDATA[Magento attribute must be of type date.]]></comment>
+                    <source_model>\MiraklSeller\Core\Model\Config\Source\Attribute\DropdownDate</source_model>
+                </field>
+                <field id="available_end_date" translate="label comment" type="select" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Available End Date</label>
+                    <comment><![CDATA[Magento attribute must be of type date.]]></comment>
+                    <source_model>\MiraklSeller\Core\Model\Config\Source\Attribute\DropdownDate</source_model>
+                </field>
+                <field id="leadtime_to_ship" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Leadtime to Ship</label>
+                    <comment><![CDATA[Magento attribute must be of type text field with input validation as integer number.]]></comment>
+                    <source_model>\MiraklSeller\Core\Model\Config\Source\Attribute\DropdownTextNumber</source_model>
+                </field>
+                <field id="product_tax_code" translate="label comment" type="select" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Product Tax Code</label>
+                    <comment><![CDATA[Magento attribute must be of type text field or dropdown.]]></comment>
+                    <source_model>\MiraklSeller\Core\Model\Config\Source\Attribute\DropdownTextOrSelect</source_model>
+                </field>
+                <field id="logistic_class" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Logistic Class</label>
+                    <source_model>\MiraklSeller\Core\Model\Config\Source\Attribute\Dropdown</source_model>
+                </field>
+            </group>
+            <group id="prices" translate="label" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label><![CDATA[Prices & Quantities]]></label>
+                <field id="enable_promotion_catalog_price_rule" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable Promotion Catalog Price Rules</label>
+                    <comment><![CDATA[If enabled, exported discount price will be filled with the best price between applicable Magento promotion catalog price rules and Magento special price. If a promotion price is applied, no discount periods are exported. If disabled, only Magento applicable special prices are used.]]></comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="customer_group" translate="label comment" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Customer Group</label>
+                    <comment><![CDATA[Select the customer group to use for price and quantity export.]]></comment>
+                    <source_model>\MiraklSeller\Core\Model\Config\Source\Customer\DropdownCustomerGroup</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

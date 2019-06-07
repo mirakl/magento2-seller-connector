@@ -1,0 +1,72 @@
+<?php
+/**
+ * @var \Magento\Framework\View\TemplateEngine\Php $this
+ * @var \MiraklSeller\Core\Block\Adminhtml\Listing\NewListing $block
+ */
+?>
+<div id="listing-connection-id-template" style="display: none;">
+    <div class="listing-connection-id-messages" style="display: none;">
+        <div class="messages"></div>
+    </div>
+    <form action="" method="post" id="listing-form" class="form-inline">
+        <fieldset class="admin__fieldset form-list question">
+            <div class="admin__field field _required">
+                <label for="connection_id" class="admin__field-label"><span><?= /* @escapeNotVerified */ __('Connection') ?></span></label>
+                <div class="admin__field-control">
+                    <select name="connection_id" id="connection_id"
+                           class="required-entry local-validation admin__control-select">
+                        <?php foreach ($block->getConnectionOption() as $connection) {?>
+                            <option value="<?= $connection['value'] ?>"><?= $connection['label'] ?></option>
+                        <?php } ?>
+                    </select>
+                    <div class="admin__field-note">
+                        <?= /* @escapeNotVerified */ __('The Mirakl platform to which the listing products will be exported.') ?>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<script>
+    require(
+        [
+            'jquery',
+            'mage/translate',
+            'Magento_Ui/js/modal/modal'
+        ],
+        function($, $t, modal)
+        {
+            var options = {
+                type: 'popup',
+                modalClass: 'mirakl-seller-small-popup',
+                responsive: true,
+                innerScroll: true,
+                title: '<?php echo __('New Listing'); ?>',
+                buttons: [{
+                    text: '<?php echo __('Continue'); ?>',
+                    'class': 'primary',
+                    click: function () {
+                        var val = $('#connection_id').val();
+                        if (!val) {
+                            var messages = $('.listing-connection-id-messages');
+                            messages.find('.messages').append(
+                                '<div class="message message-error">' +
+                                    '<?php echo __('Please provide a connection to associate with the listing'); ?>' +
+                                '</div>'
+                            );
+                            messages.show();
+                            return;
+                        }
+                        var baseUrl = '<?= $block->getUrl('*/*/edit/connection_id/PLACEHOLDER') ?>';
+                        window.location = baseUrl.replace('PLACEHOLDER', val);
+                        this.closeModal();
+                    }
+                }]
+            };
+
+            var popup = modal(options, $('#listing-connection-id-template'));
+        }
+    );
+</script>
+

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="default">
+        <job name="mirakl_seller_accept_all_orders" instance="MiraklSeller\Sales\Cron\AcceptAllOrders" method="execute">
+            <schedule>*/15 * * * *</schedule>
+        </job>
+        <job name="mirakl_seller_sync_all_orders" instance="MiraklSeller\Sales\Cron\SyncAllOrders" method="execute">
+            <schedule>*/15 * * * *</schedule>
+        </job>
+    </group>
+</config>

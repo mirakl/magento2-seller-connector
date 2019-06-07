@@ -1,0 +1,297 @@
+@font-face {
+    font-family: 'Mirakl-Font-Icons';
+    src: url('../fonts/Mirakl-Font-Icons.eot?iefa9n');
+    src: url('../fonts/Mirakl-Font-Icons.eot?iefa9n#iefix') format('embedded-opentype'),
+        url('../fonts/Mirakl-Font-Icons.ttf?iefa9n') format('truetype'),
+        url('../fonts/Mirakl-Font-Icons.woff?iefa9n') format('woff'),
+        url('../fonts/Mirakl-Font-Icons.svg?iefa9n#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.admin__menu #menu-miraklseller-api-head.level-0 > a:before {
+    font-family: 'Mirakl-Font-Icons';
+    content: "\e900";
+}
+.nobr {
+    white-space: nowrap;
+}
+
+.report-output table td {
+    font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    line-height: 16px;
+}
+
+.report-status {
+    float: left;
+    font-size: 1.3rem;
+}
+
+.report-output {
+    clear: both;
+}
+
+.report-output-content {
+    max-height: 450px;
+    border: 1px solid #d6d6d6;
+    border-radius: 3px;
+    padding: 8px 10px;
+    overflow-y: scroll;
+    margin-bottom: 20px;
+}
+
+.report-output table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.report-output table td {
+    padding: 0 4px;
+}
+
+.report-output table td.num {
+    color: rgba(0, 0 , 0, .3);
+    width: 1%;
+    vertical-align: top;
+    border-right: 1px solid #d6d6d6;
+    white-space: nowrap;
+    text-align: right;
+    padding: 0 4px;
+}
+
+.report-output table td.line {
+    color: #333;
+    word-wrap: normal;
+}
+
+.report-output table td.pre {
+    white-space: pre;
+}
+
+.mirakl-process-index .grid-severity-minor,
+.mirakl-process-view .grid-severity-minor {
+    background: #feeee1 none repeat scroll 0 0;
+    color: #ff9C00;
+    border-color: #ff9C00;
+    white-space: nowrap;
+}
+
+.mirakl-process-index .grid-severity-major,
+.mirakl-process-view .grid-severity-major {
+    background: #feeee1 none repeat scroll 0 0;
+    color: #f55600;
+    border-color: #f55600;
+}
+
+button.marketplace span:before {
+    font-family: 'Mirakl-Font-Icons';
+    content: "\e900";
+    padding-right: 10px;
+    color: #1d426a;
+}
+
+.mirakl-additional-field-values {
+    margin-top: 15px;
+}
+
+.mirakl-additional-field-values .mirakl-field-item {
+    padding-left: 20px;
+}
+
+.mirakl-additional-field-values .not-set {
+    color: #999;
+}
+
+.mirakl-connection-switcher li.current a {
+    color: #adadad !important;
+}
+
+.mirakl-seller-order-view table td,
+.mirakl_seller-order-view table td {
+    text-align: left;
+}
+
+.mirakl-seller-order-view .red,
+.mirakl_seller-order-view .red {
+    color: red;
+}
+
+.mirakl-seller-order-view .right,
+.mirakl_seller-order-view .right {
+    text-align: right;
+}
+
+.mirakl_seller-order-view .order-account-information {
+    margin-bottom: 2rem;
+}
+
+.sales-order-index td span.magento,
+.sales-order-index td span.marketplace {
+    text-transform: none;
+    font-weight: normal;
+    text-shadow: 0 1px 0 #bc3918;
+    background: linear-gradient(to bottom, #ee5a27 0, #ca3a0f 100%) repeat-x;
+    border-color: #1b5381;
+    color: #fff;
+    font-size: 11px;
+    padding: 2px 4px;
+    line-height: 13px;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
+.sales-order-index td span.marketplace.product,
+.sales-order-index td span.marketplace {
+    text-shadow: 0 1px 0 #1b5381;
+    background: linear-gradient(to bottom, #4495d8 0, #2867c1 100%) repeat-x;
+}
+
+.sales-order-index td span.marketplace.offer,
+.sales-order-index td span.magento.marketplace {
+    text-shadow: 0 1px 0 #446b1f;
+    background: linear-gradient(to bottom, #83c841 0, #5aa630 100%) repeat-x;
+}
+
+.mirakl_seller_listing_form_areas_product_content_product_content_insertListing,
+.mirakl_seller_listing_form_areas_tracking_product_content_tracking_product_content_insertListing,
+.mirakl_seller_listing_form_areas_tracking_offer_content_tracking_offer_content_insertListing {
+    box-sizing: border-box !important;
+}
+
+#product-listing-header .page-actions-placeholder {
+    float: left;
+}
+
+#product-listing-header span.dashboard-success > a {
+    color: #3cb861;
+}
+
+#product-listing-header span.dashboard-error > a {
+    color: #e41101;
+}
+
+.data-grid-cell-with-overflow {
+    overflow: visible !important;
+}
+.tooltip-seller .admin__field-tooltip-content {
+    bottom: 130%;
+}
+.data-grid-cell-with-overflow .admin__field-tooltip {
+    margin-top: 0;
+    max-width: inherit;
+    width: auto;
+}
+
+.tooltip-seller .status {
+    border-radius: 2px;
+    color: #fff;
+    display: block;
+    font: bold 10px/16px Arial, Helvetica, sans-serif;
+    line-height: 12px;
+    margin: 1px 0;
+    padding: 2px;
+    text-align: center;
+}
+
+.tooltip-seller .status-new {
+    background-color: #5bc0de;
+}
+
+.tooltip-seller .status-pending,
+.tooltip-seller .status-waiting-integration,
+.tooltip-seller .status-invalid-report-format,
+.tooltip-seller .status-not-found-in-report {
+    background-color: #ff9c00;
+}
+
+
+.tooltip-seller .status-error,
+.tooltip-seller .status-transformation-error,
+.tooltip-seller .status-integration-error {
+    background-color: #e41101;
+}
+
+.tooltip-seller .status-success {
+    background-color: #3cb861;
+}
+
+.tooltip-seller .status-delete,
+.tooltip-seller .status-integration-complete {
+    background-color: #777;
+}
+
+.mirakl-seller-small-popup .modal-inner-wrap {
+    max-width: 700px;
+}
+
+.mirakl-order .notice {
+    background: #ecf7ff;
+}
+
+.admin__page-section-item.mirakl {
+    color: #1563a3;
+}
+
+.mirakl .admin__table-secondary tbody tr:nth-child(odd) th,
+.mirakl .admin__table-secondary tbody tr:nth-child(odd) td {
+    background-color: #ecf7ff;
+}
+
+.mirakl .incident {
+    color: red;
+}
+
+.mirakl-order-messages:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+.mirakl-order-messages .comment {
+    width: 80%;
+    clear: both;
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+}
+
+.mirakl-order-messages .comment-left {
+    float: left;
+}
+
+.mirakl-order-messages .comment-left {
+    float: right;
+}
+
+.mirakl-order-messages .comment.shop {
+    background-color: #ecf7ff;
+}
+
+.mirakl-order-messages .comment.magento {
+    background-color: #fff;
+}
+
+.mirakl-order-messages .meta {
+    color: #999;
+    font-style: italic;
+}
+
+.mirakl-order-messages .meta .magento {
+    color: #df280a;
+}
+
+.mirakl-order-messages .meta .mirakl {
+    color: #1563a3;
+}
+
+.mirakl-order-messages .subject {
+    font-weight: bold;
+}
+
+.sales-order_invoice-view.mirakl-order #send_notification,
+.sales-order_creditmemo-view.mirakl-order #cancel,
+.sales-order_creditmemo-view.mirakl-order #send_notification {
+    display: none;
+}
+

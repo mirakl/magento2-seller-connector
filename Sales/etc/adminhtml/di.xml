@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\View\Page\Config">
+        <plugin name="mirakl_seller_sales" type="MiraklSeller\Sales\Plugin\View\Page\ConfigPlugin" />
+    </type>
+    <type name="MiraklSeller\Sales\Plugin\View\Page\ConfigPlugin">
+        <arguments>
+            <argument name="addBodyClassTriggers" xsi:type="array">
+                <item name="sales-order-view" xsi:type="string">sales-order-view</item>
+                <item name="sales-order_invoice-view" xsi:type="string">sales-order_invoice-view</item>
+                <item name="sales-order_creditmemo-view" xsi:type="string">sales-order_creditmemo-view</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Block\Adminhtml\Order\Totals\Tax">
+        <plugin name="mirakl_seller_sales" type="MiraklSeller\Sales\Plugin\Block\Adminhtml\Order\Totals\TaxPlugin" />
+    </type>
+</config>

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="MiraklSeller_Api::head" title="Mirakl Seller" module="MiraklSeller_Api" sortOrder="65" resource="MiraklSeller_Api::head"/>
+        <add id="MiraklSeller_Api::connections" title="Connections" translate="title" module="MiraklSeller_Api" action="mirakl_seller/connection" sortOrder="10" parent="MiraklSeller_Api::head" resource="MiraklSeller_Api::connections"/>
+        <add id="MiraklSeller_Api::config" title="Configuration" module="MiraklSeller_Api" sortOrder="300" parent="MiraklSeller_Api::head" resource="MiraklSeller_Api::head"/>
+        <add id="MiraklSeller_Api::config_developer" title="Developer" module="MiraklSeller_Api" sortOrder="100" parent="MiraklSeller_Api::config" resource="MiraklSeller_Api::config_developer" action="adminhtml/system_config/edit/section/mirakl_seller_api_developer/"/>
+    </menu>
+</config>

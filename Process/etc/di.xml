@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="process" xsi:type="object">MiraklSeller\Process\Console\Command\ProcessCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Controller\ResultFactory">
+        <arguments>
+            <argument name="typeMap" xsi:type="array">
+                <item name="download" xsi:type="array">
+                    <item name="type" xsi:type="const">MiraklSeller\Process\Controller\Result\Download::TYPE_DOWNLOAD</item>
+                    <item name="class" xsi:type="string">MiraklSeller\Process\Controller\Result\Download</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="mirakl_seller_process_listing_data_source" xsi:type="string">MiraklSeller\Process\Model\ResourceModel\Process\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="MiraklSeller\Process\Model\ResourceModel\Process\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">mirakl_seller_process</argument>
+            <argument name="resourceModel" xsi:type="string">MiraklSeller\Process\Model\ResourceModel\Process</argument>
+        </arguments>
+    </virtualType>
+    <preference for="Magento\Framework\App\Arguments\ValidationState" type="MiraklSeller\Process\Model\ValidationState"/>
+    <type name="Magento\Backend\Model\Auth\Session">
+        <plugin name="mirakl_seller_ajax_sessions_prolong" type="MiraklSeller\Process\Plugin\Model\Auth\SessionPlugin" sortOrder="99" />
+    </type>
+</config>

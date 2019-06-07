@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <!-- Admin Menu -->
+            <resource id="Magento_Backend::admin">
+                <resource id="MiraklSeller_Api::head" title="Mirakl Seller" sortOrder="100">
+                    <resource id="MiraklSeller_Api::connections" title="Connections" sortOrder="10"/>
+                </resource>
+                <!-- Admin config -->
+                <resource id="Magento_Backend::stores">
+                    <resource id="Magento_Backend::stores_settings">
+                        <resource id="Magento_Config::config">
+                            <resource id="MiraklSeller_Api::config_developer" title="Mirakl Seller Developer" sortOrder="220"/>
+                        </resource>
+                    </resource>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>

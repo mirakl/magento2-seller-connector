@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="listing-refresh" xsi:type="object">MiraklSeller\Core\Console\Command\ListingRefreshCommand</item>
+                <item name="listing-export" xsi:type="object">MiraklSeller\Core\Console\Command\ListingExportCommand</item>
+                <item name="tracking-update" xsi:type="object">MiraklSeller\Core\Console\Command\TrackingUpdateCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="MiraklSeller\Core\Model\Listing\Download\Adapter\AdapterInterface" type="MiraklSeller\Core\Model\Listing\Download\Adapter\Csv" />
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="mirakl_seller_listing_listing_data_source" xsi:type="string">MiraklSeller\Core\Model\ResourceModel\Listing\Grid\Collection</item>
+                <item name="mirakl_seller_listing_tracking_product_listing_data_source" xsi:type="string">MiraklSeller\Core\Model\ResourceModel\Listing\Tracking\Product\Grid\Collection</item>
+                <item name="mirakl_seller_listing_tracking_offer_listing_data_source" xsi:type="string">MiraklSeller\Core\Model\ResourceModel\Listing\Tracking\Offer\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="MiraklSeller\Core\Model\ResourceModel\Listing\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">mirakl_seller_listing</argument>
+            <argument name="resourceModel" xsi:type="string">MiraklSeller\Core\Model\ResourceModel\Listing</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MiraklSeller\Core\Model\ResourceModel\Listing\Tracking\Product\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">mirakl_seller_listing_tracking_product</argument>
+            <argument name="resourceModel" xsi:type="string">MiraklSeller\Core\Model\ResourceModel\Listing\Tracking\Product</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MiraklSeller\Core\Model\ResourceModel\Listing\Tracking\Offer\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">mirakl_seller_listing_tracking_offer</argument>
+            <argument name="resourceModel" xsi:type="string">MiraklSeller\Core\Model\ResourceModel\Listing\Tracking\Offer</argument>
+        </arguments>
+    </virtualType>
+    <type name="MiraklSeller\Core\Ui\Component\DataProvider\Listing\Product">
+        <arguments>
+            <argument name="addFilterStrategies" xsi:type="array">
+                <item name="product_import_id" xsi:type="object">MiraklSeller\Core\Ui\DataProvider\Offer\AddFilterToCollection</item>
+                <item name="product_import_status" xsi:type="object">MiraklSeller\Core\Ui\DataProvider\Offer\AddFilterToCollection</item>
+                <item name="product_import_message" xsi:type="object">MiraklSeller\Core\Ui\DataProvider\Offer\AddFilterToCollection</item>
+                <item name="offer_import_id" xsi:type="object">MiraklSeller\Core\Ui\DataProvider\Offer\AddFilterToCollection</item>
+                <item name="offer_import_status" xsi:type="object">MiraklSeller\Core\Ui\DataProvider\Offer\AddFilterToCollection</item>
+                <item name="offer_import_message" xsi:type="object">MiraklSeller\Core\Ui\DataProvider\Offer\AddFilterToCollection</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

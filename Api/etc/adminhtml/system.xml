@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="mirakl_seller" translate="label" sortOrder="1000">
+            <label>Mirakl Seller</label>
+        </tab>
+        <section id="mirakl_seller_api_developer" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Developer</label>
+            <tab>mirakl_seller</tab>
+            <resource>MiraklSeller_Api::config_developer</resource>
+            <group id="mirakl_api_notice" translate="label" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                <frontend_model>MiraklSeller\Api\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
+            </group>
+            <group id="log" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>API Log Settings</label>
+                <field id="log_option" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Log API Calls</label>
+                    <comment><![CDATA[If enabled, all API calls between Magento and Mirakl will be logged in <code>var/log/mirakl_seller_api.log</code> file.<br>Be aware that it is not recommended to enable this feature in a production environment.]]></comment>
+                    <source_model>MiraklSeller\Api\Model\System\Config\Source\ApiLogging</source_model>
+                </field>
+                <field id="log_filter" translate="label comment" type="textarea" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Filter by API URL</label>
+                    <comment><![CDATA[This parameter allows you to filter the requests that have to be logged with a regular expression. This parameter allows you to filter the requests that have to be logged with a regular expression. For example: <code>api/orders/.+/accept</code> will log only OR21 requests. Use the pipe | to allow multiple request patterns. For example: <code>api/orders/.+/accept|api/orders/.+/ship</code> to log requests from API OR21 and OR24.<br>Leave empty to log all requests.]]></comment>
+                </field>
+                <field id="log_buttons" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="30" translate="button_label">
+                    <label>Logs</label>
+                    <frontend_model>MiraklSeller\Api\Block\Adminhtml\System\Config\Button\Log</frontend_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

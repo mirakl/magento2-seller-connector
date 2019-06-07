@@ -1,0 +1,205 @@
+{
+    "acceptance_decision_date": "2014-10-17T10:05:14Z",
+    "channel": {
+        "code": "INIT",
+        "label": "initial"
+    },
+    "commercial_id": "DKFSLFKZ-SDF993",
+    "created_date": "2014-10-14T16:52:41Z",
+    "currency_iso_code": "EUR",
+    "customer": {
+        "billing_address": {
+            "city": "Paris",
+            "civility": "Dr.",
+            "company": null,
+            "country": "France",
+            "firstname": "Nelson",
+            "lastname": "Dionisi",
+            "phone": "0619874662",
+            "phone_secondary": "0123456789",
+            "state": null,
+            "street_1": "10-12 rue de l'Amiral Hamelin",
+            "street_2": "Escalier A",
+            "zip_code": "75116"
+        },
+        "civility": "Dr.",
+        "customer_id": "34053485",
+        "firstname": "Dionisi",
+        "lastname": "Nelson",
+        "locale": "en_US",
+        "shipping_address": {
+            "additional_info": "Code: 38JD31",
+            "city": "Paris",
+            "civility": "Dr.",
+            "company": null,
+            "country": "France",
+            "firstname": "Nelson",
+            "lastname": "Dionisi",
+            "phone": "0619874662",
+            "phone_secondary": "0123456789",
+            "state": null,
+            "street_1": "10-12 rue de l'Amiral Hamelin",
+            "street_2": "Escalier A",
+            "zip_code": "75116"
+        }
+    },
+    "has_customer_message": true,
+    "has_incident": false,
+    "has_invoice": false,
+    "last_updated_date": "2014-10-17T14:54:12Z",
+    "order_id": "DKFSLFKZ-SDF993-A",
+    "order_lines": [
+        {
+            "can_refund": false,
+            "cancelations": [
+                {
+                    "id": "10",
+                    "amount": 3.50,
+                    "shipping_amount": 2.00,
+                    "commission_amount": 0.50,
+                    "commission_total_amount": 0.55,
+                    "reason_code": "CHANGED_MIND",
+                    "created_date": "2015-12-10T19:09:19Z",
+                    "quantity": 1,
+                    "taxes": [
+                        {
+                            "code": "VAT",
+                            "amount": 0.06
+                        }
+                    ],
+                    "shipping_taxes": [
+                        {
+                            "code": "GST",
+                            "amount": 0.03
+                        }
+                    ],
+                    "commission_taxes": [
+                        {
+                            "code": "ELK",
+                            "amount": 0.05
+                        }
+                    ]
+                }
+            ],
+            "category_code": "MGG-E81",
+            "category_label": "Brico Jardin-Motoculture MKP",
+            "commission_fee": 51.00,
+            "commission_rate_vat": 20.00,
+            "commission_taxes": [
+                {
+                    "amount": 0.52,
+                    "code": "VAT",
+                    "rate": 22.00
+                },
+                {
+                    "amount": 0.48,
+                    "code": "GST",
+                    "rate": 11.00
+                }
+            ],
+            "commission_vat": 10.20,
+            "created_date": "2014-10-14T16:52:41Z",
+            "debited_date": "2014-10-17T10:14:03Z",
+            "description": null,
+            "last_updated_date": "2014-10-17T13:37:34Z",
+            "offer_id": 2000,
+            "offer_sku": "S2000",
+            "offer_state_code": "11",
+            "order_line_additional_fields": [
+                {
+                    "type": "STRING",
+                    "code": "custom-message",
+                    "value": "For Mommy"
+                }
+            ],
+            "order_line_id": "MY-LINE",
+            "order_line_index": 1,
+            "order_line_state": "RECEIVED",
+            "order_line_state_reason_code": null,
+            "order_line_state_reason_label": null,
+            "price": 240.00,
+            "price_additional_info": null,
+            "price_unit": 120.00,
+            "product_sku": "2199HEQT0000HEQT",
+            "product_title": "BOSCH Tronçonneuse à chaine - 1900W - AKE 35-19 S BOSCH",
+            "promotions": [
+                {
+                    "id": "DISCOUNT1",
+                    "deduced_amount": 1.00,
+                    "offered_quantity": 2,
+                    "apportioned": false,
+                    "configuration": {
+                        "type": "AMOUNT_OFF",
+                        "internal_description": "my great promo",
+                        "percentage_off": 12.00,
+                        "amount_off": 10.50,
+                        "free_items_quantity": 2
+                    }
+                }
+            ],
+            "quantity": 2,
+            "received_date": "2014-10-17T13:10:36Z",
+            "refunds": [
+                {
+                    "amount": 240.00,
+                    "commission_amount": 51.00,
+                    "commission_tax_amount": 10.20,
+                    "commission_taxes": [
+                        {
+                            "amount": 0.62,
+                            "code": "VAT"
+                        }
+                    ],
+                    "commission_total_amount": 61.20,
+                    "created_date": "2014-10-17T13:37:34Z",
+                    "id": "1100",
+                    "quantity": null,
+                    "reason_code": "18",
+                    "shipping_amount": 15.00,
+                    "state": "WAITING_REFUND_PAYMENT"
+                }
+            ],
+            "shipped_date": "2014-10-17T13:03:38Z",
+            "shipping_price": 15.00,
+            "shipping_price_additional_unit": null,
+            "shipping_price_unit": null,
+            "total_commission": 61.20,
+            "total_price": 255.00
+        }
+    ],
+    "order_state": "RECEIVED",
+    "order_state_reason_code": null,
+    "order_state_reason_label": null,
+    "promotions": {
+        "applied_promotions": [
+            {
+                "id": "MY_DISCOUNT",
+                "deduced_amount": 2.00,
+                "offered_quantity": 4,
+                "apportioned": false,
+                "configuration": {
+                    "type": "PERCENTAGE_OFF",
+                    "internal_description": "my great promo",
+                    "percentage_off": 10.00,
+                    "amount_off": 20.00,
+                    "free_items_quantity": 5
+                }
+            }
+        ],
+        "total_deduced_amount": 1.00
+    },
+    "paymentType": null,
+    "payment_type": null,
+    "price": 240.00,
+    "quote_id": "Q12345",
+    "shipping_company": "FedEx2",
+    "shipping_price": 15.00,
+    "shipping_tracking": "JFSKFJSDKF0923949",
+    "shipping_tracking_url": "https://fex.ex?n={tracksingId}",
+    "shipping_type_code": "STD",
+    "shipping_type_label": "Standard",
+    "shipping_zone_code": "FR",
+    "shipping_zone_label": "France",
+    "total_commission": 61.20,
+    "total_price": 255.00
+}

@@ -1,0 +1,48 @@
+{
+    "offers_before": [
+        { "product_id": 231, "product_import_id": 2001, "product_import_status": "PENDING", "product_import_message": "" },
+        { "product_id": 232, "product_import_id": 2001, "product_import_status": "PENDING", "product_import_message": "" },
+        { "product_id": 233, "product_import_id": 2001, "product_import_status": "PENDING", "product_import_message": "" },
+        { "product_id": 234, "product_import_id": 2001, "product_import_status": "PENDING", "product_import_message": "" },
+        { "product_id": 235, "product_import_id": 2001, "product_import_status": "PENDING", "product_import_message": "" }
+    ],
+    "listing_tracking_product": {
+        "import_id": 2001,
+        "import_status": "",
+        "import_status_reason": "",
+        "transformation_error_report": "",
+        "integration_error_report": "",
+        "integration_success_report": ""
+    },
+    "P42": {
+        "product_import_trackings": [
+            {
+                "date_created": "2018-01-01T00:00:00Z",
+                "error_report": false,
+                "new_product_report": false,
+                "transformation_error_report": false,
+                "transformed_file": true,
+                "import_id": 2001,
+                "import_status": "SENT",
+                "shop_id": 2000,
+                "transformed_lines_in_error": 0,
+                "transformed_lines_in_success": 5,
+                "transformed_lines_read": 5,
+                "transformed_lines_with_warning": 0
+            }
+        ],
+        "total_count": 1
+    },
+    "P44": [],
+    "P45": [],
+    "P47": [],
+    "listing_tracking_product_status_after": "SENT",
+    "listing_tracking_product_status_reason_after": "",
+    "offers_after": {
+        "231": { "product_import_status": "WAITING_INTEGRATION", "product_import_message": "" },
+        "232": { "product_import_status": "WAITING_INTEGRATION", "product_import_message": "" },
+        "233": { "product_import_status": "WAITING_INTEGRATION", "product_import_message": "" },
+        "234": { "product_import_status": "WAITING_INTEGRATION", "product_import_message": "" },
+        "235": { "product_import_status": "WAITING_INTEGRATION", "product_import_message": "" }
+    }
+}

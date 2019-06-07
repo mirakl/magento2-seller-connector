@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="mirakl_api_connection_delete_before">
+        <observer name="mirakl_seller_sales" instance="MiraklSeller\Sales\Observer\Connection\DeleteObserver" />
+    </event>
+</config>

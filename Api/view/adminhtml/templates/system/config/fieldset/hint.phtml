@@ -1,0 +1,11 @@
+<?php
+/**
+ * @var \MiraklSeller\Api\Block\Adminhtml\System\Config\Fieldset\Hint $block
+ */
+?>
+<div class="message message-notice notice">
+    <div><?php echo __('Magento Seller Connector Version: <strong>v%1</strong>', $block->getConnectorVersion()) ?></div>
+    <?php if ($_versionSDK = $block->getVersionSDK()): ?>
+        <div><?php echo __('PHP SDK Version: <strong>v%1</strong>', $_versionSDK) ?></div>
+    <?php endif ?>
+</div>

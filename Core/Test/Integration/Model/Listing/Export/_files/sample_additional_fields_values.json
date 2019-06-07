@@ -1,0 +1,50 @@
+{
+    "test-af-1": {
+        "default": "0",
+        "attribute": "eco_collection"
+    },
+    "test-af-2": {
+        "default": "10\/4\/2017 8:35 AM",
+        "attribute": "news_from_date"
+    },
+    "test-af-3": {
+        "default": "Lorem ipsum\r\ndolor\r\n\r\nsit\r\n\r\namet",
+        "attribute": "description"
+    },
+    "test-af-4": {
+        "default": "foo bar",
+        "attribute": ""
+    },
+    "test-af-5": {
+        "default": "",
+        "attribute": "color"
+    },
+    "test-af-6": {
+        "default": [
+            "Orange",
+            "Red",
+            "White",
+            "Black",
+            "Black-White",
+            "Yellow",
+            "Pink"
+        ],
+        "attribute": ""
+    },
+    "test-af-7": {
+        "default": "PHP",
+        "attribute": "country_of_manufacture"
+    },
+    "test-af-8": {
+        "default": "890",
+        "attribute": ""
+    },
+    "test-af-9": {
+        "default": "foo",
+        "attribute": ""
+    },
+    "test-af-10": {
+        "default": "0",
+        "attribute": "weight"
+    }
+}

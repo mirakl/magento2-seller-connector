@@ -1,0 +1,53 @@
+{
+    "offers_before": [
+        { "product_id": 231, "product_import_id": 2001, "product_import_status": "PENDING", "product_import_message": "" },
+        { "product_id": 232, "product_import_id": 2001, "product_import_status": "PENDING", "product_import_message": "" },
+        { "product_id": 233, "product_import_id": 2001, "product_import_status": "PENDING", "product_import_message": "" },
+        { "product_id": 234, "product_import_id": 2001, "product_import_status": "PENDING", "product_import_message": "" },
+        { "product_id": 235, "product_import_id": 2001, "product_import_status": "PENDING", "product_import_message": "" }
+    ],
+    "listing_tracking_product": {
+        "import_id": 2001,
+        "import_status": "",
+        "import_status_reason": "",
+        "transformation_error_report": "",
+        "integration_error_report": "",
+        "integration_success_report": ""
+    },
+    "P42": {
+        "product_import_trackings": [
+            {
+                "date_created": "2018-01-01T00:00:00Z",
+                "error_report": true,
+                "new_product_report": false,
+                "transformation_error_report": false,
+                "transformed_file": true,
+                "import_id": 2001,
+                "import_status": "FAILED",
+                "shop_id": 2000,
+                "transformed_lines_in_error": 5,
+                "transformed_lines_in_success": 0,
+                "transformed_lines_read": 5,
+                "transformed_lines_with_warning": 0
+            }
+        ],
+        "total_count": 1
+    },
+    "P44": [
+        "\"shop_sku\";\"error\"",
+        "\"MH12-L-Blue\";\"\"",
+        "\"MH12-L-Green\";\"Operator error\"",
+        "\"MH12-L-Red\";\"\""
+    ],
+    "P45": [],
+    "P47": [],
+    "listing_tracking_product_status_after": "FAILED",
+    "listing_tracking_product_status_reason_after": "",
+    "offers_after": {
+        "231": { "product_import_status": "INTEGRATION_ERROR", "product_import_message": "Product not found in marketplace product reports. Try to export prices & stocks. If the error \"product not found\" is returned, try to contact the marketplace. To export the product again, mark it as \"to export\"." },
+        "232": { "product_import_status": "INTEGRATION_ERROR", "product_import_message": "" },
+        "233": { "product_import_status": "INTEGRATION_ERROR", "product_import_message": "Operator error" },
+        "234": { "product_import_status": "INTEGRATION_ERROR", "product_import_message": "" },
+        "235": { "product_import_status": "INTEGRATION_ERROR", "product_import_message": "Product not found in marketplace product reports. Try to export prices & stocks. If the error \"product not found\" is returned, try to contact the marketplace. To export the product again, mark it as \"to export\"." }
+    }
+}

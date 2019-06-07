@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">mirakl_seller_connection_form.connection_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Connection</item>
+        <item name="reverseMetadataMerge" xsi:type="boolean">true</item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="save_and_continue" class="MiraklSeller\Api\Block\Adminhtml\Connection\Edit\SaveAndContinueButton"/>
+            <button name="save" class="MiraklSeller\Api\Block\Adminhtml\Connection\Edit\SaveButton"/>
+            <button name="reset" class="MiraklSeller\Api\Block\Adminhtml\ResetButton"/>
+            <button name="delete" class="MiraklSeller\Api\Block\Adminhtml\Connection\Edit\DeleteButton"/>
+            <button name="back" class="MiraklSeller\Api\Block\Adminhtml\BackButton"/>
+        </buttons>
+        <layout>
+            <navContainerName>left</navContainerName>
+            <type>tabs</type>
+        </layout>
+        <deps>
+            <dep>mirakl_seller_connection_form.connection_form_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="connection_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <validateUrl path="mirakl_seller/connection/validate"/>
+            <submitUrl path="mirakl_seller/connection/save"/>
+        </settings>
+        <dataProvider class="MiraklSeller\Api\Model\Connection\DataProvider" name="connection_form_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="main">
+        <settings>
+            <label translate="true">Connection Information</label>
+        </settings>
+        <field name="id" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">connection</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <visible>false</visible>
+            </settings>
+        </field>
+        <field name="name" sortOrder="10" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">connection</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Name</label>
+                <dataScope>name</dataScope>
+            </settings>
+        </field>
+        <field name="api_url" sortOrder="20" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">connection</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="validate-api-url" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">API URL</label>
+                <notice translate="true"><![CDATA[For example: https://<your_mirakl>/api. Replace <your_mirakl> with the URL you are using to log in to your Mirakl back office for this connection. This URL should have been provided by the marketplace.]]></notice>
+                <dataScope>api_url</dataScope>
+            </settings>
+        </field>
+        <field name="api_key" sortOrder="30" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">connection</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">API Key</label>
+                <notice translate="true">A shop API key looks like this: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx</notice>
+                <dataScope>api_key</dataScope>
+            </settings>
+        </field>
+        <field name="store_id" sortOrder="40" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">listing</item>
+                    <item name="default" xsi:type="number">0</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>int</dataType>
+                <label translate="true">Store View</label>
+                <notice translate="true"><![CDATA[Store view to use for catalog product translation during products export and for the currency (associated to the website) used during prices & stocks export. Selected store view will also be used to create Magento orders when importing Mirakl orders.]]></notice>
+                <dataScope>store_id</dataScope>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="MiraklSeller\Api\Ui\Component\Listing\Column\StoreOptions"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="shop_id" sortOrder="50" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">connection</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="validate-integer" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Shop Id</label>
+                <notice translate="true">If you use multi-stores, you can link this connection to a specific shop Id. Leave blank to use your default shop for this connection.</notice>
+                <dataScope>shop_id</dataScope>
+            </settings>
+        </field>
+    </fieldset>
+    <fieldset name="operator">
+        <settings>
+            <label translate="true">Marketplace Reports Configuration</label>
+        </settings>
+        <container name="mirakl_seller_connection_form_operator_error_report" sortOrder="50" template="ui/form/components/complex">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Integration Error Report</item>
+                    <item name="additionalClasses" xsi:type="string" />
+                    <item name="text" xsi:type="string" translate="true" />
+                </item>
+            </argument>
+        </container>
+        <field name="sku_code" sortOrder="70" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">connection</item>
+                    <item name="default" xsi:type="string">shop_sku</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">SKU Column</label>
+                <notice translate="true">Column name containing the product SKU in the marketplace integration error report. This is required to read the report and display integration errors messages at the product level in Magento.</notice>
+                <dataScope>sku_code</dataScope>
+                <componentType>field</componentType>
+            </settings>
+        </field>
+        <field name="errors_code" sortOrder="80" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">connection</item>
+                    <item name="default" xsi:type="string">errors</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Errors Column</label>
+                <notice translate="true">Name of the column containing errors messages in the integration files (API P44 only)</notice>
+                <dataScope>errors_code</dataScope>
+                <componentType>field</componentType>
+            </settings>
+        </field>
+        <container name="mirakl_seller_connection_form_operator_message_report" sortOrder="90" template="ui/form/components/complex">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Success Report</item>
+                    <item name="additionalClasses" xsi:type="string" />
+                    <item name="text" xsi:type="string" translate="true" />
+                </item>
+            </argument>
+        </container>
+        <field name="success_sku_code" sortOrder="100" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">connection</item>
+                    <item name="default" xsi:type="string">shop_sku</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">SKU Column</label>
+                <notice translate="true">Column name containing the product SKU in the marketplace integration success report. This is required to read the report and display integration success messages at the product level in Magento.</notice>
+                <dataScope>success_sku_code</dataScope>
+                <componentType>field</componentType>
+            </settings>
+        </field>
+        <field name="messages_code" sortOrder="110" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">connection</item>
+                    <item name="default" xsi:type="string">messages</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Messages Column</label>
+                <notice translate="true">Name of the column containing messages in the marketplace integration success report.</notice>
+                <dataScope>messages_code</dataScope>
+                <componentType>field</componentType>
+            </settings>
+        </field>
+    </fieldset>
+    <fieldset name="export">
+        <settings>
+            <label translate="true">Export Settings</label>
+        </settings>
+        <field name="magento_tier_prices_apply_on" sortOrder="120" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">connection</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Magento Tier Prices Apply On</label>
+                <notice translate="true">Mirakl offers two variations to manage tier prices: "Volume pricing" and "Volume discounts". Marketplaces can choose to activate each of the variation. Depending on the marketplace configuration, choose how you would like Magento tier prices to be exported.</notice>
+                <dataScope>magento_tier_prices_apply_on</dataScope>
+                <componentType>field</componentType>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options>
+                            <option name="0" xsi:type="array">
+                                <item name="value" xsi:type="string">VOLUME_PRICING</item>
+                                <item name="label" xsi:type="string" translate="true">Volume Pricing</item>
+                            </option>
+                            <option name="1" xsi:type="array">
+                                <item name="value" xsi:type="string">VOLUME_DISCOUNTS</item>
+                                <item name="label" xsi:type="string" translate="true">Volume Discounts</item>
+                            </option>
+                        </options>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="exportable_attributes" sortOrder="130" formElement="multiselect">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">connection</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Exportable Attributes (associated products)</label>
+                <notice translate="true">Select the attributes for which you want to export the values of the configurable product instead of the values of the associated product.</notice>
+                <dataScope>exportable_attributes</dataScope>
+                <componentType>field</componentType>
+            </settings>
+            <formElements>
+                <multiselect>
+                    <settings>
+                        <options class="MiraklSeller\Api\Model\Connection\Source\ExportableAttribute"/>
+                    </settings>
+                </multiselect>
+            </formElements>
+        </field>
+        <field name="exported_prices_attribute" sortOrder="140" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">connection</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Exported Prices Attribute</label>
+                <notice translate="true">By default exported prices are computed by the Magento pricing engine. To export a specific price for the current marketplace, you can create a product attribute with the type "price" and select it in this dropdown. In this scenario, discount prices cannot be exported. If the price attribute cannot be found or is empty for a specific product, the price exported will be the default price.</notice>
+                <dataScope>exported_prices_attribute</dataScope>
+                <componentType>field</componentType>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="MiraklSeller\Api\Model\Connection\Source\ExportedPricesAttribute"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+    </fieldset>
+</form>

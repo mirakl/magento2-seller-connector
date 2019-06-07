@@ -1,0 +1,59 @@
+<?php
+/** @var \MiraklSeller\Core\Block\Adminhtml\Listing\Edit\Tab\Product\ProductListingHeader $block */
+$nbProductsSuccess = $block->getNbSuccessProducts();
+$productsLabelFailed = $block->getFailedProductsLabels();
+if (!$block->getListing()->getId()) {
+    return;
+}
+?>
+
+<div class="page-main-actions" id="product-listing-header">
+    <div class="page-actions-placeholder">
+        <div class="entry-edit">
+            <div class="fieldset" style="overflow: hidden;">
+                <ol>
+                    <li>
+                        <span class="dashboard-success"><a title="<?php echo __('Filter products by %1 status', 'SUCCESS') ?>" href="#" onclick="return addProductsGridFilter('SUCCESS');"><?php echo __('Products exported successfully'); ?></a></span><strong> (<?php echo $nbProductsSuccess; ?>)</strong>
+                        <?php if (!empty($productsLabelFailed)): ?>
+                            <?php
+                            $label = ' - ';
+                            foreach ($productsLabelFailed as $status => $productsLabel) {
+                                $label .= '<a title="'.__('Filter products by %1 status', $status) .'" href="#" onclick="return addProductsGridFilter(\'' . $status . '\');">' . __($productsLabel['product_import_status']) . '</a><strong> (' . $productsLabel['count'] . ')</strong> - ';
+                            }
+                            $label = rtrim($label, '- ');
+                            ?>
+                            <span class="dashboard-error"><?php echo $label; ?></span>
+                        <?php endif; ?>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <div class="page-actions" data-ui-id="page-actions-toolbar-content-header">
+        <div class="page-actions-inner">
+            <div class="page-actions-buttons">
+                <?= $block->getButtonsHtml() ?>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="application/javascript">
+    //<![CDATA[
+    function addProductsGridFilter(status) {
+        require(['uiRegistry'], function (uiRegistry) {
+            var data;
+            if (status === 'ERROR') {
+                data = { offer_import_status: status, product_import_status: '' };
+            } else {
+                data = { product_import_status: status, offer_import_status: '' };
+            }
+
+            uiRegistry.get('mirakl_seller_listing_product_listing.mirakl_seller_listing_product_listing.listing_top.listing_filters', function (element) {
+                element.setData(data);
+                element.apply();
+            });
+        });
+        return false;
+    }
+    //]]>
+</script>

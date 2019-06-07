@@ -1,0 +1,31 @@
+<?php
+/** @var \Magento\Backend\Block\Template $block */
+?>
+<script>
+require([
+    'jquery'
+], function($) {
+    $(document).ready(function() {
+        'use strict';
+
+        setTimeout(function() {
+            (function asyncProcess() {
+                $.ajax({
+                    url: '<?php echo $block->getUrl('mirakl_seller/process/async') ?>',
+                    data: {
+                        form_key: '<?php /* @escapeNotVerified */ echo $block->getFormKey()?>'
+                    },
+                    showLoader: false,
+                    dataType: 'html',
+                    success: function(data) {
+                        console.log('Mirakl: ' + data);
+                    },
+                    complete: function() {
+                        setTimeout(asyncProcess, 2 * 60 * 1000); // every 2 minutes
+                    }
+                });
+            })();
+        }, 10000); // Wait 10s before calling async process URL in order to avoid multiple calls when browsing Magento admin fastly
+    });
+});
+</script>

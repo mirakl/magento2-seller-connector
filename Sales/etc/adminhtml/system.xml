@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="mirakl_seller_sales" translate="label" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Mirakl Orders</label>
+            <tab>mirakl_seller</tab>
+            <resource>MiraklSeller_Sales::config</resource>
+            <group id="mirakl_api_notice" translate="label" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                <frontend_model>MiraklSeller\Api\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
+            </group>
+            <group id="order_acceptance" translate="label" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Mirakl Orders Acceptance Settings</label>
+                <field id="auto_accept" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Automatic Acceptance</label>
+                    <comment><![CDATA[If enabled, Mirakl orders waiting for acceptance will be automatically accepted with scheduled task (every 15 minutes by default).]]></comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="insufficient_stock" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Insufficient Stock</label>
+                    <comment><![CDATA[If the option "Reject item automatically" is selected, items of an order with not enough stock will be automatically rejected. Other items of the same order will be automatically accepted.]]></comment>
+                    <source_model>MiraklSeller\Sales\Model\MiraklOrder\Acceptance\InsufficientStock</source_model>
+                    <depends>
+                        <field id="auto_accept">1</field>
+                    </depends>
+                </field>
+                <field id="backorder" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Backorder</label>
+                    <comment><![CDATA[Behavior applied when negative stock (backorder) is allowed on an item.]]></comment>
+                    <source_model>MiraklSeller\Sales\Model\MiraklOrder\Acceptance\Backorder</source_model>
+                    <depends>
+                        <field id="auto_accept">1</field>
+                    </depends>
+                </field>
+                <field id="prices_variations" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Prices Variations</label>
+                    <comment><![CDATA[Falling prices differences allowed (in %) between product price of a Mirakl order and price in Magento. Otherwise, the order will be handled manually.<br>Leave the field empty to accept the order regardless the price difference.]]></comment>
+                    <validate>validate-number</validate>
+                    <depends>
+                        <field id="auto_accept">1</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="order" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Mirakl Orders Import Settings</label>
+                <field id="auto_create_invoice" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Automatic Invoice Creation</label>
+                    <comment><![CDATA[If enabled, invoice will be created automatically while importing Mirakl order into Magento.]]></comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="auto_create_shipment" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Automatic Shipment Creation</label>
+                    <comment><![CDATA[If enabled, shipment will be created automatically while importing Mirakl order into Magento (only if the Mirakl order has already been shipped).]]></comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="auto_create_refunds" translate="label comment" type="select" sortOrder="25" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Automatic Refunds Creation</label>
+                    <comment><![CDATA[If enabled, refunds will be created automatically while importing Mirakl order into Magento.]]></comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="auto_orders_import" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Automatic Orders Import</label>
+                    <comment><![CDATA[If enabled, all the Mirakl orders of all connections will be synchronized automatically via Magento cron tasks. Note that only modified orders since the last synchronization date will be processed.]]></comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

@@ -1,0 +1,93 @@
+[
+    {
+        "code": "test-af-1",
+        "entity": "OFFER",
+        "label": "Test AF #1 (Boolean)",
+        "required": true,
+        "type": "BOOLEAN"
+    },
+    {
+        "code": "test-af-2",
+        "entity": "OFFER",
+        "label": "Test AF #2 (Date)",
+        "required": true,
+        "type": "DATE"
+    },
+    {
+        "code": "test-af-3",
+        "entity": "OFFER",
+        "label": "Test AF #3 (Textarea)",
+        "required": false,
+        "type": "TEXTAREA"
+    },
+    {
+        "code": "test-af-4",
+        "entity": "OFFER",
+        "label": "Test AF #4 (Text)",
+        "required": true,
+        "type": "STRING"
+    },
+    {
+        "code": "test-af-5",
+        "entity": "OFFER",
+        "label": "Test AF #5 (Link)",
+        "required": false,
+        "type": "LINK"
+    },
+    {
+        "accepted_values": [
+            "Blue",
+            "Orange",
+            "Silver",
+            "Red",
+            "White",
+            "Black",
+            "Black-White",
+            "Gray",
+            "Yellow",
+            "Purple",
+            "Pink"
+        ],
+        "code": "test-af-6",
+        "entity": "OFFER",
+        "label": "Test AF #6 (Multiselect)",
+        "required": false,
+        "type": "MULTIPLE_VALUES_LIST"
+    },
+    {
+        "accepted_values": [
+            "PHP",
+            "Java",
+            "Perl",
+            "Python",
+            "Javascript"
+        ],
+        "code": "test-af-7",
+        "entity": "OFFER",
+        "label": "Test AF #7 (Select)",
+        "required": true,
+        "type": "LIST"
+    },
+    {
+        "code": "test-af-8",
+        "entity": "OFFER",
+        "label": "Test AF #8 (Numeric)",
+        "required": true,
+        "type": "NUMERIC"
+    },
+    {
+        "code": "test-af-9",
+        "entity": "OFFER",
+        "label": "Test AF #9",
+        "regex": "\/[a-z]*<br>\/",
+        "required": false,
+        "type": "REGEX"
+    },
+    {
+        "code": "test-af-10",
+        "entity": "OFFER",
+        "label": "Test AF #10 (Optional Boolean)",
+        "required": false,
+        "type": "BOOLEAN"
+    }
+]

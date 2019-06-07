@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="styles"/>
+    <body>
+        <referenceContainer name="page.main.actions">
+            <block class="MiraklSeller\Sales\Block\Adminhtml\Connection\Switcher" name="mirakl_seller.sales.connection_switcher" as="connection_switcher">
+                <arguments>
+                    <argument name="use_confirm" xsi:type="string">0</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <block class="MiraklSeller\Sales\Block\Adminhtml\MiraklOrder\Grid\Filters" name="mirakl_seller.sales.list.filters" as="list_filters"/>
+            <uiComponent name="mirakl_seller_order_listing"/>
+        </referenceContainer>
+    </body>
+</page>
+

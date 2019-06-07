@@ -1,0 +1,19 @@
+Mirakl Magento Connector (the "Software")
+Copyright (C) Mirakl SAS. 
+
+License last updated: November 10, 2015
+
+CAREFULLY READ THE FOLLOWING TERMS AND CONDITIONS BEFORE USING THIS SOFTWARE. BY USING THIS FREEWARE VERSION, YOU ACKNOWLEDGE THAT YOU HAVE READ THIS NOTICE, UNDERSTAND IT, AND AGREE TO BE BOUND BY ITS TERMS AND CONDITIONS. YOU ALSO AGREE THAT UNLESS YOU HAVE A DIFFERENT LICENSE AGREEMENT SIGNED BY MIRAKL AND EXPRESSLY GOVERNING YOUR USE OF THIS SPECIFIC SOFTWARE, YOUR USE OF THIS SOFTWARE INDICATES YOUR ACCEPTANCE OF THIS LICENSE AGREEMENT AND WARRANTY. IF YOU DO NOT AGREE TO THE TERMS OF THIS AGREEMENT, DELETE THE SOFTWARE FROM ALL STORAGE MEDIA. 
+
+If you obtained the Software from Mirakl, and subject to your compliance with the terms of this agreement, Mirakl grants to you a non-exclusive license to use the Software in the manner and for the purposes described below: 
+-	You may install and use the Software, solely for interfacing a marketplace solution provided by Mirakl with a third party solution. Any use for any other purpose is expressly forbidden. 
+-	You may modify, adapt, translate, or create derivative works based upon the Software, provided that (i) you keep this copyright notice and disclaimer of warranty intact, and (ii) such derivative work / adaptation is bound by the terms therein.
+-	You shall not sublicence or distribute the Software (including any derivative work) to any third party without Mirakl's prior written approval.
+
+You acknowledge and agree that the Software along with any technical information related to the Software in the shall be construed as Mirakl's confidential Information. Confidential information shall not be disclosed to anyone else without Mirakl's prior written approval. Any disclosure in violation of this section shall be deemed a material breach of this Agreement
+
+You will not have any proprietary rights in and to the Software. You acknowledge and agree that Mirakl retains all copyrights and other proprietary rights in and to the Software.
+
+This agreement shall be governed by the laws of France. If any portion of this Agreement is deemed unenforceable by a court of competent jurisdiction, it shall not affect the forcibility of the other portions of this Agreement.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL MIRAKL BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

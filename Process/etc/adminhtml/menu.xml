@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="MiraklSeller_Process::process" title="Processes" module="MiraklSeller_Process" sortOrder="90" parent="MiraklSeller_Api::head" action="mirakl_seller/process" resource="MiraklSeller_Process::process"/>
+        <add id="MiraklSeller_Process::configuration" title="Processes" module="MiraklSeller_Process" sortOrder="50" parent="MiraklSeller_Api::config" resource="MiraklSeller_Config::process" action="adminhtml/system_config/edit/section/mirakl_seller_process/"/>
+    </menu>
+</config>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mirakl_seller_process_view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="template" xsi:type="string">templates/view</item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="back" class="MiraklSeller\Api\Block\Adminhtml\BackButton"/>
+            <button name="run" class="MiraklSeller\Process\Block\Adminhtml\Process\View\RunButton"/>
+            <button name="stop" class="MiraklSeller\Process\Block\Adminhtml\Process\View\StopButton"/>
+            <button name="delete" class="MiraklSeller\Process\Block\Adminhtml\Process\View\DeleteButton"/>
+        </buttons>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>mirakl_seller_process_view.process_view_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="process_view_data_source">
+        <dataProvider class="MiraklSeller\Process\Model\Process\DataProvider" name="process_view_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+</mirakl_seller_process_view>

@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">mirakl_seller_listing_form.listing_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Configure Listing</item>
+        <item name="reverseMetadataMerge" xsi:type="boolean">true</item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="save_and_continue" class="MiraklSeller\Core\Block\Adminhtml\Listing\Edit\SaveAndContinueButton"/>
+            <button name="refresh" class="MiraklSeller\Core\Block\Adminhtml\Listing\Edit\RefreshButton"/>
+            <button name="export_product" class="MiraklSeller\Core\Block\Adminhtml\Listing\Edit\ExportProductButton"/>
+            <button name="export_offer" class="MiraklSeller\Core\Block\Adminhtml\Listing\Edit\ExportOfferButton"/>
+            <button name="reset" class="MiraklSeller\Api\Block\Adminhtml\ResetButton"/>
+            <button name="delete" class="MiraklSeller\Core\Block\Adminhtml\Listing\Edit\DeleteButton"/>
+            <button name="back" class="MiraklSeller\Api\Block\Adminhtml\BackButton"/>
+        </buttons>
+        <layout>
+            <navContainerName>left</navContainerName>
+            <type>tabs</type>
+        </layout>
+        <deps>
+            <dep>mirakl_seller_listing_form.listing_form_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="listing_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <validateUrl path="mirakl_seller/listing/validate"/>
+            <submitUrl path="mirakl_seller/listing/save"/>
+        </settings>
+        <dataProvider class="MiraklSeller\Core\Model\Listing\DataProvider" name="listing_form_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="main" sortOrder="10">
+        <settings>
+            <label translate="true">Listing Information</label>
+        </settings>
+        <field name="id" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">listing</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <visible>false</visible>
+            </settings>
+        </field>
+        <field name="name" sortOrder="10" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">listing</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Name</label>
+                <dataScope>name</dataScope>
+            </settings>
+        </field>
+        <field name="is_active" sortOrder="20" formElement="checkbox">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">listing</item>
+                    <item name="default" xsi:type="number">1</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>boolean</dataType>
+                <label translate="true">Is Active</label>
+                <notice translate="true">If inactive, listing will not be exported.</notice>
+                <dataScope>is_active</dataScope>
+            </settings>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <valueMap>
+                            <map name="false" xsi:type="number">0</map>
+                            <map name="true" xsi:type="number">1</map>
+                        </valueMap>
+                        <prefer>toggle</prefer>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
+        <field name="connection_id" sortOrder="30" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">listing</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>int</dataType>
+                <label translate="true">Connection</label>
+                <disabled>true</disabled>
+                <dataScope>connection_id</dataScope>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="MiraklSeller\Api\Model\ResourceModel\Connection\Collection"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="offer_state" sortOrder="50" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">listing</item>
+                    <item name="default" xsi:type="number">11</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>int</dataType>
+                <label translate="true">Products Condition</label>
+                <notice translate="true"><![CDATA[Specify the state to use when exporting prices & stocks of the listing.]]></notice>
+                <dataScope>offer_state</dataScope>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="MiraklSeller\Core\Model\Offer\State"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <container name="mirakl_seller_listing_form_product_reference_identifier" sortOrder="60" template="ui/form/components/complex">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Product Reference Identifiers</item>
+                </item>
+            </argument>
+        </container>
+        <field name="product_id_type" sortOrder="70" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">listing</item>
+                    <item name="default" xsi:type="string">SHOP_SKU</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Product Id Type</label>
+                <notice translate="true"><![CDATA[This code will be used to fill the "product_id_type" field in the prices & stocks export file.]]></notice>
+                <dataScope>product_id_type</dataScope>
+            </settings>
+        </field>
+        <field name="product_id_value_attribute" sortOrder="80" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">listing</item>
+                    <item name="default" xsi:type="string">sku</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>int</dataType>
+                <label translate="true">Product Id Value</label>
+                <notice translate="true">The selected attribute will be used as the reference value to identify a product in Mirakl. Only attributes defined in the global scope are listed here.</notice>
+                <dataScope>product_id_value_attribute</dataScope>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="MiraklSeller\Core\Ui\Component\Listing\Column\Attribute\IdentifierOptions"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <container name="mirakl_seller_listing_form_configurable_attribute" sortOrder="90" template="ui/form/components/complex">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Configurable Attributes</item>
+                </item>
+            </argument>
+        </container>
+        <field name="variants_attributes" sortOrder="100" formElement="multiselect">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">listing</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>array</dataType>
+                <label translate="true">Skip Configurable Attributes</label>
+                <notice translate="true">Select the configurable attributes not supported by the marketplace, if any. Refer to the documentation for more information.</notice>
+                <dataScope>variants_attributes</dataScope>
+            </settings>
+            <formElements>
+                <multiselect>
+                    <settings>
+                        <options class="MiraklSeller\Core\Ui\Component\Listing\Column\Attribute\VariantOptions"/>
+                    </settings>
+                </multiselect>
+            </formElements>
+        </field>
+    </fieldset>
+    <htmlContent name="mirakl_seller_listing_form_filter_products" sortOrder="20">
+        <argument name="data" xsi:type="array">
+            <item name="tab" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Conditions</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
+                <item name="opened" xsi:type="boolean">false</item>
+            </item>
+        </argument>
+        <settings>
+            <wrapper>
+                <canShow>true</canShow>
+                <componentType>fieldset</componentType>
+            </wrapper>
+        </settings>
+        <block class="MiraklSeller\Core\Block\Adminhtml\Listing\Edit\Tab\Conditions" name="listing_edit_tab_filter_products"/>
+    </htmlContent>
+    <fieldset name="offer_additional_fields_values" sortOrder="30">
+        <settings>
+            <label translate="true">Additional Fields</label>
+        </settings>
+        <miraklCustomFields name="additional_fields" sortOrder="10">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="itemTemplate" xsi:type="string">additional_fields</item>
+                </item>
+            </argument>
+            <container name="additional_fields" sortOrder="10" component="MiraklSeller_Core/js/form/components/item">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="isTemplate" xsi:type="boolean">true</item>
+                        <item name="childType" xsi:type="string">group</item>
+                    </item>
+                </argument>
+                <field name="default" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="source" xsi:type="string">additional_fields</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <dataType>text</dataType>
+                        <label translate="true">Default Value</label>
+                        <notice translate="true">Specify the value sent for all listing products.</notice>
+                    </settings>
+                </field>
+                <field name="attribute" formElement="select">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="source" xsi:type="string">additional_fields</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <dataType>select</dataType>
+                        <label translate="true">Magento Attribute</label>
+                        <notice translate="true">Select a Magento attribute. This setting allows you to apply one specific value per product. If empty, the default value is applied.</notice>
+                    </settings>
+                    <formElements>
+                        <select>
+                            <settings>
+                                <options class="MiraklSeller\Core\Ui\Component\Listing\Column\Attribute\AllOptions"/>
+                            </settings>
+                        </select>
+                    </formElements>
+                </field>
+            </container>
+        </miraklCustomFields>
+    </fieldset>
+    <fieldset name="product_content" sortOrder="40" class="MiraklSeller\Core\Ui\Component\Listing\Product\Fieldset\TabDisplay">
+        <settings>
+            <label translate="true"><![CDATA[Products / Prices & Stocks]]></label>
+        </settings>
+        <htmlContent name="customer_edit_tab_view_content">
+            <block class="MiraklSeller\Core\Block\Adminhtml\Listing\Edit\Tab\Product\ProductListingHeader" name="product_listing_header" template="MiraklSeller_Core::listing/product-listing-header.phtml">
+                <block class="Magento\Backend\Block\Widget\Button" name="widget_button" />
+            </block>
+        </htmlContent>
+        <insertListing class="MiraklSeller\Core\Ui\Component\Listing\InsertListing">
+            <settings>
+                <renderUrl path="mui/index/render">
+                    <param name="listing_id">*</param>
+                </renderUrl>
+            </settings>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="autoRender" xsi:type="boolean">true</item>
+                    <item name="ns" xsi:type="string">mirakl_seller_listing_product_listing</item>
+                </item>
+            </argument>
+        </insertListing>
+    </fieldset>
+    <fieldset name="tracking_product_content" sortOrder="50" class="MiraklSeller\Core\Ui\Component\Listing\Product\Fieldset\TabDisplay">
+        <settings>
+            <label translate="true">Track Products Exports</label>
+        </settings>
+        <insertListing class="MiraklSeller\Core\Ui\Component\Listing\InsertListing">
+            <settings>
+                <renderUrl path="mui/index/render">
+                    <param name="listing_id">*</param>
+                </renderUrl>
+            </settings>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="autoRender" xsi:type="boolean">true</item>
+                    <item name="ns" xsi:type="string">mirakl_seller_listing_tracking_product_listing</item>
+                </item>
+            </argument>
+        </insertListing>
+    </fieldset>
+    <fieldset name="tracking_offer_content" sortOrder="60" class="MiraklSeller\Core\Ui\Component\Listing\Product\Fieldset\TabDisplay">
+        <settings>
+            <label translate="true"><![CDATA[Track Prices & Stocks Exports]]></label>
+        </settings>
+        <insertListing class="MiraklSeller\Core\Ui\Component\Listing\InsertListing">
+            <settings>
+                <renderUrl path="mui/index/render">
+                    <param name="listing_id">*</param>
+                </renderUrl>
+            </settings>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="autoRender" xsi:type="boolean">true</item>
+                    <item name="ns" xsi:type="string">mirakl_seller_listing_tracking_offer_listing</item>
+                </item>
+            </argument>
+        </insertListing>
+    </fieldset>
+</form>

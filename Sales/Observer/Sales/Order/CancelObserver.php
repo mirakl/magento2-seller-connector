@@ -1,0 +1,43 @@
+<?php
+namespace MiraklSeller\Sales\Observer\Sales\Order;
+
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\ObserverInterface;
+
+class CancelObserver extends AbstractObserver implements ObserverInterface
+{
+    /**
+     * Intercept order cancelation from back office to cancel the order on Mirakl if possible.
+     *
+     * {@inheritdoc}
+     */
+    public function execute(Observer $observer)
+    {
+        if (!$order = $this->getOrderFromEvent($observer->getEvent())) {
+            return; // Do not do anything if it's not an imported Mirakl order
+        }
+
+        $connection    = $this->getConnectionById($order->getMiraklConnectionId());
+        $miraklOrderId = $order->getMiraklOrderId();
+        $miraklOrder   = $this->getMiraklOrder($connection, $miraklOrderId);
+
+        if ($miraklOrder->getPaymentWorkflow() != 'PAY_ON_DELIVERY') {
+            return; // Do not do anything for payment workflow different than PAY_ON_DELIVERY
+        }
+
+        try {
+            // Synchronize Magento and Mirakl orders together
+            $this->synchronizeOrder->synchronize($order, $miraklOrder);
+
+            // Block order cancelation if not possible
+            if (!$miraklOrder->getData('can_cancel')) {
+                $this->fail(__('This order cannot be canceled.'), $observer->getEvent()->getControllerAction());
+            }
+
+            // Cancel the Mirakl order just before canceling the Magento order
+            $this->apiOrder->cancelOrder($connection, $miraklOrderId);
+        } catch (\Exception $e) {
+            $this->messageManager->addErrorMessage(__('An error occurred: %1', $e->getMessage()));
+        }
+    }
+}

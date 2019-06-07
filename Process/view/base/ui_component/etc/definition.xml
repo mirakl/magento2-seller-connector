@@ -1,0 +1,3 @@
+<components xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_definition.xsd">
+    <mirakl_seller_process_view class="MiraklSeller\Process\Component\Process\View"/>
+</components>

@@ -1,0 +1,21 @@
+{
+    "name": "mirakl/magento2-seller-connector",
+    "description": "This is the official Mirakl extension for sellers using Magento 2.",
+    "type": "magento2-component",
+    "version": "1.2.0",
+    "license": "proprietary",
+    "require": {
+        "mirakl/sdk-php-shop": "~1.9.2"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "MiraklSeller\\Api\\": "Api/",
+            "MiraklSeller\\Process\\": "Process/",
+            "MiraklSeller\\Core\\": "Core/",
+            "MiraklSeller\\Sales\\": "Sales/"
+        }
+    }
+}

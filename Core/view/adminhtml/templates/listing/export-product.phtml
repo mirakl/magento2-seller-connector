@@ -1,0 +1,72 @@
+<?php
+use MiraklSeller\Core\Model\Listing;
+/**
+ * @var \Magento\Framework\View\TemplateEngine\Php $this
+ * @var \MiraklSeller\Core\Block\Adminhtml\Listing\Edit\ExportProduct $block
+ */
+?>
+<div id="export-product-mode-template" style="display: none;">
+    <div class="export-product-mode-messages" style="display: none;">
+        <div class="messages"></div>
+    </div>
+    <form action="" method="post" id="export-product-mode-form" class="form-inline">
+        <fieldset class="admin__fieldset form-list question">
+            <div class="admin__field field _required">
+                <label for="export-product-mode-select" class="admin__field-label"><span><?= /* @escapeNotVerified */ __('Which products do you want to export?') ?></span></label>
+                <div class="admin__field-control">
+                    <select name="export_mode" id="export-product-mode-select"
+                           class="required-entry local-validation admin__control-select">
+                        <option value=""></option>
+                        <option value="<?php echo strtolower(Listing::PRODUCT_MODE_PENDING) ?>"><?php echo __('Products waiting for export') ?></option>
+                        <option value="<?php echo strtolower(Listing::PRODUCT_MODE_ERROR) ?>"><?php echo __('Products in error') ?></option>
+                        <option value="<?php echo strtolower(Listing::PRODUCT_MODE_ALL) ?>"><?php echo __('All products') ?></option>
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<script>
+    require(
+        [
+            'jquery',
+            'Magento_Ui/js/modal/modal'
+        ],
+        function(
+            $,
+            modal
+        ) {
+            var options = {
+                type: 'popup',
+                modalClass: 'mirakl-seller-small-popup',
+                responsive: true,
+                innerScroll: true,
+                title: $.mage.__('Export Products'),
+                buttons: [{
+                    text: $.mage.__('OK'),
+                    'class': 'primary',
+                    click: function () {
+                        var val = $('#export-product-mode-select').val();
+                        if (!val) {
+                            var messages = $('.export-product-mode-messages');
+                            messages.find('.messages').append(
+                                '<div class="message message-error">' +
+                                    $.mage.__('Please provide a mode') +
+                                '</div>'
+                            );
+                            messages.show();
+                            return;
+                        }
+                        var baseUrl = '<?= $block->getExportProductUrl() ?>#product_content';
+                        window.location = baseUrl.replace('PLACEHOLDER', val);
+                        this.closeModal();
+                    }
+                }]
+            };
+
+            var popup = modal(options, $('#export-product-mode-template'));
+        }
+    );
+</script>
+

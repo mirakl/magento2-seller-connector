@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="controller_action_predispatch_sales_order_cancel">
+        <observer name="mirakl_seller_sales" instance="MiraklSeller\Sales\Observer\Sales\Order\CancelObserver" />
+    </event>
+    <event name="controller_action_predispatch_sales_order_addComment">
+        <observer name="mirakl_seller_sales" instance="MiraklSeller\Sales\Observer\Sales\Order\CommentObserver" />
+    </event>
+    <event name="controller_action_predispatch_sales_order_edit_start">
+        <observer name="mirakl_seller_sales" instance="MiraklSeller\Sales\Observer\Sales\Order\EditObserver" />
+    </event>
+    <event name="controller_action_predispatch_sales_order_email">
+        <observer name="mirakl_seller_sales" instance="MiraklSeller\Sales\Observer\Sales\Order\EmailObserver" />
+    </event>
+    <event name="controller_action_predispatch_sales_order_invoice_save">
+        <observer name="mirakl_seller_sales" instance="MiraklSeller\Sales\Observer\Sales\Order\InvoiceObserver" />
+    </event>
+    <event name="controller_action_predispatch_adminhtml_order_shipment_save">
+        <observer name="mirakl_seller_sales" instance="MiraklSeller\Sales\Observer\Sales\Order\ShipmentObserver" />
+    </event>
+    <event name="controller_action_predispatch_sales_order_creditmemo_save">
+        <observer name="mirakl_seller_sales" instance="MiraklSeller\Sales\Observer\Sales\Order\CreditMemoObserver" />
+    </event>
+    <event name="controller_action_predispatch_sales_order_view">
+        <observer name="mirakl_seller_sales" instance="MiraklSeller\Sales\Observer\Sales\Order\ViewObserver" />
+    </event>
+</config>

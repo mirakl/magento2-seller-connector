@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\SalesRule\Model\Utility">
+        <plugin name="mirakl_seller_sales" type="MiraklSeller\Sales\Plugin\Model\SalesRule\UtilityPlugin" />
+    </type>
+    <type name="Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsProductSalableForRequestedQtyConditionChain">
+        <plugin name="mirakl_seller_sales" type="MiraklSeller\Sales\Plugin\Model\InventorySales\IsProductSalableForRequestedQtyConditionChainPlugin" />
+    </type>
+    <type name="Magento\CatalogInventory\Model\StockStateProvider">
+        <plugin name="mirakl_seller_sales" type="MiraklSeller\Sales\Plugin\Model\CatalogInventory\StockStateProviderPlugin" />
+    </type>
+    <type name="MiraklSeller\Sales\Model\Create\Order">
+        <arguments>
+            <argument name="addressMapper" xsi:type="object">MiraklSeller\Sales\Model\Mapper\Address</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="mirakl_seller_order_accept" xsi:type="object">MiraklSeller\Sales\Console\Command\AcceptCommand</item>
+                <item name="mirakl_seller_order_import" xsi:type="object">MiraklSeller\Sales\Console\Command\ImportCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="mirakl_seller_order_source" xsi:type="object">MiraklSeller\Sales\Ui\Component\View\Element\DataProvider\OrderSourceFilter</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Sales\Model\ResourceModel\Order\Grid" type="Magento\Sales\Model\ResourceModel\Grid">
+        <arguments>
+            <argument name="columns">
+                <item name="mirakl_connection_id" xsi:type="string">sales_order.mirakl_connection_id</item>
+            </argument>
+        </arguments>
+    </virtualType>
+</config>

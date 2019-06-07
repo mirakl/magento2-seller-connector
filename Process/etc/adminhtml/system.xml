@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="mirakl_seller" translate="label" sortOrder="1000">
+            <label>Mirakl Seller</label>
+        </tab>
+        <section id="mirakl_seller_process" translate="label" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Processes</label>
+            <tab>mirakl_seller</tab>
+            <resource>MiraklSeller_Config::process</resource>
+            <group id="mirakl_api_notice" translate="label" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                <frontend_model>MiraklSeller\Api\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
+            </group>
+            <group id="general" translate="label" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Mirakl Processes Configuration</label>
+                <field id="auto_async_execution" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Automatic Asynchronous Execution</label>
+                    <comment><![CDATA[If enabled, pending processes will be automatically executed asynchronously during Magento backend navigation through an AJAX request.]]></comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="timeout_delay" translate="label comment" type="text" sortOrder="15" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Timeout Delay</label>
+                    <comment><![CDATA[Delay in minutes after which the process has to be automatically cancelled.<br>This parameter is useful if a crash occurs during a process runtime and blocks other processes execution.<br>Leave blank to ignore.]]></comment>
+                    <validate>validate-greater-than-zero validate-number</validate>
+                </field>
+                <field id="show_file_max_size" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label><![CDATA["Open in Browser" Max File Size]]></label>
+                    <comment><![CDATA[Allow files not exceeding this size (in MB) to be opened directly in browser.]]></comment>
+                    <validate>required-entry validate-greater-than-zero validate-number</validate>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
