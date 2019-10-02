@@ -3,7 +3,7 @@ namespace MiraklSeller\Core\Observer\Product;
 
 use Magento\Framework\Event\Observer;
 
-class MassDeleteBeforeObserver extends AbstractDeleteObserver
+class MassDeleteBeforeObserver extends AbstractObserver
 {
     /**
      * {@inheritdoc}

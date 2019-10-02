@@ -362,7 +362,6 @@ class Offer extends AbstractDb
         ]);
 
         return $this->updateProducts($listingId, $productIds, [
-            'offer_import_id'     => null,
             'offer_import_status' => OfferModel::OFFER_DELETE,
         ]);
     }

@@ -10,7 +10,7 @@ use MiraklSeller\Process\Model\Process;
 use MiraklSeller\Process\Model\ProcessFactory;
 use MiraklSeller\Process\Model\ResourceModel\ProcessFactory as ProcessResourceFactory;
 
-abstract class AbstractDeleteObserver implements ObserverInterface
+abstract class AbstractObserver implements ObserverInterface
 {
     /**
      * @var ManagerInterface

@@ -1,28 +1,21 @@
 <?php
 namespace MiraklSeller\Sales\Model\Mapper;
 
-use MiraklSeller\Sales\Helper\Order as OrderHelper;
+use MiraklSeller\Sales\Model\Address\CountryResolver;
 
 class Address implements MapperInterface
 {
     /**
-     * @var OrderHelper
+     * @var CountryResolver
      */
-    protected $orderHelper;
+    protected $countryResolver;
 
     /**
-     * @var string
+     * @param CountryResolver $countryResolver
      */
-    protected $defaultLocale;
-
-    /**
-     * @param   OrderHelper $orderHelper
-     * @param   string      $defaultLocale
-     */
-    public function __construct(OrderHelper $orderHelper, $defaultLocale = 'en_US')
+    public function __construct(CountryResolver $countryResolver)
     {
-        $this->orderHelper = $orderHelper;
-        $this->defaultLocale = $defaultLocale;
+        $this->countryResolver = $countryResolver;
     }
 
     /**
@@ -30,12 +23,8 @@ class Address implements MapperInterface
      */
     public function map(array $data, $locale = null)
     {
-        if (empty($locale)) {
-            $locale = $this->defaultLocale;
-        }
+        $countryId = $this->countryResolver->resolve($data, $locale);
 
-        $countries = $this->orderHelper->getCountryList($locale);
-        $countryCode = array_search($data['country'], $countries);
         $phone = $data['phone'];
         if (!$phone && !empty($data['phone_secondary'])) {
             $phone = $data['phone_secondary'];
@@ -48,7 +37,7 @@ class Address implements MapperInterface
             'telephone'  => $phone,
             'postcode'   => $data['zip_code'] ?? '',
             'city'       => $data['city'] ?? '',
-            'country_id' => $countryCode ?: $data['country'],
+            'country_id' => $countryId ?: '',
             'country'    => $data['country'],
         ];
 

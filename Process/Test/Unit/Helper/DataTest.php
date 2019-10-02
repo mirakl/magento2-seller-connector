@@ -45,7 +45,6 @@ class ProcessTest extends TestCase
             'context' => $context,
             'apiHelper' => $apiHelper,
             'collectionFactory' => $this->collectionFactoryMock,
-
         ]);
     }
 

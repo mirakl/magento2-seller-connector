@@ -3,6 +3,9 @@
 /** @var \MiraklSeller\Sales\Block\Adminhtml\Connection\Switcher $block **/
 $connections = $block->getConnections();
 $currentConnection = $block->getCurrentConnection();
+if (!$currentConnection) {
+    return;
+}
 ?>
 <?php if ($currentConnection->getId()): ?>
     <div class="mirakl-connection-switcher store-switcher">

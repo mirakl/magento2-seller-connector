@@ -1,44 +1,21 @@
 <?php
-namespace MiraklSeller\Sales\Test\Unit\Model\Mapper;
+namespace MiraklSeller\Sales\Test\Integration\Model\Mapper;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use MiraklSeller\Sales\Helper\Order as OrderHelper;
 use MiraklSeller\Sales\Model\Mapper\Address as AddressMapper;
-use PHPUnit\Framework\TestCase;
+use MiraklSeller\Api\Test\Integration\TestCase;
 
-/**
- * @group sales
- * @group model
- * @coversDefaultClass \MiraklSeller\Sales\Model\Mapper\Address
- */
 class AddressTest extends TestCase
 {
     /**
-     * @var AddressMapper
-     */
-    protected $addressMapper;
-
-    protected function setUp()
-    {
-        $objectManager = new ObjectManager($this);
-        $orderHelperMock = $this->getMockBuilder(OrderHelper::class)
-            ->disableOriginalConstructor()
-            ->setMethodsExcept(['getCountryList'])
-            ->getMock();
-        $this->addressMapper = $objectManager->getObject(AddressMapper::class, [
-            'orderHelper' => $orderHelperMock,
-        ]);
-    }
-
-    /**
-     * @covers  ::map
      * @param   array   $data
      * @param   array   $expected
      * @dataProvider getTestMapDataProvider
      */
     public function testMap(array $data, array $expected)
     {
-        $this->assertEquals($expected, $this->addressMapper->map($data));
+        /** @var AddressMapper $addressMapper */
+        $addressMapper = $this->objectManager->create(AddressMapper::class);
+        $this->assertEquals($expected, $addressMapper->map($data));
     }
 
     /**

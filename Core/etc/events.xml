@@ -6,4 +6,10 @@
     <event name="controller_action_predispatch_catalog_product_massDelete">
         <observer name="mirakl_seller" instance="MiraklSeller\Core\Observer\Product\MassDeleteBeforeObserver" />
     </event>
+    <event name="catalog_product_save_after">
+        <observer name="mirakl_seller" instance="MiraklSeller\Core\Observer\Product\SaveAfterObserver"/>
+    </event>
+    <event name="catalog_product_attribute_update_before">
+        <observer name="mirakl_seller" instance="MiraklSeller\Core\Observer\Product\AttributeUpdateBeforeObserver"/>
+    </event>
 </config>

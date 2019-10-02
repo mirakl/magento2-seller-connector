@@ -51,11 +51,15 @@ class Switcher extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @return  Connection
+     * @return  Connection|null
      */
     public function getCurrentConnection()
     {
-        return $this->connectionLoader->getCurrentConnection();
+        try {
+            return $this->connectionLoader->getCurrentConnection();
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     /**

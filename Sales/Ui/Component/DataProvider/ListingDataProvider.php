@@ -3,6 +3,7 @@ namespace MiraklSeller\Sales\Ui\Component\DataProvider;
 
 use Magento\Framework\Api\Filter;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\NotFoundException;
 use MiraklSeller\Api\Model\Connection;
 use MiraklSeller\Sales\Model\Collection;
 use MiraklSeller\Sales\Model\CollectionFactory;
@@ -143,7 +144,13 @@ class ListingDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             return $this;
         }
 
-        if (!$connection = $this->getConnection()) {
+        try {
+            $connection = $this->getConnection();
+        } catch (NotFoundException $e) {
+            return $this;
+        }
+
+        if (!$connection || !$connection->getId()) {
             return $this;
         }
 

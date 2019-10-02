@@ -52,6 +52,14 @@ class Filters extends Template
     }
 
     /**
+     * @return  \MiraklSeller\Api\Model\ResourceModel\Connection\Collection
+     */
+    public function getConnections()
+    {
+        return $this->connectionLoader->getConnections();
+    }
+
+    /**
      * @return  ShopOrderCollection
      */
     public function getOrdersWithIncident()

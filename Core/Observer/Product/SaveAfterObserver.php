@@ -3,7 +3,7 @@ namespace MiraklSeller\Core\Observer\Product;
 
 use Magento\Framework\Event\Observer;
 
-class DeleteBeforeObserver extends AbstractObserver
+class SaveAfterObserver extends AbstractObserver
 {
     /**
      * {@inheritdoc}
@@ -13,6 +13,8 @@ class DeleteBeforeObserver extends AbstractObserver
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $observer->getEvent()->getProduct();
 
-        $this->deleteProducts([$product->getId()]);
+        if ($product->isDisabled()) {
+            $this->deleteProducts([$product->getId()]);
+        }
     }
 }
