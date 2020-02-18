@@ -127,6 +127,9 @@
                 <label translate="true">Output</label>
                 <dataType>text</dataType>
                 <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <fieldClass>
+                    <class name="pre">true</class>
+                </fieldClass>
             </settings>
         </column>
         <column name="status">

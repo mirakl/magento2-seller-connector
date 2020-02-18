@@ -133,6 +133,9 @@ $_miraklSalesHelper = $this->helper('MiraklSeller\Sales\Helper\Data');
                     </div>
                     <address>
                         <?= $_billingAddress->getFirstname() ?> <?= $_billingAddress->getLastname() ?><br>
+                        <?php if ($_company = $_billingAddress->getCompany()): ?>
+                            <?= $_company ?><br>
+                        <?php endif ?>
                         <?= $_billingAddress->getStreet1() ?><br>
                         <?php if ($_street2 = $_billingAddress->getStreet2()): ?>
                             <?= $_street2 ?><br>
@@ -140,6 +143,9 @@ $_miraklSalesHelper = $this->helper('MiraklSeller\Sales\Helper\Data');
                         <?= $_billingAddress->getZipCode() ?> <?= $_billingAddress->getCity() ?><br>
                         <?php if ($_countryCode = $_billingAddress->getCountry()): ?>
                             <?= $block->getCountry($_countryCode) ?><br>
+                        <?php endif ?>
+                        <?php if ($_state = $_billingAddress->getState()): ?>
+                            <?= $_state ?><br>
                         <?php endif ?>
                         <?php if ($_phone = $_billingAddress->getPhone()): ?>
                             <?= __('T: %1', $_phone) ?><br>
@@ -158,6 +164,9 @@ $_miraklSalesHelper = $this->helper('MiraklSeller\Sales\Helper\Data');
                     </div>
                     <address>
                         <?= $_shippingAddress->getFirstname() ?> <?= $_shippingAddress->getLastname() ?><br>
+                        <?php if ($_company = $_shippingAddress->getCompany()): ?>
+                            <?= $_company ?><br>
+                        <?php endif ?>
                         <?= $_shippingAddress->getStreet1() ?><br>
                         <?php if ($_street2 = $_shippingAddress->getStreet2()): ?>
                             <?= $_street2 ?><br>
@@ -165,6 +174,9 @@ $_miraklSalesHelper = $this->helper('MiraklSeller\Sales\Helper\Data');
                         <?= $_shippingAddress->getZipCode() ?> <?= $_shippingAddress->getCity() ?><br>
                         <?php if ($_countryCode = $_shippingAddress->getCountry()): ?>
                             <?= $block->getCountry($_countryCode) ?><br>
+                        <?php endif ?>
+                        <?php if ($_state = $_shippingAddress->getState()): ?>
+                            <?= $_state ?><br>
                         <?php endif ?>
                         <?php if ($_phone = $_shippingAddress->getPhone()): ?>
                             <?= __('T: %1', $_phone) ?><br>

@@ -45,6 +45,10 @@ class Product implements FormatterInterface
             $category = implode('/', str_replace('/', '-', $path));
         }
 
+        if (isset($data['category_ids']) && is_array($data['category_ids'])) {
+            $data['category_ids'] = implode(',', $data['category_ids']);
+        }
+
         $parentSku = '';
         if (isset($data['parent_sku'])) {
             $parentSku = $data['parent_sku'];

@@ -17,6 +17,7 @@
     white-space: nowrap;
 }
 
+.data-grid td.pre,
 .report-output table td {
     font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
     line-height: 16px;
@@ -68,16 +69,20 @@
     white-space: pre;
 }
 
-.mirakl-process-index .grid-severity-minor,
-.mirakl-process-view .grid-severity-minor {
+.mirakl_seller-process-view .admin__table-secondary th {
+    width: 250px;
+}
+
+.mirakl_seller-process-index .grid-severity-minor,
+.mirakl_seller-process-view .grid-severity-minor {
     background: #feeee1 none repeat scroll 0 0;
     color: #ff9C00;
     border-color: #ff9C00;
     white-space: nowrap;
 }
 
-.mirakl-process-index .grid-severity-major,
-.mirakl-process-view .grid-severity-major {
+.mirakl_seller-process-index .grid-severity-major,
+.mirakl_seller-process-view .grid-severity-major {
     background: #feeee1 none repeat scroll 0 0;
     color: #f55600;
     border-color: #f55600;

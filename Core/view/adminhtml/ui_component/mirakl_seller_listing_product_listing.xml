@@ -59,17 +59,6 @@
                     <label translate="true">Mark as Export</label>
                 </settings>
             </action>
-            <action name="delete">
-                <settings>
-                    <confirm>
-                        <message translate="true">Are you sure?</message>
-                        <title translate="true">Confirm</title>
-                    </confirm>
-                    <url path="mirakl_seller/listingProduct/massDeleteOffer"/>
-                    <type>delete</type>
-                    <label translate="true">Mark as Delete</label>
-                </settings>
-            </action>
         </massaction>
         <paging name="listing_paging"/>
     </listingToolbar>

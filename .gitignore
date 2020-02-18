@@ -1,0 +1,7 @@
+.DS_Store
+bin/
+composer.lock
+docker/
+docker-compose.yml.dist
+Jenkinsfile
+phpunit.xml

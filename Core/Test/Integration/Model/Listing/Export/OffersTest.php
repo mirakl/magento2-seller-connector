@@ -5,7 +5,9 @@ use Magento\Catalog\Model\Indexer\Product\Price\Processor as PriceIndexer;
 use Magento\Framework\Indexer\IndexerRegistry;
 use MiraklSeller\Core\Helper\Config;
 use MiraklSeller\Core\Model\Listing\Export\Offers as ExportModel;
+use MiraklSeller\Core\Model\Offer;
 use MiraklSeller\Core\Model\Offer\Loader;
+use MiraklSeller\Core\Model\ResourceModel\Offer as OfferResourceModel;
 use MiraklSeller\Core\Test\Integration\TestCase;
 
 /**
@@ -66,6 +68,42 @@ class OffersTest extends TestCase
             [[341, 342, 343, 344, 345], $this->_getJsonFileContents('expected_export_offers_2.json')],
             [[287, 288, 289, 290, 291], $this->_getJsonFileContents('expected_export_offers_with_prices_1.json')],
             [[], []],
+        ];
+    }
+
+    /**
+     * @covers ::export
+     * @param   array   $productIds
+     * @param   array   $expectedResult
+     * @dataProvider getTestExportWithDeleteOffersDataProvider
+     * @magentoDbIsolation enabled
+     */
+    public function testExportWithDeleteOffers($productIds, $expectedResult)
+    {
+        $listing = $this->createSampleListing();
+
+        /** @var OfferResourceModel $offerResource */
+        $offerResource = $this->objectManager->create(OfferResourceModel::class);
+        $offerResource->createOffers($listing->getId(), $productIds);
+        $offerResource->updateProducts($listing->getId(), $productIds, [
+            'offer_import_status' => Offer::OFFER_DELETE,
+        ]);
+
+        $result = $this->exportModel->export($listing);
+
+        $this->assertEquals($expectedResult, $result);
+    }
+
+    /**
+     * @return  array
+     */
+    public function getTestExportWithDeleteOffersDataProvider()
+    {
+        return [
+            [
+                [267, 268, 269],
+                $this->_getJsonFileContents('expected_export_offers_delete_1.json')
+            ],
         ];
     }
 
@@ -155,10 +193,8 @@ class OffersTest extends TestCase
      * @dataProvider getTestExportWithAdditionalFieldsDataProvider
      * @magentoDbIsolation enabled
      */
-    public function testExportWithAdditionalFields(
-        $productIds, $additionalFields, $additionalFieldsValues, $expectedResult
-    ) {
-
+    public function testExportWithAdditionalFields($productIds, $additionalFields, $additionalFieldsValues, $expectedResult)
+    {
         $listing = $this->createSampleListing();
 
         $connection = $listing->getConnection();

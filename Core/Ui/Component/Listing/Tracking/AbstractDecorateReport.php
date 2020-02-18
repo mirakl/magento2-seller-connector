@@ -31,7 +31,7 @@ abstract class AbstractDecorateReport extends Column
     {
         $html = '';
 
-        if (strlen($tracking[$field])) {
+        if ($tracking[$field]) {
             $downloadUrl = $this->getUrl('mirakl_seller/tracking/downloadReport', [
                 'type' => $this->getTrackingType(),
                 'id' => $tracking['id'],

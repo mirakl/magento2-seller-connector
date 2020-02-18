@@ -1,16 +1,15 @@
 <?php
 namespace MiraklSeller\Api\Model\Connection\Source;
 
-use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as AttributeCollection;
-use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
 use Magento\Framework\Data\OptionSourceInterface;
+use MiraklSeller\Core\Model\ResourceModel\Product as ProductResource;
 
 class ExportableAttribute implements OptionSourceInterface
 {
     /**
-     * @var AttributeCollectionFactory
+     * @var ProductResource
      */
-    protected $attrCollectionFactory;
+    protected $productResource;
 
     /**
      * @var array
@@ -18,11 +17,11 @@ class ExportableAttribute implements OptionSourceInterface
     protected $options;
 
     /**
-     * @param AttributeCollectionFactory $attrCollectionFactory
+     * @param ProductResource $productResource
      */
-    public function __construct(AttributeCollectionFactory $attrCollectionFactory)
+    public function __construct(ProductResource $productResource)
     {
-        $this->attrCollectionFactory = $attrCollectionFactory;
+        $this->productResource = $productResource;
     }
 
     /**
@@ -32,29 +31,6 @@ class ExportableAttribute implements OptionSourceInterface
      */
     public function toOptionArray()
     {
-        if ($this->options !== null) {
-            return $this->options;
-        }
-
-        $options = [];
-
-        /** @var AttributeCollection $collection */
-        $collection = $this->attrCollectionFactory->create();
-        $collection->addVisibleFilter()
-            ->setOrder('frontend_label', 'ASC');
-
-        foreach ($collection as $attribute) {
-            /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
-            if ($attribute->getFrontendLabel()) {
-                $options[] = [
-                    'value' => $attribute->getAttributeCode(),
-                    'label' => sprintf('%s [%s]', $attribute->getFrontendLabel(), $attribute->getAttributeCode()),
-                ];
-            }
-        }
-
-        $this->options = $options;
-
-        return $this->options;
+        return $this->productResource->toOptionArray();
     }
 }

@@ -54,15 +54,15 @@ class Offer extends AbstractModel
      * @var array
      */
     protected static $_productStatusLabels = [
-        self::PRODUCT_NEW                    => 'Waiting for export',      // Product not exported yet to Mirakl
-        self::PRODUCT_PENDING                => 'Waiting in Mirakl',       // Product exported, waiting for import in Mirakl
-        self::PRODUCT_TRANSFORMATION_ERROR   => 'Transformation failed',   // Transformation failed for this product, fix mapping
-        self::PRODUCT_WAITING_INTEGRATION    => 'Waiting for integration', // Transformation ok, waiting for operator integration
-        self::PRODUCT_INTEGRATION_COMPLETE   => 'Integration complete',    // Integration complete in operator system
-        self::PRODUCT_INTEGRATION_ERROR      => 'Integration failed',      // Integration failed in operator system
-        self::PRODUCT_INVALID_REPORT_FORMAT  => 'Invalid report format',   // Integration cannot be confirmed because of invalid report format
-        self::PRODUCT_NOT_FOUND_IN_REPORT    => 'Not found in report',     // Integration cannot be confirmed because of missing product in report
-        self::PRODUCT_SUCCESS                => 'Import succeeded',        // Product successfully created in Mirakl
+        self::PRODUCT_NEW                   => 'Waiting for export',      // Product not exported yet to Mirakl
+        self::PRODUCT_PENDING               => 'Waiting in Mirakl',       // Product exported, waiting for import in Mirakl
+        self::PRODUCT_TRANSFORMATION_ERROR  => 'Transformation failed',   // Transformation failed for this product, fix mapping
+        self::PRODUCT_WAITING_INTEGRATION   => 'Waiting for integration', // Transformation ok, waiting for operator integration
+        self::PRODUCT_INTEGRATION_COMPLETE  => 'Integration complete',    // Integration complete in operator system
+        self::PRODUCT_INTEGRATION_ERROR     => 'Integration failed',      // Integration failed in operator system
+        self::PRODUCT_INVALID_REPORT_FORMAT => 'Invalid report format',   // Integration cannot be confirmed because of invalid report format
+        self::PRODUCT_NOT_FOUND_IN_REPORT   => 'Not found in report',     // Integration cannot be confirmed because of missing product in report
+        self::PRODUCT_SUCCESS               => 'Import succeeded',        // Product successfully created in Mirakl
     ];
 
     /**
@@ -73,7 +73,7 @@ class Offer extends AbstractModel
         self::OFFER_PENDING => 'Waiting in Mirakl',  // Offer exported, waiting for import in Mirakl
         self::OFFER_SUCCESS => 'Import succeeded',   // Offer successfully created in Mirakl
         self::OFFER_ERROR   => 'Import failed',      // Offer with error in Mirakl
-        self::OFFER_DELETE  => 'To delete',          // Offer to delete in Mirakl
+        self::OFFER_DELETE  => 'To delete',          // Offer to set as out of stock in Mirakl
     ];
 
     /**

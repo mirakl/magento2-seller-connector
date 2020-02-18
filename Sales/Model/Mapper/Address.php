@@ -33,10 +33,12 @@ class Address implements MapperInterface
         $result = [
             'firstname'  => $data['firstname'] ?? '',
             'lastname'   => $data['lastname'] ?? '',
+            'company'    => $data['company'] ?? '',
             'street'     => trim(($data['street_1'] ?? '') . "\n" . ($data['street_2'] ?? '')),
             'telephone'  => $phone,
             'postcode'   => $data['zip_code'] ?? '',
             'city'       => $data['city'] ?? '',
+            'region'     => $data['state'] ?? '',
             'country_id' => $countryId ?: '',
             'country'    => $data['country'],
         ];

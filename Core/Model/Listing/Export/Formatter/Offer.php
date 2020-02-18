@@ -91,7 +91,7 @@ class Offer implements FormatterInterface
             'product-id-type'       => $data['product-id-type'],
             'description'           => $data['description'],
             'internal-description'  => $data['internal_description'],
-            'price'                 => isset($data['price']) ? self::formatPrice($data['price']) : '',
+            'price'                 => isset($data['price']) ? self::formatPrice($data['price']) : '0',
             'price-additional-info' => $data['price_additional_info'],
             'quantity'              => isset($data['qty']) ? intval($data['qty']) : '',
             'min-quantity-alert'    => $data['min_quantity_alert'],

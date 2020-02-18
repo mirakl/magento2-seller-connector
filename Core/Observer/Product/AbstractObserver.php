@@ -97,6 +97,8 @@ abstract class AbstractObserver implements ObserverInterface
             /** @var \MiraklSeller\Core\Model\Listing $listing */
             foreach ($listings as $listing) {
                 $listing->setProductIds($productIds);
+
+                // Do not delete offers in Mirakl but define them to qty 0
                 $offerResource->markOffersAsDelete($listing->getId(), $productIds);
 
                 /** @var Process $process */

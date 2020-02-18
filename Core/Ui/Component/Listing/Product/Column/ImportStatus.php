@@ -23,15 +23,15 @@ class ImportStatus extends Column
      * @var array
      */
     protected $productStatusTooltips = [
-        Offer::PRODUCT_NEW                    => 'Will be sent automatically in the next export.',
-        Offer::PRODUCT_PENDING                => 'Exported. Export status is about to be checked.',
-        Offer::PRODUCT_TRANSFORMATION_ERROR   => 'Your data does not satisfy Mirakl validation. Check the error message. When your product is ready to be exported, click on the Export Products button.',
-        Offer::PRODUCT_WAITING_INTEGRATION    => 'Marketplace integration in progress. Integration reports will be available soon in Magento.',
-        Offer::PRODUCT_INTEGRATION_COMPLETE   => 'Waiting for successful Price & Stock export for final product availability in the marketplace.',
-        Offer::PRODUCT_INTEGRATION_ERROR      => 'Your data does not satisfy the marketplace validation. Check the error message. When your product is ready to be exported, click on the Export Products button.',
-        Offer::PRODUCT_INVALID_REPORT_FORMAT  => 'The marketplace integration report file cannot be processed.',
-        Offer::PRODUCT_NOT_FOUND_IN_REPORT    => 'Product not found in the marketplace integration reports.',
-        Offer::PRODUCT_SUCCESS                => 'Product has been correctly imported in the marketplace.',
+        Offer::PRODUCT_NEW                   => 'Will be sent automatically in the next export.',
+        Offer::PRODUCT_PENDING               => 'Exported. Export status is about to be checked.',
+        Offer::PRODUCT_TRANSFORMATION_ERROR  => 'Your data does not satisfy Mirakl validation. Check the error message. When your product is ready to be exported, click on the Export Products button.',
+        Offer::PRODUCT_WAITING_INTEGRATION   => 'Marketplace integration in progress. Integration reports will be available soon in Magento.',
+        Offer::PRODUCT_INTEGRATION_COMPLETE  => 'Waiting for successful Price & Stock export for final product availability in the marketplace.',
+        Offer::PRODUCT_INTEGRATION_ERROR     => 'Your data does not satisfy the marketplace validation. Check the error message. When your product is ready to be exported, click on the Export Products button.',
+        Offer::PRODUCT_INVALID_REPORT_FORMAT => 'The marketplace integration report file cannot be processed.',
+        Offer::PRODUCT_NOT_FOUND_IN_REPORT   => 'Product not found in the marketplace integration reports.',
+        Offer::PRODUCT_SUCCESS               => 'Product has been correctly imported in the marketplace.',
     ];
 
     /**
@@ -42,7 +42,7 @@ class ImportStatus extends Column
         Offer::OFFER_PENDING => 'Exported. Export status is about to be checked.',
         Offer::OFFER_SUCCESS => 'Price & Stock has been correctly imported in the marketplace.',
         Offer::OFFER_ERROR   => 'Your data does not satisfy Mirakl validation. Check the error message. When your price & stock is ready to be exported click on the Export Prices & Stocks button.',
-        Offer::OFFER_DELETE  => 'Product will be deleted from the marketplace in the next export.',
+        Offer::OFFER_DELETE  => 'Offer quantity will be set to zero in the marketplace during the next export.',
     ];
 
     /**
@@ -99,7 +99,7 @@ class ImportStatus extends Column
             : $this->offer->getOfferStatusLabels();
 
         return sprintf(
-            '<div class="admin__field-tooltip tooltip-seller"><span class="status status-%s">%s&nbsp</span><div class="admin__field-tooltip-content">%s</div></div>',
+            '<div class="admin__field-tooltip tooltip-seller"><span class="status status-%s">%s</span><div class="admin__field-tooltip-content">%s</div></div>',
             $className,
             $labels[$value],
             $this->escaper->escapeHtml($tooltip)

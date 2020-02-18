@@ -110,11 +110,13 @@ class Offers extends AbstractExport
         $data = [];
         foreach ($collection as $product) {
             $productId = $product['entity_id'];
-            $action = $product['offer_import_status'] == Offer::OFFER_DELETE ? 'delete' : 'update';
-            $data[$productId] = $this->prepareOffer($product, $listing, $action);
+            if ($product['offer_import_status'] == Offer::OFFER_DELETE) {
+                $product['qty'] = 0; // Set quantity to zero if offer has been flagged as "to delete"
+            }
+            $data[$productId] = $this->prepareOffer($product, $listing);
         }
 
-        // Delete product who are not in the export (out of stock, no price)
+        // Mark out of stock products that are not in the export (out of stock, no price)
         $deleteIds = array_diff($listing->getProductIds(), array_keys($data));
         if (count($deleteIds)) {
             $collection = $this->productCollectionFactory->create();
@@ -124,7 +126,8 @@ class Offers extends AbstractExport
 
             foreach ($collection as $product) {
                 $productId = $product['entity_id'];
-                $data[$productId] = $this->prepareOffer($product, $listing, 'delete');
+                $product['qty'] = 0; // Set quantity to zero, do not delete the offer in Mirakl
+                $data[$productId] = $this->prepareOffer($product, $listing);
             }
         }
 

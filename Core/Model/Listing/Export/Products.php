@@ -17,8 +17,15 @@ class Products extends AbstractExport
         $collection->load(); // Load collection to be able to use methods below
         $collection->addCategoryPaths();
 
-        $exportableAttributes = $listing->getConnection()->getExportableAttributes();
-        $collection->overrideByParentData(['parent_sku' => 'sku'], $exportableAttributes);
+        $allExportableAttributes = array_chunk($listing->getConnection()->getExportableAttributes(), 15);
+        if (!empty($allExportableAttributes)) {
+            foreach ($allExportableAttributes as $exportableAttributes) {
+                $collection->overrideByParentData(['parent_sku' => 'sku'], $exportableAttributes);
+                $collection->setFlag('parent_data_override', false);
+            }
+        } else {
+            $collection->overrideByParentData(['parent_sku' => 'sku']);
+        }
 
         $nbImageToExport = $this->config->getNumberImageMaxToExport();
         $variantsAttributes = $listing->getVariantsAttributes();

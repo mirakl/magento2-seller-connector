@@ -53,7 +53,8 @@ class OrderTest extends TestCase
         $this->assertSame('75008', $shippingAddress->getPostcode());
         $this->assertSame('0987654321', $shippingAddress->getTelephone());
         $this->assertSame('FR', $shippingAddress->getCountryId());
-        $this->assertNull($shippingAddress->getCompany());
+        $this->assertSame('Mirakl', $shippingAddress->getCompany());
+        $this->assertSame('', $shippingAddress->getRegion());
 
         $billingAddress = $order->getBillingAddress();
         $this->assertSame('test@do-not-use.com', $billingAddress->getEmail());
@@ -64,6 +65,6 @@ class OrderTest extends TestCase
         $this->assertSame('75008', $billingAddress->getPostcode());
         $this->assertSame('0619874662', $billingAddress->getTelephone());
         $this->assertSame('FR', $billingAddress->getCountryId());
-        $this->assertNull($billingAddress->getCompany());
+        $this->assertSame('', $billingAddress->getCompany());
     }
 }

@@ -56,7 +56,7 @@ class Download extends AbstractListing
         } catch (\Exception $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
 
-            return $this->_redirect('*/*/');
+            return $this->_redirect('*/listing/edit', ['id' => $this->getRequest()->getParam('id')]);
         }
     }
 }

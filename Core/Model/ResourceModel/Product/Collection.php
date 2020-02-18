@@ -39,6 +39,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @var ProductResource
      */
     protected $productResource;
+
     /**
      * @var Visibility
      */
@@ -48,8 +49,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @var array
      */
     protected $orderConditionFields = [
-        'use_config_min_sale_qty' => 'min_sale_qty',
-        'use_config_max_sale_qty' => 'max_sale_qty',
+        'use_config_min_sale_qty'   => 'min_sale_qty',
+        'use_config_max_sale_qty'   => 'max_sale_qty',
         'use_config_enable_qty_inc' => 'enable_qty_increments',
         'use_config_qty_increments' => 'qty_increments',
     ];
@@ -352,8 +353,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
         foreach ($this->_items as $productId => $data) {
             $this->_items[$productId]['category_paths'] = [];
-            foreach ($data['category_ids'] as $categoryId) {
-                $this->_items[$productId]['category_paths'][$categoryId] = $getCategoryPath($categoryId);
+            if (!isset($data['category_ids'])) {
+                $this->_items[$productId]['category_ids'] = [];
+            } else {
+                foreach ($data['category_ids'] as $categoryId) {
+                    $this->_items[$productId]['category_paths'][$categoryId] = $getCategoryPath($categoryId);
+                }
             }
         }
 
@@ -795,14 +800,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * @param   array   $productAttribute
-     * @param   array   $eavAttribute
+     * @param   array   $productAttributes
+     * @param   array   $attrCodes
      * @param   bool    $orderCondition
      * @return  $this
      */
     public function overrideByParentData(
-        $productAttribute = [],
-        $eavAttribute = [],
+        $productAttributes = [],
+        $attrCodes = [],
         $orderCondition = false
     ) {
         if ($this->getFlag('parent_data_override') || empty($this->_items)) {
@@ -813,11 +818,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
         /** @var Collection $collection */
         $collection = $this->_entityFactory->create(self::class);
-        if (count($productAttribute)) {
-            $collection->addFieldToSelect($productAttribute);
+        if (count($productAttributes)) {
+            $collection->addFieldToSelect($productAttributes);
         }
 
-        foreach ($eavAttribute as $attrCode) {
+        foreach ($attrCodes as $attrCode) {
             $collection->addAttribute($attrCode);
         }
 
@@ -841,7 +846,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
             // Remove useless attribute from catalog_product_entity base table
             $fields = $this->productResource->getProductBaseColumns();
-            foreach (array_diff($fields, array_values($productAttribute)) as $field) {
+            foreach (array_diff($fields, array_values($productAttributes)) as $field) {
                 unset($data[$field]);
             }
 
