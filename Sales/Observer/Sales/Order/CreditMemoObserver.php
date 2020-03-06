@@ -30,10 +30,15 @@ class CreditMemoObserver extends AbstractObserver implements ObserverInterface
 
         $connection = $this->getConnectionById($order->getMiraklConnectionId());
 
-        $this->fail(__(
-            'Refund is not possible on a Mirakl order from Magento. ' .
-            'You can go to your <a href="%1" target="_blank">Mirakl back office</a> to handle it.',
-            $connection->getBaseUrl()
-        ), $action, false);
+        try {
+            $this->fail(__(
+                'Refund is not possible on a Mirakl order from Magento. ' .
+                'You can go to your <a href="%1" target="_blank">Mirakl back office</a> to handle it.',
+                $connection->getBaseUrl()
+            ), $action);
+        } catch (\Exception $e) {
+            $this->messageManager->addErrorMessage(__('An error occurred: %1', $e->getMessage()));
+            $this->resetLastAddedMessageEscaping();
+        }
     }
 }

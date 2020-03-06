@@ -29,6 +29,11 @@ class Order
     protected $shipmentCreator;
 
     /**
+     * @var SynchronizeRefunds
+     */
+    protected $synchronizeRefunds;
+
+    /**
      * @var Config
      */
     protected $config;

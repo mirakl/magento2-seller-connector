@@ -159,6 +159,11 @@ class Process extends AbstractModel
     private $outputFactory;
 
     /**
+     * @var string
+     */
+    protected $decodeMethod = 'unserialize';
+
+    /**
      * @param   Context                     $context
      * @param   Registry                    $registry
      * @param   AbstractResource|null       $resource
@@ -225,6 +230,15 @@ class Process extends AbstractModel
                 $this->handleError($error['message'], $error['file'], $error['line']);
             }
         });
+    }
+
+    /**
+     * @param   string  $str
+     * @return  mixed
+     */
+    protected function decode($str)
+    {
+        return call_user_func($this->decodeMethod, $str);
     }
 
     /**
@@ -339,8 +353,8 @@ class Process extends AbstractModel
 
             $this->errorHelper->deleteProcessError($this);
 
-            @set_time_limit(0);
-            @ini_set('memory_limit', -1);
+            set_time_limit(0);
+            ini_set('memory_limit', -1);
 
             ob_start();
 
@@ -521,7 +535,7 @@ class Process extends AbstractModel
     {
         $params = $this->_getData('params');
         if (is_string($params)) {
-            $params = unserialize($params);
+            $params = $this->decode($params);
         }
 
         return is_array($params) ? $params : [];

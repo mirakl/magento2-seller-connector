@@ -32,6 +32,12 @@
                     <frontend_type>text</frontend_type>
                     <validate>validate-number</validate>
                 </field>
+                <field id="attributes_chunk_size" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Attributes Chunk Size</label>
+                    <comment><![CDATA[Technical setting. If an error occurs during listing's products export because of a too large number of attributes to join in the SQL query, set a lower value in this field. Default is to split every 15 attributes. Specify a value between 5 and 15.]]></comment>
+                    <frontend_type>text</frontend_type>
+                    <validate>required-entry validate-range range-5-15</validate>
+                </field>
             </group>
             <group id="offer_fields_mapping" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Offer Fields Mapping</label>

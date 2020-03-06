@@ -9,8 +9,22 @@ class Config extends ConfigApi
     const XML_PATH_NUMBER_IMAGE_EXPORT                          = 'mirakl_seller_core/listing/nb_image_exported';
     const XML_PATH_NB_DAYS_EXPIRED                              = 'mirakl_seller_core/listing/nb_days_expired';
     const XML_PATH_NB_DAYS_KEEP_FAILED_PRODUCTS                 = 'mirakl_seller_core/listing/nb_days_keep_failed_products';
+    const XML_PATH_ATTRIBUTES_CHUNK_SIZE                        = 'mirakl_seller_core/listing/attributes_chunk_size';
     const XML_PATH_DISCOUNT_ENABLE_PROMOTION_CATALOG_PRICE_RULE = 'mirakl_seller_core/prices/enable_promotion_catalog_price_rule';
     const XML_PATH_DISCOUNT_CUSTOMER_GROUP                      = 'mirakl_seller_core/prices/customer_group';
+
+    /**
+     * Technical setting.
+     * Returns the maximum number of attributes to join in an unique SQL query during products export.
+     *
+     * @return  int
+     */
+    public function getAttributesChunkSize()
+    {
+        $size = (int) $this->getValue(self::XML_PATH_ATTRIBUTES_CHUNK_SIZE);
+
+        return max(5, min(15, $size));
+    }
 
     /**
      * Returns store locale

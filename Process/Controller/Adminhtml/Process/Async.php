@@ -46,6 +46,8 @@ class Async extends AbstractProcess
             $process->run();
         }
 
-        exit; // @codingStandardsIgnoreLine
+        $this->getResponse()->clearBody();
+
+        $this->_actionFlag->set('', self::FLAG_NO_POST_DISPATCH, true);
     }
 }

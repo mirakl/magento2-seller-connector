@@ -9,11 +9,11 @@ use MiraklSeller\Core\Helper\Data as CoreHelper;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @group process
+ * @group core
  * @group helper
- * @coversDefaultClass \MiraklSeller\Process\Helper\Data
+ * @coversDefaultClass \MiraklSeller\Core\Helper\Data
  */
-class ProcessTest extends TestCase
+class DataTest extends TestCase
 {
     /**
      * @var CoreHelper

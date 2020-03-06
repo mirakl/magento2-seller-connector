@@ -59,7 +59,7 @@ class Error extends AbstractHelper
     public function deleteProcessError(Process $process)
     {
         if (($file = $this->getProcessErrorFile($process)) && file_exists($file)) {
-            return @unlink($file);
+            return unlink($file);
         }
 
         return true;
@@ -122,7 +122,7 @@ class Error extends AbstractHelper
     public function logProcessError(Process $process, array $error)
     {
         if ($file = $this->getProcessErrorFile($process)) {
-            return @file_put_contents($file, json_encode($error, JSON_PRETTY_PRINT));
+            return file_put_contents($file, json_encode($error, JSON_PRETTY_PRINT));
         }
 
         return false;

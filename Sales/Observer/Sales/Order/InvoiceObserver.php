@@ -28,18 +28,18 @@ class InvoiceObserver extends AbstractObserver implements ObserverInterface
             return;
         }
 
-        if (array_sum($invoiceQtys['items']) < $order->getTotalQtyOrdered()) {
-            $this->fail(__('Partial invoicing is not allowed on this Mirakl order.'), $action);
-        }
-
-        $connection  = $this->getConnectionById($order->getMiraklConnectionId());
-        $miraklOrder = $this->getMiraklOrder($connection, $order->getMiraklOrderId());
-
-        if ($miraklOrder->getPaymentWorkflow() != 'PAY_ON_DELIVERY') {
-            return; // Do not do anything for payment workflow different than PAY_ON_DELIVERY
-        }
-
         try {
+            if (array_sum($invoiceQtys['items']) < $order->getTotalQtyOrdered()) {
+                $this->fail(__('Partial invoicing is not allowed on this Mirakl order.'), $action);
+            }
+
+            $connection  = $this->getConnectionById($order->getMiraklConnectionId());
+            $miraklOrder = $this->getMiraklOrder($connection, $order->getMiraklOrderId());
+
+            if ($miraklOrder->getPaymentWorkflow() != 'PAY_ON_DELIVERY') {
+                return; // Do not do anything for payment workflow different than PAY_ON_DELIVERY
+            }
+
             // Synchronize Magento and Mirakl orders together
             $this->synchronizeOrder->synchronize($order, $miraklOrder);
         } catch (\Exception $e) {

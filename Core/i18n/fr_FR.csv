@@ -267,3 +267,5 @@
 "Manage Exports","Gestion des exports"
 "Logistic Class","Classe logistique"
 "Offer quantity will be set to zero in the marketplace during the next export.","La quantité de l'offre sera définie à zéro dans la marketplace lors du prochain export."
+"Attributes Chunk Size","Nombre maximum d'attributs à regrouper"
+"Technical setting. If an error occurs during listing's products export because of a too large number of attributes to join in the SQL query, set a lower value in this field. Default is to split every 15 attributes. Specify a value between 5 and 15.","Paramètre technique. Si une erreur survient lors de l'export des produits d'un listing à cause d'un trop grand nombre d'attributs utilisés dans la requête SQL, définissez une valeur plus petite dans ce champ. La valeur par défaut est 15 attributs. La valeur doit être comprise entre 5 et 15."

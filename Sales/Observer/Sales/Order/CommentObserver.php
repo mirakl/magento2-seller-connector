@@ -67,6 +67,5 @@ class CommentObserver extends AbstractObserver implements ObserverInterface
         $response->setHeader('Content-Type', 'application/json', true);
         $response->setBody(json_encode(['error' => true, 'message' => $message]));
         $response->sendResponse();
-        exit; // @codingStandardsIgnoreLine
     }
 }

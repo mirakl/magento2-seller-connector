@@ -18,6 +18,11 @@ class Process extends AbstractDb
     ];
 
     /**
+     * @var string
+     */
+    protected $encodeMethod = 'md5';
+
+    /**
      * Initialize resource model
      *
      * @return void
@@ -26,6 +31,15 @@ class Process extends AbstractDb
     {
         // Table Name and Primary Key column
         $this->_init('mirakl_seller_process', 'id');
+    }
+
+    /**
+     * @param   string  $str
+     * @return  mixed
+     */
+    protected function encode($str)
+    {
+        return call_user_func($this->encodeMethod, $str);
     }
 
     /**
@@ -38,7 +52,7 @@ class Process extends AbstractDb
     {
         /** @var ProcessModel $object */
         if (!$object->getHash()) {
-            $object->setHash(md5($object->getType() . ' ' . $object->getName()));
+            $object->setHash($this->encode($object->getType() . ' ' . $object->getName()));
         }
 
         if (!$object->getStatus()) {

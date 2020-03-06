@@ -36,7 +36,9 @@ class Download extends AbstractResult
         $response->clearBody();
         $response->sendHeaders();
 
-        echo file_get_contents($this->file); // @codingStandardsIgnoreLine
+        $content = file_get_contents($this->file);
+        $response->setContent($content);
+        $response->sendContent();
 
         return $this;
     }

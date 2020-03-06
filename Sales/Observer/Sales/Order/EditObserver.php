@@ -20,6 +20,10 @@ class EditObserver extends AbstractObserver implements ObserverInterface
         /** @var \Magento\Backend\App\Action $action */
         $action = $observer->getEvent()->getControllerAction();
 
-        $this->fail(__('It is not possible to edit this Mirakl order.'), $action);
+        try {
+            $this->fail(__('It is not possible to edit this Mirakl order.'), $action);
+        } catch (\Exception $e) {
+            $this->messageManager->addErrorMessage(__('An error occurred: %1', $e->getMessage()));
+        }
     }
 }

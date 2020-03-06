@@ -120,19 +120,13 @@ abstract class AbstractObserver
      *
      * @param   string      $msg
      * @param   Action|null $action
-     * @param   bool        $escape
      * @throws  \Exception
      */
-    protected function fail($msg, Action $action = null, $escape = true)
+    protected function fail($msg, Action $action = null)
     {
         if ($action && ($refererUrl = $action->getRequest()->getServer('HTTP_REFERER'))) {
-            $this->messageManager->addErrorMessage($msg);
-            if (!$escape) {
-                $this->resetLastAddedMessageEscaping();
-            }
             $action->getActionFlag()->set('', Action::FLAG_NO_DISPATCH, true);
-            $action->getResponse()->setRedirect($refererUrl)->sendResponse();
-            exit; // @codingStandardsIgnoreLine
+            $action->getResponse()->setRedirect($refererUrl);
         }
 
         throw new \Exception($msg);

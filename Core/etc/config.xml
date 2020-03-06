@@ -7,6 +7,7 @@
                 <nb_image_exported>5</nb_image_exported>
                 <nb_days_expired>10</nb_days_expired>
                 <nb_days_keep_failed_products>10</nb_days_keep_failed_products>
+                <attributes_chunk_size>15</attributes_chunk_size>
             </listing>
             <offer_fields_mapping>
                 <description/>

@@ -17,7 +17,7 @@ use MiraklSeller\Process\Model\Process;
  * @group model
  * @group resource
  * @group offer
- * @coversDefaultClass \MiraklSeller_Core_Model_Resource_Offer
+ * @coversDefaultClass \MiraklSeller\Core\Model\ResourceModel\Offer
  */
 class OfferTest extends TestCase
 {

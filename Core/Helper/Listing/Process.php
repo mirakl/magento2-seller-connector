@@ -218,8 +218,7 @@ class Process extends Data
 
         // Calculate hashes of offers data to import only modified ones later if in delta mode
         foreach ($data as $productId => $values) {
-            // serialize and sha1 seem better than json_encode and md5 (hashing 100k+ products takes less than 1s)
-            $hash = sha1(serialize($values));
+            $hash = sha1(json_encode($values));
 
             if ($full || $updateProducts[$productId]['offer_hash'] !== $hash) {
                 // Update hash if full import mode or if offer's hash has changed

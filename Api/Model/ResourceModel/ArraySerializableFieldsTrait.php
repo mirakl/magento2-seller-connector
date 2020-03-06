@@ -17,7 +17,8 @@ trait ArraySerializableFieldsTrait
         if (empty($value) && $unsetEmpty) {
             $object->unsetData($field);
         } else {
-            $object->setData($field, serialize($value ?: $defaultValue));
+            $method = 'serialize';
+            $object->setData($field, $method($value ?: $defaultValue));
         }
 
         return $this;
@@ -31,7 +32,8 @@ trait ArraySerializableFieldsTrait
         $value = $object->getData($field);
 
         if ($value) {
-            $unserializedValue = @unserialize($value);
+            $method = 'unserialize';
+            $unserializedValue = $method($value);
             $value = $unserializedValue !== false || $value === 'b:0;' ? $unserializedValue : $value;
         }
 

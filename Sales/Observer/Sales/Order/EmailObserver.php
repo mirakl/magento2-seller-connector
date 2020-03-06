@@ -20,7 +20,11 @@ class EmailObserver extends AbstractObserver implements ObserverInterface
         /** @var \Magento\Backend\App\Action $action */
         $action = $observer->getEvent()->getControllerAction();
 
-        $this->fail(__('Sending emails is not possible on a Mirakl order. ' .
-            'You can exchange messages with the buyer by using the Comments History section on this order.'), $action);
+        try {
+            $this->fail(__('Sending emails is not possible on a Mirakl order. ' .
+                'You can exchange messages with the buyer by using the Comments History section on this order.'), $action);
+        } catch (\Exception $e) {
+            $this->messageManager->addErrorMessage(__('An error occurred: %1', $e->getMessage()));
+        }
     }
 }

@@ -8,8 +8,8 @@ class Cli extends AbstractOutput
      */
     public function display($str)
     {
-        echo $str . PHP_EOL; // @codingStandardsIgnoreLine
-        @ob_flush();
+        printf('%s%s', $str, PHP_EOL);
+        ob_flush();
 
         return $this;
     }

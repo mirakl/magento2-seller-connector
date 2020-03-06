@@ -163,7 +163,6 @@ abstract class TestCase extends \MiraklSeller\Api\Test\Integration\TestCase
         return $listing;
     }
 
-
     /**
      * @return  TrackingProduct
      */
@@ -173,7 +172,7 @@ abstract class TestCase extends \MiraklSeller\Api\Test\Integration\TestCase
 
         $tracking = $this->trackingProductFactory->create();
         $tracking->setListingId($listing->getId())
-            ->setImportId(mt_rand(2000, 9999))
+            ->setImportId(random_int(2000, 9999))
             ->setImportStatus(ProductImportWithTransformationStatus::COMPLETE);
         $this->trackingProductResource->save($tracking);
 

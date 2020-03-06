@@ -8,7 +8,7 @@ use MiraklSeller\Process\Test\Integration;
 /**
  * @group process
  * @group helper
- * @coversDefaultClass \MiraklSeller_Process_Helper_Data
+ * @coversDefaultClass \MiraklSeller\Process\Helper\Data
  */
 class DataTest extends Integration\TestCase
 {
@@ -189,7 +189,8 @@ class DataTest extends Integration\TestCase
     {
         // Create 2 sample processes for test
         $process1 = $this->createSampleProcess();
-        $process1->setStatus(Process::STATUS_PROCESSING)->setHash(md5(uniqid()));
+        $method = 'md5';
+        $process1->setStatus(Process::STATUS_PROCESSING)->setHash($method(uniqid()));
         $this->processResourceFactory->create()->save($process1);
         $process2 = $this->createSampleProcess();
 

@@ -174,14 +174,28 @@ class Order
                 /** @var \Mirakl\MMP\Common\Domain\Order\Tax\OrderTaxAmount $tax */
                 foreach ($orderLine->getTaxes() as $tax) {
                     $taxAmount += $tax->getAmount();
-                    @$quoteTaxes[$tax->getCode()] += $tax->getAmount();
-                    @$quoteItemsTaxes['product'][$quoteItem->getId()][$tax->getCode()] += $tax->getAmount();
+                    if (!isset($quoteTaxes[$tax->getCode()])) {
+                        $quoteTaxes[$tax->getCode()] = 0;
+                    }
+                    $quoteTaxes[$tax->getCode()] += $tax->getAmount();
+
+                    if (!isset($quoteItemsTaxes['product'][$quoteItem->getId()][$tax->getCode()])) {
+                        $quoteItemsTaxes['product'][$quoteItem->getId()][$tax->getCode()] = 0;
+                    }
+                    $quoteItemsTaxes['product'][$quoteItem->getId()][$tax->getCode()] += $tax->getAmount();
                 }
 
                 foreach ($orderLine->getShippingTaxes() as $tax) {
                     $shippingTaxAmount += $tax->getAmount();
-                    @$quoteTaxes[$tax->getCode()] += $tax->getAmount();
-                    @$quoteItemsTaxes['shipping'][$quoteItem->getId()][$tax->getCode()] += $tax->getAmount();
+                    if (!isset($quoteTaxes[$tax->getCode()])) {
+                        $quoteTaxes[$tax->getCode()] = 0;
+                    }
+                    $quoteTaxes[$tax->getCode()] += $tax->getAmount();
+
+                    if (!isset($quoteItemsTaxes['shipping'][$quoteItem->getId()][$tax->getCode()])) {
+                        $quoteItemsTaxes['shipping'][$quoteItem->getId()][$tax->getCode()] = 0;
+                    }
+                    $quoteItemsTaxes['shipping'][$quoteItem->getId()][$tax->getCode()] += $tax->getAmount();
                 }
             } catch (\Exception $e) {
                 throw new LocalizedException(__(

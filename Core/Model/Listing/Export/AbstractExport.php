@@ -80,7 +80,8 @@ abstract class AbstractExport implements ExportInterface
      */
     public function getListingProductsData(Listing $listing)
     {
-        $collections = $this->productHelper->getProductsDataCollections($listing);
+        $chunkSize = $this->config->getAttributesChunkSize();
+        $collections = $this->productHelper->getProductsDataCollections($listing, $chunkSize);
 
         $data = [];
         /** @var \MiraklSeller\Core\Model\ResourceModel\Product\Collection $collection */

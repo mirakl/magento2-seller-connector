@@ -94,6 +94,11 @@ class Listing extends AbstractModel
     protected $builder;
 
     /**
+     * @var string
+     */
+    protected $decodeMethod = 'unserialize';
+
+    /**
      * @param   Context                     $context
      * @param   Registry                    $registry
      * @param   StoreManagerInterface       $storeManager
@@ -141,6 +146,15 @@ class Listing extends AbstractModel
     public function build()
     {
         return $this->getBuilder()->build($this);
+    }
+
+    /**
+     * @param   string  $str
+     * @return  mixed
+     */
+    protected function decode($str)
+    {
+        return call_user_func($this->decodeMethod, $str);
     }
 
     /**
@@ -207,7 +221,7 @@ class Listing extends AbstractModel
     {
         $params = $this->_getData('builder_params');
         if (is_string($params)) {
-            $params = unserialize($params);
+            $params = $this->decode($params);
         }
 
         return is_array($params) ? $params : [];
@@ -247,7 +261,7 @@ class Listing extends AbstractModel
     {
         $values = $this->_getData('variants_attributes');
         if (is_string($values)) {
-            $values = unserialize($values);
+            $values = $this->decode($values);
         }
 
         return is_array($values) ? $values : [];
@@ -260,7 +274,7 @@ class Listing extends AbstractModel
     {
         $values = $this->_getData('offer_additional_fields_values');
         if (is_string($values)) {
-            $values = unserialize($values);
+            $values = $this->decode($values);
         }
 
         return is_array($values) ? $values : [];
