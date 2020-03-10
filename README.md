@@ -12,7 +12,7 @@ Please use one of the following method according to your needs.
 ### Installing the connector
 **We advise you to backup your Magento folder and your database before installing the connector.**
 
-    composer require mirakl/connector-magento2-seller
+    composer require mirakl/magento2-seller-connector
     php bin/magento module:enable MiraklSeller_Api MiraklSeller_Core MiraklSeller_Process MiraklSeller_Sales
     php bin/magento setup:upgrade
     php bin/magento cache:clean
@@ -28,7 +28,7 @@ Please use one of the following method according to your needs.
     php bin/magento module:disable MiraklSeller_Api MiraklSeller_Core MiraklSeller_Process MiraklSeller_Sales
     php bin/magento setup:upgrade
     php bin/magento cache:clean
-    composer remove mirakl/connector-magento2-seller
+    composer remove mirakl/magento2-seller-connector
 
 ## Method 2: Installation with Magento 2 Extension Manager
 ### Purchasing the connector (free)
