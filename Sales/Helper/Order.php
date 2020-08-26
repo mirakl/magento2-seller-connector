@@ -27,19 +27,27 @@ class Order extends AbstractHelper
     protected $orderCollectionFactory;
 
     /**
-     * @param   Context                     $context
-     * @param   ResolverInterface           $localeResolver
-     * @param   OrderCollectionFactory      $orderCollectionFactory
+     * @var Config
+     */
+    protected $config;
+
+    /**
+     * @param   Context                 $context
+     * @param   ResolverInterface       $localeResolver
+     * @param   OrderCollectionFactory  $orderCollectionFactory
+     * @param   Config                  $config
      */
     public function __construct(
         Context $context,
         ResolverInterface $localeResolver,
-        OrderCollectionFactory $orderCollectionFactory
+        OrderCollectionFactory $orderCollectionFactory,
+        Config $config
     ) {
         parent::__construct($context);
 
         $this->localeResolver = $localeResolver;
         $this->orderCollectionFactory = $orderCollectionFactory;
+        $this->config = $config;
     }
 
     /**
@@ -48,13 +56,7 @@ class Order extends AbstractHelper
      */
     public function canImport($status)
     {
-        return in_array($status, [
-            OrderStatus::SHIPPING,
-            OrderStatus::SHIPPED,
-            OrderStatus::TO_COLLECT,
-            OrderStatus::RECEIVED,
-            OrderStatus::CLOSED,
-        ]);
+        return in_array($status, $this->config->getAllowedStatusesForOrdersImport());
     }
 
     /**

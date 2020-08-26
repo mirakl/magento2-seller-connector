@@ -224,3 +224,5 @@
 "If enabled, refunds will be created automatically while importing Mirakl order into Magento.","Si activé, les remboursements seront automatiquement créés lors de l'import des commandes Mirakl dans Magento."
 "Refund must be created in <a href=""%1"" target=""_blank"">Mirakl back office</a>. It will be synchronized automatically in Magento afterwards.","Veuillez vous connecter à <a href=""%1"" target=""_blank"">Mirakl</a> pour créer un remboursement. Il sera synchronisé automatiquement dans Magento par la suite."
 "Additional Information","Informations supplémentaires"
+"Allowed Statuses for Orders Import","Statuts autorisés pour l'import de commandes"
+"Select the Mirakl order statuses that you want to allow for orders import in Magento.","Sélectionnez les statuts de commandes Mirakl que vous souhaitez autoriser lors de l'import de commandes dans Magento."

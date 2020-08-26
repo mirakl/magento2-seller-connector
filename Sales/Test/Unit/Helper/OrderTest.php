@@ -22,7 +22,17 @@ class OrderTest extends TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->orderHelper = $objectManager->getObject(OrderHelper::class);
+
+        // Mock the config object to match default values
+        $configMock = $this->getMockBuilder(\MiraklSeller\Sales\Helper\Config::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAllowedStatusesForOrdersImport'])
+            ->getMock();
+        $configMock->expects($this->any())
+            ->method('getAllowedStatusesForOrdersImport')
+            ->willReturn([OrderState::SHIPPING]);
+
+        $this->orderHelper = $objectManager->getObject(OrderHelper::class, ['config' => $configMock]);
     }
 
     /**
@@ -67,14 +77,14 @@ class OrderTest extends TestCase
         return [
             [OrderState::STAGING, false],
             [OrderState::SHIPPING, true],
-            [OrderState::SHIPPED, true],
-            [OrderState::CLOSED, true],
+            [OrderState::SHIPPED, false],
+            [OrderState::CLOSED, false],
             [OrderState::REFUNDED, false],
-            [OrderState::TO_COLLECT, true],
+            [OrderState::TO_COLLECT, false],
             [OrderState::WAITING_ACCEPTANCE, false],
             [OrderState::WAITING_DEBIT_PAYMENT, false],
             [OrderState::CANCELED, false],
-            [OrderState::RECEIVED, true],
+            [OrderState::RECEIVED, false],
         ];
     }
 

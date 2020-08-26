@@ -286,6 +286,7 @@ class Order
                 $item->setRowTotalInclTax($item->getRowTotalInclTax() + $itemTaxAmount);
                 $item->setBasePriceInclTax($item->getBasePrice() + ($itemTaxAmount / $item->getQty()));
                 $item->setPriceInclTax($item->getPriceInclTax() + ($itemTaxAmount / $item->getQty()));
+                $item->setTaxPercent(round(($itemTaxAmount / $item->getRowTotal()) * 100, 2));
                 $quoteItemResource->save($item);
             }
         }

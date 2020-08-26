@@ -8,10 +8,23 @@ class Config extends \MiraklSeller\Api\Helper\Config
     const XML_PATH_AUTO_ACCEPT_BACKORDER_BEHAVIOR          = 'mirakl_seller_sales/order_acceptance/backorder';
     const XML_PATH_AUTO_ACCEPT_PRICES_VARIATIONS_BEHAVIOR  = 'mirakl_seller_sales/order_acceptance/prices_variations';
 
-    const XML_PATH_AUTO_CREATE_INVOICE  = 'mirakl_seller_sales/order/auto_create_invoice';
-    const XML_PATH_AUTO_CREATE_SHIPMENT = 'mirakl_seller_sales/order/auto_create_shipment';
-    const XML_PATH_AUTO_CREATE_REFUNDS  = 'mirakl_seller_sales/order/auto_create_refunds';
-    const XML_PATH_AUTO_ORDERS_IMPORT   = 'mirakl_seller_sales/order/auto_orders_import';
+    const XML_PATH_AUTO_CREATE_INVOICE                 = 'mirakl_seller_sales/order/auto_create_invoice';
+    const XML_PATH_AUTO_CREATE_SHIPMENT                = 'mirakl_seller_sales/order/auto_create_shipment';
+    const XML_PATH_AUTO_CREATE_REFUNDS                 = 'mirakl_seller_sales/order/auto_create_refunds';
+    const XML_PATH_AUTO_ORDERS_IMPORT                  = 'mirakl_seller_sales/order/auto_orders_import';
+    const XML_PATH_AUTO_ORDERS_IMPORT_ALLOWED_STATUSES = 'mirakl_seller_sales/order/auto_orders_import_allowed_statuses';
+
+    /**
+     * Returns the Mirakl order statuses allowed for orders import in Magento
+     *
+     * @return  string[]
+     */
+    public function getAllowedStatusesForOrdersImport()
+    {
+        $statuses = $this->getValue(self::XML_PATH_AUTO_ORDERS_IMPORT_ALLOWED_STATUSES);
+
+        return strlen($statuses) ? explode(',', $statuses) : [];
+    }
 
     /**
      * Returns behavior selected during order auto acceptance process when a product has backorder enabled

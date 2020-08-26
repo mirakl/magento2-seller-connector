@@ -13,6 +13,7 @@
                 <auto_create_shipment>1</auto_create_shipment>
                 <auto_create_refunds>1</auto_create_refunds>
                 <auto_orders_import>1</auto_orders_import>
+                <auto_orders_import_allowed_statuses>SHIPPING</auto_orders_import_allowed_statuses>
             </order>
         </mirakl_seller_sales>
         <payment>

@@ -41,25 +41,6 @@ class ShipmentObserver extends AbstractObserver implements ObserverInterface
                 // Block partial shipping
                 $this->fail(__('Partial shipping is not allowed on this Mirakl order.'), $action);
             }
-
-            // Handle Magento order fully shipped
-            $trackings = $request->getParam('tracking', []);
-            foreach ($trackings as $tracking) {
-                // Send order tracking info to Mirakl
-                $this->apiOrder->updateOrderTrackingInfo(
-                    $connection,
-                    $miraklOrder->getId(),
-                    '', // Carrier code may not be present in Mirakl and is not mandatory
-                    $tracking['title'],
-                    $tracking['number']
-                );
-                break; // Stop after the first, Mirakl handles only one tracking
-            }
-
-            // Confirm shipment of the order in Mirakl
-            if ($miraklOrder->getStatus()->getState() == OrderState::SHIPPING) {
-                $this->apiOrder->shipOrder($connection, $miraklOrder->getId());
-            }
         } catch (\Exception $e) {
             $this->messageManager->addErrorMessage(__('An error occurred: %1', $e->getMessage()));
         }

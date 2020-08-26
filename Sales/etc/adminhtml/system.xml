@@ -62,6 +62,14 @@
                     <comment><![CDATA[If enabled, all the Mirakl orders of all connections will be synchronized automatically via Magento cron tasks. Note that only modified orders since the last synchronization date will be processed.]]></comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="auto_orders_import_allowed_statuses" translate="label comment" type="multiselect" sortOrder="31" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Allowed Statuses for Orders Import</label>
+                    <source_model>MiraklSeller\Sales\Model\MiraklOrder\Source\StatusImport</source_model>
+                    <comment><![CDATA[Select the Mirakl order statuses that you want to allow for orders import in Magento.]]></comment>
+                    <depends>
+                        <field id="auto_orders_import">1</field>
+                    </depends>
+                </field>
             </group>
         </section>
     </system>

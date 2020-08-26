@@ -174,7 +174,7 @@ abstract class AbstractObserver
             ));
         }
 
-        $this->registry->register('mirakl_order', $miraklOrder);
+        $this->registry->register('mirakl_order', $miraklOrder, true);
 
         return $miraklOrder;
     }

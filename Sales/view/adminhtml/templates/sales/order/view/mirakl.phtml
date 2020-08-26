@@ -1,6 +1,7 @@
 <?php
 /** @var \MiraklSeller\Sales\Block\Adminhtml\Sales\Order\View\MiraklInfo $block */
 $_miraklOrder = $block->getMiraklOrder();
+if (!$_miraklOrder) return;
 ?>
 <div class="admin__page-section-item mirakl">
     <div class="admin__page-section-item-title">

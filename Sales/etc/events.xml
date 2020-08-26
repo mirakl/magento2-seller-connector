@@ -3,4 +3,7 @@
     <event name="mirakl_api_connection_delete_before">
         <observer name="mirakl_seller_sales" instance="MiraklSeller\Sales\Observer\Connection\DeleteObserver" />
     </event>
+    <event name="sales_order_shipment_save_after">
+        <observer name="mirakl_seller_sales_shipment_save" instance="MiraklSeller\Sales\Observer\Sales\Order\ShipmentSaveAfterObserver" />
+    </event>
 </config>
