@@ -93,7 +93,7 @@ class Offer implements FormatterInterface
             'internal-description'  => $data['internal_description'],
             'price'                 => isset($data['price']) ? self::formatPrice($data['price']) : '0',
             'price-additional-info' => $data['price_additional_info'],
-            'quantity'              => isset($data['qty']) ? intval($data['qty']) : '',
+            'quantity'              => isset($data['qty']) ? max(0, intval($data['qty'])) : '',
             'min-quantity-alert'    => $data['min_quantity_alert'],
             'state'                 => $data['state'] ?: \MiraklSeller\Core\Model\Offer\State::DEFAULT_STATE,
             'available-start-date'  => self::formatDate($data['available_start_date']),
