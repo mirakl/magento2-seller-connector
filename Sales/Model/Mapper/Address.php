@@ -25,7 +25,7 @@ class Address implements MapperInterface
     {
         $countryId = $this->countryResolver->resolve($data, $locale);
 
-        $phone = $data['phone'];
+        $phone = $data['phone'] ?? '';
         if (!$phone && !empty($data['phone_secondary'])) {
             $phone = $data['phone_secondary'];
         }

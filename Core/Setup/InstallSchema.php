@@ -34,7 +34,7 @@ class InstallSchema implements InstallSchemaInterface
             ->addColumn('builder_params', Table::TYPE_TEXT, '2M', ['default' => null], 'Builder Parameters')
             ->addColumn('product_id_type', Table::TYPE_TEXT, 255, ['nullable'  => true], 'Product Id Type')
             ->addColumn('product_id_value_attribute', Table::TYPE_TEXT, 255, ['default' => null], 'Product Id Value Attribute')
-            ->addColumn('variants_attributes', Table::TYPE_TEXT, 255, ['default' => null], 'Variants Attributes')
+            ->addColumn('variants_attributes', Table::TYPE_TEXT, '64k', ['default' => null], 'Variants Attributes')
             ->addColumn('last_export_date', Table::TYPE_DATETIME, null, ['default' => null, 'nullable' => true], 'Last Export Date')
             ->addColumn('offer_state', Table::TYPE_SMALLINT, 5, [
                 'unsigned'  => true,
