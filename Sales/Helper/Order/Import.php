@@ -85,7 +85,7 @@ class Import extends AbstractHelper
     {
         $order = $this->orderCreator->create($miraklOrder, $store);
 
-        if ($this->salesConfig->isAutoCreateInvoice() && $miraklOrder->getPaymentWorkflow() == 'PAY_ON_ACCEPTANCE') {
+        if ($this->salesConfig->isAutoCreateInvoice() && $this->orderHelper->isMiraklOrderInvoiced($miraklOrder)) {
             $this->invoiceCreator->create($order);
         }
 
