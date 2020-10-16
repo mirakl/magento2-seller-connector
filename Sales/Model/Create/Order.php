@@ -3,25 +3,24 @@ namespace MiraklSeller\Sales\Model\Create;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
-use Magento\Directory\Model\CurrencyFactory;
+use Magento\Directory\Model\Currency;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Quote\Api\CartManagementInterface;
-use Magento\Quote\Model\Quote\Address\RateFactory as AddressRateFactory;
-use Magento\Quote\Model\QuoteFactory;
-use Magento\Quote\Model\ResourceModel\Quote\Address\RateFactory as AddressRateResourceFactory;
-use Magento\Quote\Model\ResourceModel\QuoteFactory as QuoteResourceFactory;
-use Magento\Quote\Model\ResourceModel\Quote\ItemFactory as QuoteItemResourceFactory;
-use Magento\Sales\Model\Order\Tax\ItemFactory as OrderTaxItemFactory;
-use Magento\Sales\Model\Order\Tax;
-use Magento\Sales\Model\ResourceModel\Order\TaxFactory as OrderTaxResourceFactory;
-use Magento\Sales\Model\ResourceModel\Order\Tax\ItemFactory as OrderTaxItemResourceFactory;
-use Magento\Sales\Model\ResourceModel\OrderFactory as OrderResourceFactory;
+use Magento\Quote\Model\Quote\Address\Rate as AddressRate;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\ResourceModel\Quote\Address\Rate as AddressRateResource;
+use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\Quote\Model\ResourceModel\Quote\Item as QuoteItemResource;
+use Magento\Sales\Model\Order\Tax\Item as OrderTaxItem;
+use Magento\Sales\Model\ResourceModel\Order\Tax as OrderTaxResource;
+use Magento\Sales\Model\ResourceModel\Order\Tax\Item as OrderTaxItemResource;
+use Magento\Sales\Model\ResourceModel\Order as OrderResource;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Tax\Model\Sales\Order\TaxFactory as OrderTaxFactory;
+use Magento\Tax\Model\Sales\Order\Tax as OrderTax;
 use Mirakl\MMP\Shop\Domain\Order\ShopOrder;
 use MiraklSeller\Sales\Helper\Data as SalesHelper;
 use MiraklSeller\Sales\Model\InventorySales\SkipQtyCheckFlag;
@@ -113,19 +112,18 @@ class Order
             $store = $this->storeManager->getDefaultStoreView();
         }
 
-        $quoteCurrency = $this->objectManager->get(CurrencyFactory::class)
-            ->create()
+        $quoteCurrency = $this->objectManager->create(Currency::class)
             ->load($miraklOrder->getCurrencyIsoCode());
 
-        /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->get(QuoteFactory::class)->create();
+        /** @var Quote $quote */
+        $quote = $this->objectManager->create(Quote::class);
         $quote->setStoreId($store->getId())
             ->setForcedCurrency($quoteCurrency)
             ->setIsSuperMode(true)
             ->setFromMiraklOrder(true);
 
-        /** @var \Magento\Quote\Model\ResourceModel\Quote $quoteResource */
-        $quoteResource = $this->objectManager->get(QuoteResourceFactory::class)->create();
+        /** @var QuoteResource $quoteResource */
+        $quoteResource = $this->objectManager->get(QuoteResource::class);
         $quoteResource->save($quote);
 
         $oldSkipQtyCheckFlag = $this->skipQtyCheckFlag->getQtySkipQtyCheck();
@@ -135,8 +133,8 @@ class Order
         $taxAmount = 0;
         $shippingTaxAmount = 0;
 
-        /** @var \Magento\Quote\Model\ResourceModel\Quote\Item $quoteItemResource */
-        $quoteItemResource = $this->objectManager->get(QuoteItemResourceFactory::class)->create();
+        /** @var QuoteItemResource $quoteItemResource */
+        $quoteItemResource = $this->objectManager->get(QuoteItemResource::class);
 
         /** @var \Mirakl\MMP\Common\Domain\Order\ShopOrderLine $orderLine */
         foreach ($miraklOrder->getOrderLines() as $orderLine) {
@@ -241,8 +239,8 @@ class Order
 
         $quoteResource->save($quote);
 
-        /** @var \Magento\Quote\Model\Quote\Address\Rate $addressRate */
-        $addressRate = $this->objectManager->get(AddressRateFactory::class)->create();
+        /** @var AddressRate $addressRate */
+        $addressRate = $this->objectManager->create(AddressRate::class);
         $addressRate->setAddress($quote->getShippingAddress())
             ->setAddressId($quote->getShippingAddress()->getId())
             ->setCode('flatrate_flatrate')
@@ -251,9 +249,7 @@ class Order
             ->setCarrierTitle($miraklOrder->getShipping()->getType()->getLabel())
             ->setMethodTitle($miraklOrder->getShipping()->getType()->getLabel());
 
-        $this->objectManager->get(AddressRateResourceFactory::class)
-            ->create()
-            ->save($addressRate);
+        $this->objectManager->get(AddressRateResource::class)->save($addressRate);
 
         $quote->getShippingAddress()
             ->setShippingMethod('flatrate_flatrate')
@@ -296,9 +292,7 @@ class Order
 
         $order->setTaxAmount($totalTaxAmount);
         $order->setShippingTaxAmount($shippingTaxAmount);
-        $this->objectManager->get(OrderResourceFactory::class)
-            ->create()
-            ->save($order);
+        $this->objectManager->get(OrderResource::class)->save($order);
 
         // Save order taxes by code
         foreach ($quoteTaxes as $code => $amount) {
@@ -316,12 +310,10 @@ class Order
                 'base_real_amount' => $amount,
             ];
 
-            /** @var Tax $orderTax */
-            $orderTax = $this->objectManager->get(OrderTaxFactory::class)->create();
+            /** @var OrderTax $orderTax */
+            $orderTax = $this->objectManager->create(OrderTax::class);
             $orderTax->setData($data);
-            $this->objectManager->get(OrderTaxResourceFactory::class)
-                ->create()
-                ->save($orderTax);
+            $this->objectManager->get(OrderTaxResource::class)->save($orderTax);
 
             // Save order item taxes by code
             foreach ($quoteItemsTaxes as $taxableItemType => $quoteItemTaxDetails) {
@@ -347,12 +339,10 @@ class Order
                             'taxable_item_type'  => $taxableItemType,
                         ];
 
-                        /** @var \Magento\Sales\Model\Order\Tax\Item $orderTaxItem */
-                        $orderTaxItem = $this->objectManager->get(OrderTaxItemFactory::class)->create();
+                        /** @var OrderTaxItem $orderTaxItem */
+                        $orderTaxItem = $this->objectManager->create(OrderTaxItem::class);
                         $orderTaxItem->setData($data);
-                        $this->objectManager->get(OrderTaxItemResourceFactory::class)
-                            ->create()
-                            ->save($orderTaxItem);
+                        $this->objectManager->get(OrderTaxItemResource::class)->save($orderTaxItem);
                     }
                 }
             }
