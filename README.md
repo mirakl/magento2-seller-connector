@@ -1,8 +1,8 @@
 # Mirakl Seller Connector for Magento 2
 # Compatibility
 Magento 2 Seller Connector is successfully tested on the following Magento versions:
-- Magento Open Source 2.2 to 2.3
-- Magento Commerce 2.2 to 2.3
+- Magento Open Source 2.3 to 2.4
+- Magento Commerce 2.3 to 2.4
 
 # Installation
 There is different ways to install the Mirakl connector for Magento 2.  
