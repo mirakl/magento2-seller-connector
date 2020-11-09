@@ -20,7 +20,7 @@ class ProductsTest extends TestCase
      */
     protected $exportModel;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -39,17 +39,21 @@ class ProductsTest extends TestCase
      */
     public function testExport($productIds, $expectedResult)
     {
-        /** @var Listing|\PHPUnit_Framework_MockObject_MockObject $listingMock */
+        /** @var Listing|\PHPUnit\Framework\MockObject\MockObject $listingMock */
         $connectionMock = $this->createMock(Connection::class);
         $connectionMock->expects($this->any())
             ->method('getExportableAttributes')
             ->willReturn([]);
 
-        /** @var Listing|\PHPUnit_Framework_MockObject_MockObject $listingMock */
+        /** @var Listing|\PHPUnit\Framework\MockObject\MockObject $listingMock */
         $listingMock = $this->createMock(Listing::class);
         $listingMock->expects($this->any())
             ->method('getProductIds')
             ->willReturn($productIds);
+
+        $listingMock->expects($this->any())
+            ->method('getVariantsAttributes')
+            ->willReturn([]);
 
         $listingMock->expects($this->any())
             ->method('getConnection')
@@ -86,13 +90,13 @@ class ProductsTest extends TestCase
      */
     public function testExportWithVariantsAttributes($productIds, $variantsAttributes, $expectedResult)
     {
-        /** @var Listing|\PHPUnit_Framework_MockObject_MockObject $listingMock */
+        /** @var Listing|\PHPUnit\Framework\MockObject\MockObject $listingMock */
         $connectionMock = $this->createMock(Connection::class);
         $connectionMock->expects($this->any())
             ->method('getExportableAttributes')
             ->willReturn([]);
 
-        /** @var Listing|\PHPUnit_Framework_MockObject_MockObject $listingMock */
+        /** @var Listing|\PHPUnit\Framework\MockObject\MockObject $listingMock */
         $listingMock = $this->createMock(Listing::class);
         $listingMock->expects($this->any())
             ->method('getProductIds')
@@ -136,13 +140,13 @@ class ProductsTest extends TestCase
      */
     public function testExportWithExportableAttributes($productIds, $exportableAttributes, $expectedResult)
     {
-        /** @var Listing|\PHPUnit_Framework_MockObject_MockObject $listingMock */
+        /** @var Listing|\PHPUnit\Framework\MockObject\MockObject $listingMock */
         $connectionMock = $this->createMock(Connection::class);
         $connectionMock->expects($this->any())
             ->method('getExportableAttributes')
             ->willReturn($exportableAttributes);
 
-        /** @var Listing|\PHPUnit_Framework_MockObject_MockObject $listingMock */
+        /** @var Listing|\PHPUnit\Framework\MockObject\MockObject $listingMock */
         $listingMock = $this->createMock(Listing::class);
         $listingMock->expects($this->any())
             ->method('getProductIds')

@@ -17,7 +17,7 @@ class DataTest extends Integration\TestCase
      */
     protected $helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->helper = $this->objectManager->get(Helper::class);

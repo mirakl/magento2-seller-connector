@@ -21,16 +21,16 @@ class DownloadTest extends TestCase
     protected $downloadModel;
 
     /**
-     * @var Download\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var Download\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $adapterMock;
 
     /**
-     * @var Products|\PHPUnit_Framework_MockObject_MockObject
+     * @var Products|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $exportModelMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->adapterMock = $this->createMock(Download\Adapter\AdapterInterface::class);
         $this->exportModelMock = $this->createMock(Products::class);

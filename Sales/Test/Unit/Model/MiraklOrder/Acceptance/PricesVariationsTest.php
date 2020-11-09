@@ -21,7 +21,7 @@ class PricesVariationsTest extends TestCase
      */
     public function testIsPriceVariationValid($config, $magentoPrice, $miraklPrice, $expected)
     {
-        /** @var PricesVariations|\PHPUnit_Framework_MockObject_MockObject $modelMock */
+        /** @var PricesVariations|\PHPUnit\Framework\MockObject\MockObject $modelMock */
         $modelMock = $this->getMockBuilder(PricesVariations::class)
             ->disableOriginalConstructor()
             ->setMethodsExcept(['isPriceVariationValid'])

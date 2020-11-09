@@ -54,7 +54,7 @@ class ProcessTest extends TestCase
      */
     protected $trackingProductCollectionFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -87,7 +87,7 @@ class ProcessTest extends TestCase
         $listing = $this->createSampleListing();
 
         // Mock listing builder in order to specify product ids manually
-        /** @var Standard|\PHPUnit_Framework_MockObject_MockObject $builderMock */
+        /** @var Standard|\PHPUnit\Framework\MockObject\MockObject $builderMock */
         $builderMock = $this->createMock(Standard::class);
         $builderMock->expects($this->once())
             ->method('build')
@@ -99,7 +99,7 @@ class ProcessTest extends TestCase
             ->method('create')
             ->willReturn($listing);
 
-        /** @var Process|\PHPUnit_Framework_MockObject_MockObject $processMock */
+        /** @var Process|\PHPUnit\Framework\MockObject\MockObject $processMock */
         $processMock = $this->createMock(Process::class);
 
         // Build and save listing product ids in db
@@ -133,7 +133,7 @@ class ProcessTest extends TestCase
         $listing = $this->createSampleListing();
 
         // Mock listing builder in order to specify product ids manually
-        /** @var Standard|\PHPUnit_Framework_MockObject_MockObject $builderMock */
+        /** @var Standard|\PHPUnit\Framework\MockObject\MockObject $builderMock */
         $builderMock = $this->createMock(Standard::class);
         $builderMock->expects($this->exactly(3))
             ->method('build')
@@ -149,7 +149,7 @@ class ProcessTest extends TestCase
             ->method('create')
             ->willReturn($listing);
 
-        /** @var Process|\PHPUnit_Framework_MockObject_MockObject $processMock */
+        /** @var Process|\PHPUnit\Framework\MockObject\MockObject $processMock */
         $processMock = $this->createMock(Process::class);
 
         // Build and save listing product ids in db
@@ -247,7 +247,7 @@ class ProcessTest extends TestCase
         $listing = $this->createSampleListing();
 
         // Mock listing builder in order to specify product ids manually
-        /** @var Standard|\PHPUnit_Framework_MockObject_MockObject $builderMock */
+        /** @var Standard|\PHPUnit\Framework\MockObject\MockObject $builderMock */
         $builderMock = $this->createMock(Standard::class);
         $builderMock->expects($this->once())
             ->method('build')
@@ -259,7 +259,7 @@ class ProcessTest extends TestCase
             ->method('create')
             ->willReturn($listing);
 
-        /** @var Process|\PHPUnit_Framework_MockObject_MockObject $processMock */
+        /** @var Process|\PHPUnit\Framework\MockObject\MockObject $processMock */
         $processMock = $this->createMock(Process::class);
 
         // Build and save listing product ids in db
@@ -396,7 +396,7 @@ class ProcessTest extends TestCase
         $listing = $this->createSampleListing();
 
         // Mock listing builder in order to specify product ids manually
-        /** @var Standard|\PHPUnit_Framework_MockObject_MockObject $builderMock */
+        /** @var Standard|\PHPUnit\Framework\MockObject\MockObject $builderMock */
         $builderMock = $this->createMock(Standard::class);
         $builderMock->expects($this->once())
             ->method('build')
@@ -408,7 +408,7 @@ class ProcessTest extends TestCase
             ->method('create')
             ->willReturn($listing);
 
-        /** @var Process|\PHPUnit_Framework_MockObject_MockObject $processMock */
+        /** @var Process|\PHPUnit\Framework\MockObject\MockObject $processMock */
         $processMock = $this->objectManager->create(Process::class);
         $processMock->addOutput('db');
 
@@ -538,7 +538,7 @@ class ProcessTest extends TestCase
         $listing = $this->createSampleListing();
 
         // Mock listing builder in order to specify product ids manually
-        /** @var Standard|\PHPUnit_Framework_MockObject_MockObject $builderMock */
+        /** @var Standard|\PHPUnit\Framework\MockObject\MockObject $builderMock */
         $builderMock = $this->createMock(Standard::class);
         $builderMock->expects($this->once())
             ->method('build')
@@ -550,7 +550,7 @@ class ProcessTest extends TestCase
             ->method('create')
             ->willReturn($listing);
 
-        /** @var Process|\PHPUnit_Framework_MockObject_MockObject $processMock */
+        /** @var Process|\PHPUnit\Framework\MockObject\MockObject $processMock */
         $processMock = $this->createMock(Process::class);
 
         // Build and save listing product ids in db

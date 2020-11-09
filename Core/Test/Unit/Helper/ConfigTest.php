@@ -19,7 +19,7 @@ class ConfigTest extends TestCase
      */
     public function testGetAttributesChunkSize($configValueMock, $expected)
     {
-        /** @var \MiraklSeller\Core\Helper\Config|\PHPUnit_Framework_MockObject_MockObject $configMock */
+        /** @var \MiraklSeller\Core\Helper\Config|\PHPUnit\Framework\MockObject\MockObject $configMock */
         $configMock = $this->getMockBuilder(\MiraklSeller\Core\Helper\Config::class)
             ->disableOriginalConstructor()
             ->setMethodsExcept(['getAttributesChunkSize'])

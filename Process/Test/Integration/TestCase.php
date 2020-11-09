@@ -25,7 +25,7 @@ abstract class TestCase extends \MiraklSeller\Api\Test\Integration\TestCase
     protected $processCollectionFactory;
 
     /**
-     * @var ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
@@ -34,7 +34,7 @@ abstract class TestCase extends \MiraklSeller\Api\Test\Integration\TestCase
      */
     protected $processIds = [];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -44,7 +44,7 @@ abstract class TestCase extends \MiraklSeller\Api\Test\Integration\TestCase
         $this->objectManagerMock = $this->createMock(ObjectManager::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 

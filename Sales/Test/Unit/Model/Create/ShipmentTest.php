@@ -19,19 +19,20 @@ class ShipmentTest extends TestCase
      */
     protected $shipmentCreator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->shipmentCreator = (new ObjectManager($this))->getObject(ShipmentCreator::class);
     }
 
     /**
      * @covers  ::create
-     * @expectedException \Exception
-     * @expectedExceptionMessage Cannot do shipment for the order.
      */
     public function testCreateShipmentThrowsException()
     {
-        /** @var Order|\PHPUnit_Framework_MockObject_MockObject $order */
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage("Cannot do shipment for the order.");
+
+        /** @var Order|\PHPUnit\Framework\MockObject\MockObject $order */
         $order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -39,7 +40,7 @@ class ShipmentTest extends TestCase
             ->method('canShip')
             ->willReturn(false);
 
-        /** @var ShopOrder|\PHPUnit_Framework_MockObject_MockObject $miraklOrder */
+        /** @var ShopOrder|\PHPUnit\Framework\MockObject\MockObject $miraklOrder */
         $miraklOrder = $this->getMockBuilder(ShopOrder::class)
             ->disableOriginalConstructor()
             ->getMock();

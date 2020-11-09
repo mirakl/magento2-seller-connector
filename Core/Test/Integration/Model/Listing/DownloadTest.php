@@ -19,7 +19,7 @@ class DownloadTest extends TestCase
      */
     protected $download;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -37,17 +37,21 @@ class DownloadTest extends TestCase
      */
     public function testPrepare($productIds, $expectedResult)
     {
-        /** @var Listing|\PHPUnit_Framework_MockObject_MockObject $listingMock */
+        /** @var Listing|\PHPUnit\Framework\MockObject\MockObject $listingMock */
         $connectionMock = $this->createMock(Connection::class);
         $connectionMock->expects($this->any())
             ->method('getExportableAttributes')
             ->willReturn([]);
 
-        /** @var Listing|\PHPUnit_Framework_MockObject_MockObject $listingMock */
+        /** @var Listing|\PHPUnit\Framework\MockObject\MockObject $listingMock */
         $listingMock = $this->createMock(Listing::class);
         $listingMock->expects($this->any())
             ->method('getProductIds')
             ->willReturn($productIds);
+
+        $listingMock->expects($this->any())
+            ->method('getVariantsAttributes')
+            ->willReturn([]);
 
         $listingMock->expects($this->any())
             ->method('getConnection')

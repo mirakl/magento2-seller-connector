@@ -138,8 +138,8 @@ class Order
 
         /** @var \Mirakl\MMP\Common\Domain\Order\ShopOrderLine $orderLine */
         foreach ($miraklOrder->getOrderLines() as $orderLine) {
-            if ($orderLine->getStatus()->getState() == 'REFUSED') {
-                continue; // Ignore refused items on Mirakl
+            if (in_array($orderLine->getStatus()->getState(), ['REFUSED', 'CANCELED'])) {
+                continue; // Do not import refused or canceled order lines
             }
 
             $sku = $orderLine->getOffer()->getSku();

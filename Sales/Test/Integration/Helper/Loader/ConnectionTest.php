@@ -11,7 +11,7 @@ class ConnectionTest extends TestCase
      */
     protected $connectionLoader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->connectionLoader = $this->objectManager->create(ConnectionLoader::class);

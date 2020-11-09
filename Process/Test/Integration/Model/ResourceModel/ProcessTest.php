@@ -16,7 +16,7 @@ class ProcessTest extends Integration\TestCase
      */
     protected $resourceModel;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->resourceModel = $this->processResourceFactory->create();
@@ -42,11 +42,12 @@ class ProcessTest extends Integration\TestCase
 
     /**
      * @covers ::markAsTimeout
-     * @expectedException \Exception
-     * @expectedExceptionMessage Delay for expired processes cannot be empty
      */
     public function testMarkAsTimeoutWithEmptyDelay()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Delay for expired processes cannot be empty');
+
         $this->resourceModel->markAsTimeout(0);
     }
 }

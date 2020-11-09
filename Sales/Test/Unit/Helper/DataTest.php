@@ -18,7 +18,7 @@ class DataTest extends TestCase
      */
     protected $helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->helper = $objectManager->getObject(Helper::class);

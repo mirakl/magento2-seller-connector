@@ -20,7 +20,7 @@ class DataTest extends TestCase
      */
     protected $helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $context = $objectManager->getObject(Context::class);

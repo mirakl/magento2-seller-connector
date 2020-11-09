@@ -23,11 +23,11 @@ class ConnectionTest extends TestCase
     protected $connectionModel;
 
     /**
-     * @var Response|\PHPUnit_Framework_MockObject_MockObject
+     * @var Response|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $responseMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $context = $this->getMockBuilder('Magento\Framework\Model\Context')
             ->disableOriginalConstructor()

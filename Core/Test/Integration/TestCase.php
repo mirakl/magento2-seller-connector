@@ -86,7 +86,7 @@ abstract class TestCase extends \MiraklSeller\Api\Test\Integration\TestCase
      */
     protected $processCollectionFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -102,7 +102,7 @@ abstract class TestCase extends \MiraklSeller\Api\Test\Integration\TestCase
         $this->processCollectionFactory = $this->objectManager->create(ProcessCollectionFactory::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if (!empty($this->connectionIds)) {
             // Delete created connections

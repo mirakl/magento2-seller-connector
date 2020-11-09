@@ -38,13 +38,11 @@
         "style_bags": null,
         "style_bottom": null,
         "style_general": null,
-        "ts_dimensions_height": null,
-        "ts_dimensions_length": null,
-        "ts_dimensions_width": null,
-        "weight": "1.0000",
+        "weight": "1.000000",
         "weight_type": null,
         "entity_id": "341",
-        "sku": "MJ09-M-Blue"
+        "sku": "MJ09-M-Blue",
+        "custom_layout_update_file": null
     },
     "342": {
         "image_1": "http://foobar.com/pub/media/catalog/product/m/j/mj09-white_main_3.jpg",
@@ -85,13 +83,11 @@
         "style_bags": null,
         "style_bottom": null,
         "style_general": null,
-        "ts_dimensions_height": null,
-        "ts_dimensions_length": null,
-        "ts_dimensions_width": null,
-        "weight": "1.0000",
+        "weight": "1.000000",
         "weight_type": null,
         "entity_id": "342",
-        "sku": "MJ09-M-White"
+        "sku": "MJ09-M-White",
+        "custom_layout_update_file": null
     },
     "343": {
         "image_1": "http://foobar.com/pub/media/catalog/product/m/j/mj09-yellow_main_3.jpg",
@@ -132,13 +128,11 @@
         "style_bags": null,
         "style_bottom": null,
         "style_general": null,
-        "ts_dimensions_height": null,
-        "ts_dimensions_length": null,
-        "ts_dimensions_width": null,
-        "weight": "1.0000",
+        "weight": "1.000000",
         "weight_type": null,
         "entity_id": "343",
-        "sku": "MJ09-M-Yellow"
+        "sku": "MJ09-M-Yellow",
+        "custom_layout_update_file": null
     },
     "344": {
         "image_1": "http://foobar.com/pub/media/catalog/product/m/j/mj09-blue_main_3.jpg",
@@ -179,13 +173,11 @@
         "style_bags": null,
         "style_bottom": null,
         "style_general": null,
-        "ts_dimensions_height": null,
-        "ts_dimensions_length": null,
-        "ts_dimensions_width": null,
-        "weight": "1.0000",
+        "weight": "1.000000",
         "weight_type": null,
         "entity_id": "344",
-        "sku": "MJ09-L-Blue"
+        "sku": "MJ09-L-Blue",
+        "custom_layout_update_file": null
     },
     "345": {
         "image_1": "http://foobar.com/pub/media/catalog/product/m/j/mj09-white_main_3.jpg",
@@ -226,12 +218,10 @@
         "style_bags": null,
         "style_bottom": null,
         "style_general": null,
-        "ts_dimensions_height": null,
-        "ts_dimensions_length": null,
-        "ts_dimensions_width": null,
-        "weight": "1.0000",
+        "weight": "1.000000",
         "weight_type": null,
         "entity_id": "345",
-        "sku": "MJ09-L-White"
+        "sku": "MJ09-L-White",
+        "custom_layout_update_file": null
     }
 }

@@ -22,7 +22,7 @@ class OrderTest extends TestCase
      */
     protected $orderSynchronizer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->orderCreator = $this->objectManager->create(OrderCreator::class);

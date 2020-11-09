@@ -33,7 +33,7 @@ class ProcessTest extends TestCase
     protected $helper;
 
     /**
-     * @var ProductApiHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductApiHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productApiHelper;
 
@@ -67,7 +67,7 @@ class ProcessTest extends TestCase
      */
     protected $trackingProductResource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -112,7 +112,7 @@ class ProcessTest extends TestCase
         $trackingProduct->setListingId($listing->getId());
         $this->trackingProductResource->save($trackingProduct);
 
-        /** @var Process|\PHPUnit_Framework_MockObject_MockObject $processMock */
+        /** @var Process|\PHPUnit\Framework\MockObject\MockObject $processMock */
         $processMock = $this->createMock(Process::class);
 
         $this->productApiHelper->expects($this->any())

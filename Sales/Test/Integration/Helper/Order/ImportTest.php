@@ -11,12 +11,11 @@ use MiraklSeller\Sales\Helper\Order\Import as OrderImportHelper;
 
 class ImportTest extends TestCase
 {
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The Mirakl order #foo cannot be imported
-     */
     public function testImportMiraklOrderCannotBeImported()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The Mirakl order #foo cannot be imported');
+
         $connection = $this->objectManager->create(Connection::class);
 
         $miraklOrder = new ShopOrder([
@@ -29,12 +28,11 @@ class ImportTest extends TestCase
         $orderImportHelper->importMiraklOrder($connection, $miraklOrder);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
-     * @expectedExceptionMessage The Mirakl order #foo has already been imported (#bar)
-     */
     public function testImportMiraklOrderWithExistingOrder()
     {
+        $this->expectException(\Magento\Framework\Exception\AlreadyExistsException::class);
+        $this->expectExceptionMessage('The Mirakl order #foo has already been imported (#bar)');
+
         $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->getMock();

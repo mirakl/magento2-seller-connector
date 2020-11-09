@@ -29,7 +29,7 @@ class ProductTest extends TestCase
      */
     protected $constructorEntityMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $classes = [
             'context' => Context::class,

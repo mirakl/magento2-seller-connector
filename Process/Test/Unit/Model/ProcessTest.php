@@ -23,29 +23,29 @@ class ProcessTest extends TestCase
     protected $process;
 
     /**
-     * @var OutputFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var OutputFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $outputFactory;
 
     /**
-     * @var ProcessModelFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProcessModelFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $processModelFactory;
 
     /**
-     * @var ProcessResourceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProcessResourceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $processResourceFactory;
 
     /**
-     * @var ProcessCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProcessCollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $processCollectionFactory;
 
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->outputFactory = $this->createMock(OutputFactory::class);
         $this->processModelFactory = $this->createMock(ProcessModelFactory::class);
@@ -107,7 +107,7 @@ class ProcessTest extends TestCase
      */
     public function testCanRun()
     {
-        /** @var Process|\PHPUnit_Framework_MockObject_MockObject $processMock */
+        /** @var Process|\PHPUnit\Framework\MockObject\MockObject $processMock */
         $processMock = $this->getMockBuilder(Process::class)
             ->disableOriginalConstructor()
             ->setMethodsExcept(['canRun', '__call'])
@@ -134,12 +134,13 @@ class ProcessTest extends TestCase
 
     /**
      * @covers ::run
-     * @expectedException \Exception
-     * @expectedExceptionMessage Cannot run a process that is not in pending status
      */
     public function testRun()
     {
-        /** @var Process|\PHPUnit_Framework_MockObject_MockObject $processMock */
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Cannot run a process that is not in pending status');
+
+        /** @var Process|\PHPUnit\Framework\MockObject\MockObject $processMock */
         $processMock = $this->getMockBuilder(Process::class)
             ->disableOriginalConstructor()
             ->setMethodsExcept(['run'])
@@ -180,11 +181,12 @@ class ProcessTest extends TestCase
 
     /**
      * @covers ::addOutput
-     * @expectedException \Exception
-     * @expectedExceptionMessage Invalid output specified.
      */
     public function testAddOutput()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Invalid output specified.');
+
         $outputMock = $this->createMock(Output\Db::class);
 
         $this->assertEquals($this->process, $this->process->addOutput('cli')); // no exception expected
@@ -227,7 +229,7 @@ class ProcessTest extends TestCase
         $this->process->execute();
 
         $this->assertEquals($this->process->getStatus(), Process::STATUS_ERROR);
-        $this->assertContains('Process is already running.', $this->process->getOutput());
+        $this->assertStringContainsString('Process is already running.', $this->process->getOutput());
     }
 
     /**
@@ -265,13 +267,13 @@ class ProcessTest extends TestCase
         $this->process->execute();
 
         $this->assertEquals($this->process->getStatus(), Process::STATUS_ERROR);
-        $this->assertContains('Invalid helper specified', $this->process->getOutput());
+        $this->assertStringContainsString('Invalid helper specified', $this->process->getOutput());
 
         $this->process->setHelper('MiraklSeller\Process\Helper\Data');
         $this->process->setMethod('bar');
         $this->process->execute();
 
         $this->assertEquals($this->process->getStatus(), Process::STATUS_ERROR);
-        $this->assertContains('Invalid helper method specified', $this->process->getOutput());
+        $this->assertStringContainsString('Invalid helper method specified', $this->process->getOutput());
     }
 }

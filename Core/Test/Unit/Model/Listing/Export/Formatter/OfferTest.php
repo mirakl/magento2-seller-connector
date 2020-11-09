@@ -25,21 +25,21 @@ class OfferTest extends TestCase
     protected $formatter;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $config;
 
     /**
-     * @var Helper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Helper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $helper;
 
     /**
-     * @var Inventory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Inventory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $inventory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helper = $this->getMockBuilder(Helper::class)
             ->disableOriginalConstructor()
@@ -62,10 +62,10 @@ class OfferTest extends TestCase
      */
     public function testFormat()
     {
-        /** @var Listing|\PHPUnit_Framework_MockObject_MockObject $listingMock */
+        /** @var Listing|\PHPUnit\Framework\MockObject\MockObject $listingMock */
         $listingMock = $this->createMock(Listing::class);
 
-        /** @var Connection|\PHPUnit_Framework_MockObject_MockObject $connectionMock */
+        /** @var Connection|\PHPUnit\Framework\MockObject\MockObject $connectionMock */
         $connectionMock = $this->createMock(Connection::class);
 
         $listingMock->expects($this->any())

@@ -7,13 +7,15 @@ use Magento\Framework\Event\ObserverInterface;
 class CancelObserver extends AbstractObserver implements ObserverInterface
 {
     /**
-     * Intercept order cancelation from back office to cancel the order on Mirakl if possible.
+     * Intercept order cancelation to cancel the order in Mirakl if possible.
      *
      * {@inheritdoc}
      */
     public function execute(Observer $observer)
     {
-        if (!$order = $this->getOrderFromEvent($observer->getEvent())) {
+        $order = $observer->getEvent()->getOrder();
+
+        if (!$this->isImportedMiraklOrder($order)) {
             return; // Do not do anything if it's not an imported Mirakl order
         }
 

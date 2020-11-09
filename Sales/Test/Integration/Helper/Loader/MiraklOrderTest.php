@@ -13,11 +13,11 @@ class MiraklOrderTest extends TestCase
 {
     /**
      * @param   string  $name
-     * @return  Connection|\PHPUnit_Framework_MockObject_MockObject
+     * @return  Connection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getConnectionMock($name = 'Connection Mock')
     {
-        /** @var Connection|\PHPUnit_Framework_MockObject_MockObject $connectionMock */
+        /** @var Connection|\PHPUnit\Framework\MockObject\MockObject $connectionMock */
         $connectionMock = $this->getMockBuilder(Connection::class)
             ->disableOriginalConstructor()
             ->setMethodsExcept(['__call', 'getData', 'setData'])
@@ -27,23 +27,21 @@ class MiraklOrderTest extends TestCase
         return $connectionMock;
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\NotFoundException
-     * @expectedExceptionMessage Mirakl order id could not be found
-     */
     public function testGetCurrentMiraklOrderWithoutOrderId()
     {
+        $this->expectException(\Magento\Framework\Exception\NotFoundException::class);
+        $this->expectExceptionMessage('Mirakl order id could not be found');
+
         /** @var MiraklOrderLoader $miraklOrderLoader */
         $miraklOrderLoader = $this->objectManager->create(MiraklOrderLoader::class);
         $miraklOrderLoader->getCurrentMiraklOrder($this->getConnectionMock());
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\NotFoundException
-     * @expectedExceptionMessage Could not find Mirakl order for id 'foo' with connection 'bar'
-     */
     public function testGetCurrentMiraklOrderWithOrderNotFound()
     {
+        $this->expectException(\Magento\Framework\Exception\NotFoundException::class);
+        $this->expectExceptionMessage("Could not find Mirakl order for id 'foo' with connection 'bar'");
+
         $requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -18,7 +18,7 @@ class ManagerTest extends TestCase
      */
     protected $clientManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
@@ -47,11 +47,12 @@ class ManagerTest extends TestCase
 
     /**
      * @covers ::disableClient
-     * @expectedException \Mirakl\Core\Exception\ClientDisabledException
      */
     public function testDisableClient()
     {
-        /** @var Connection|\PHPUnit_Framework_MockObject_MockObject $connection */
+        $this->expectException(\Mirakl\Core\Exception\ClientDisabledException::class);
+
+        /** @var Connection|\PHPUnit\Framework\MockObject\MockObject $connection */
         $connection = $this->getMockBuilder(Connection::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId'])

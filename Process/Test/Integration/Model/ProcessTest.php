@@ -1,7 +1,6 @@
 <?php
 namespace MiraklSeller\Process\Test\Integration\Model;
 
-use Magento\Setup\Exception;
 use MiraklSeller\Process\Model\Process;
 use MiraklSeller\Process\Test\Integration;
 
@@ -130,7 +129,7 @@ class ProcessTest extends Integration\TestCase
             $process2->run();
         } catch (\Exception $e) {
             $this->assertInstanceOf(\Exception::class, $e);
-            $this->assertContains('has not completed yet', $e->getMessage());
+            $this->assertStringContainsString('has not completed yet', $e->getMessage());
         }
 
         // Verify that statuses did not change

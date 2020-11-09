@@ -2,6 +2,7 @@
 namespace MiraklSeller\Sales\Test\Integration\Model\Synchronize;
 
 use Magento\Sales\Model\Order\Creditmemo\Item as CreditMemoItem;
+use Magento\Sales\Model\ResourceModel\Order\Creditmemo\CollectionFactory as CreditMemoCollectionFactory;
 use Mirakl\MMP\Shop\Domain\Order\ShopOrder;
 use MiraklSeller\Api\Test\Integration\TestCase;
 use MiraklSeller\Sales\Helper\Order\Import as OrderImportHelper;
@@ -25,7 +26,7 @@ class RefundsTest extends TestCase
      */
     protected $connectionLoader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->orderImportHelper = $this->objectManager->create(OrderImportHelper::class);
@@ -56,7 +57,9 @@ class RefundsTest extends TestCase
 
         $this->assertTrue($updated);
 
-        $creditMemos = $magentoOrder->getCreditmemosCollection()->getItems();
+        /** @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection $creditMemoCollection */
+        $creditMemoCollection = $this->objectManager->get(CreditMemoCollectionFactory::class)->create();
+        $creditMemos = $creditMemoCollection->setOrderFilter($magentoOrder)->getItems();
         $this->assertCount(3, $creditMemos);
 
         /** @var CreditMemoItem $creditMemo1 */

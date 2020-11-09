@@ -41,7 +41,7 @@ class ProcessTest extends TestCase
      */
     protected $constructorEntityMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $classes = [
             'context' => Context::class,
@@ -75,17 +75,18 @@ class ProcessTest extends TestCase
 
     /**
      * @covers ::exportOffer
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage This listing is inactive.
      */
     public function testExportOfferWithInactiveListing()
     {
-        /** @var ProcessModel|\PHPUnit_Framework_MockObject_MockObject $processMock */
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('This listing is inactive.');
+
+        /** @var ProcessModel|\PHPUnit\Framework\MockObject\MockObject $processMock */
         $processMock = $this->getMockBuilder(ProcessModel::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var Listing|\PHPUnit_Framework_MockObject_MockObject $listingMock */
+        /** @var Listing|\PHPUnit\Framework\MockObject\MockObject $listingMock */
         $listingMock = $this->getMockBuilder(Listing::class)
             ->disableOriginalConstructor()
             ->setMethodsExcept(['validate'])
@@ -114,17 +115,19 @@ class ProcessTest extends TestCase
 
     /**
      * @covers ::exportProduct
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage This listing is inactive.
+     *
      */
     public function testExportProductWithInactiveListing()
     {
-        /** @var ProcessModel|\PHPUnit_Framework_MockObject_MockObject $processMock */
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('This listing is inactive.');
+
+        /** @var ProcessModel|\PHPUnit\Framework\MockObject\MockObject $processMock */
         $processMock = $this->getMockBuilder(ProcessModel::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var Listing|\PHPUnit_Framework_MockObject_MockObject $listingMock */
+        /** @var Listing|\PHPUnit\Framework\MockObject\MockObject $listingMock */
         $listingMock = $this->getMockBuilder(Listing::class)
             ->disableOriginalConstructor()
             ->setMethodsExcept(['validate'])

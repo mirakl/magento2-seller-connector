@@ -20,7 +20,7 @@ class OfferTest extends TestCase
      */
     protected $helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $context = $objectManager->getObject(Context::class);
@@ -35,13 +35,12 @@ class OfferTest extends TestCase
         ]);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage No offer to import
-     */
     public function testImportOffersWithEmptyData()
     {
-        /** @var Connection|\PHPUnit_Framework_MockObject_MockObject $connectionMock */
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('No offer to import');
+
+        /** @var Connection|\PHPUnit\Framework\MockObject\MockObject $connectionMock */
         $connectionMock = $this->createMock(Connection::class);
 
         $this->helper->importOffers($connectionMock, []);

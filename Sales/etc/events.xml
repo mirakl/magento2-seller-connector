@@ -6,4 +6,7 @@
     <event name="sales_order_shipment_save_after">
         <observer name="mirakl_seller_sales_shipment_save" instance="MiraklSeller\Sales\Observer\Sales\Order\ShipmentSaveAfterObserver" />
     </event>
+    <event name="order_cancel_after">
+        <observer name="mirakl_seller_sales" instance="MiraklSeller\Sales\Observer\Sales\Order\CancelObserver" />
+    </event>
 </config>

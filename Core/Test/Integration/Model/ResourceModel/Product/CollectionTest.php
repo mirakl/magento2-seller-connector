@@ -32,7 +32,7 @@ class CollectionTest extends TestCase
      */
     protected $attributeFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -125,8 +125,8 @@ class CollectionTest extends TestCase
             [
                 337, 0, [
                     337 => [
-                        'entity_id' => '337', 'price' => '65.0000', 'tax_class_id' => '2', 'final_price' => '65.0000',
-                        'minimal_price' => '65.0000', 'min_price' => '65.0000', 'max_price' => '65.0000',
+                        'entity_id' => '337', 'price' => '65.000000', 'tax_class_id' => '2', 'final_price' => '65.000000',
+                        'minimal_price' => '65.000000', 'min_price' => '65.000000', 'max_price' => '65.000000',
                         'tier_price' => null
                     ],
                 ],
@@ -134,8 +134,8 @@ class CollectionTest extends TestCase
             [
                 384, 1, [
                     384 => [
-                        'entity_id' => '384', 'price' => '56.9900', 'tax_class_id' => '2', 'final_price' => '56.9900',
-                        'minimal_price' => '56.9900', 'min_price' => '56.9900', 'max_price' => '56.9900',
+                        'entity_id' => '384', 'price' => '56.990000', 'tax_class_id' => '2', 'final_price' => '56.990000',
+                        'minimal_price' => '56.990000', 'min_price' => '56.990000', 'max_price' => '56.990000',
                         'tier_price' => null
                     ],
                 ],
@@ -261,9 +261,9 @@ class CollectionTest extends TestCase
                         'qty' => '100.0000', 'use_config_min_sale_qty' => '1', 'use_config_max_sale_qty' => '1',
                         'use_config_enable_qty_inc' => '1', 'use_config_qty_increments' => '1',
                         'min_sale_qty' => '1.0000', 'max_sale_qty' => '0.0000', 'enable_qty_increments' => '0',
-                        'qty_increments' => '0.0000', 'tier_prices' => '', 'price' => '33.0000',
-                        'tax_class_id' => '2', 'final_price' => '33.0000', 'minimal_price' => '33.0000',
-                        'min_price' => '33.0000', 'max_price' => '33.0000', 'tier_price' => null
+                        'qty_increments' => '0.0000', 'tier_prices' => '', 'price' => '33.000000',
+                        'tax_class_id' => '2', 'final_price' => '33.000000', 'minimal_price' => '33.000000',
+                        'min_price' => '33.000000', 'max_price' => '33.000000', 'tier_price' => null
                     ],
                 ],
             ],
@@ -274,9 +274,9 @@ class CollectionTest extends TestCase
                         'qty' => '100.0000', 'use_config_min_sale_qty' => '1', 'use_config_max_sale_qty' => '1',
                         'use_config_enable_qty_inc' => '1', 'use_config_qty_increments' => '1',
                         'min_sale_qty' => '1.0000', 'max_sale_qty' => '0.0000', 'enable_qty_increments' => '0',
-                        'qty_increments' => '0.0000', 'tier_prices' => '', 'price' => '16.0000',
-                        'tax_class_id' => '2', 'final_price' => '16.0000', 'minimal_price' => '16.0000',
-                        'min_price' => '16.0000', 'max_price' => '16.0000', 'tier_price' => null
+                        'qty_increments' => '0.0000', 'tier_prices' => '', 'price' => '16.000000',
+                        'tax_class_id' => '2', 'final_price' => '16.000000', 'minimal_price' => '16.000000',
+                        'min_price' => '16.000000', 'max_price' => '16.000000', 'tier_price' => null
                     ],
                 ],
             ],
@@ -287,9 +287,9 @@ class CollectionTest extends TestCase
                         'qty' => '100.0000', 'use_config_min_sale_qty' => '1', 'use_config_max_sale_qty' => '1',
                         'use_config_enable_qty_inc' => '1', 'use_config_qty_increments' => '1',
                         'min_sale_qty' => '1.0000', 'max_sale_qty' => '0.0000', 'enable_qty_increments' => '0',
-                        'qty_increments' => '0.0000', 'tier_prices' => '', 'price' => '66.0000',
-                        'tax_class_id' => '2', 'final_price' => '66.0000', 'minimal_price' => '66.0000',
-                        'min_price' => '66.0000', 'max_price' => '66.0000', 'tier_price' => null
+                        'qty_increments' => '0.0000', 'tier_prices' => '', 'price' => '66.000000',
+                        'tax_class_id' => '2', 'final_price' => '66.000000', 'minimal_price' => '66.000000',
+                        'min_price' => '66.000000', 'max_price' => '66.000000', 'tier_price' => null
                     ],
                 ],
             ],

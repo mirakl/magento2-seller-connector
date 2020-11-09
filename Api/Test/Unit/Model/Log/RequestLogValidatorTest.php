@@ -11,16 +11,16 @@ class RequestLogValidatorTest extends TestCase
     protected $requestLogValidator;
 
     /**
-     * @var \MiraklSeller\Api\Helper\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \MiraklSeller\Api\Helper\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Mirakl\Core\Request\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Mirakl\Core\Request\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(\MiraklSeller\Api\Helper\Config::class)
             ->disableOriginalConstructor()

@@ -22,12 +22,12 @@ use MiraklSeller\Process\Model\Process;
 class OfferTest extends TestCase
 {
     /**
-     * @var ListingFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ListingFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $listingFactoryMock;
 
     /**
-     * @var DateTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var DateTime|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dateTimeMock;
 
@@ -41,7 +41,7 @@ class OfferTest extends TestCase
      */
     protected $offerResource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -83,7 +83,7 @@ class OfferTest extends TestCase
             ->willReturn($listing);
 
         // Mock listing builder in order to specify product ids manually
-        /** @var Standard|\PHPUnit_Framework_MockObject_MockObject $builderMock */
+        /** @var Standard|\PHPUnit\Framework\MockObject\MockObject $builderMock */
         $builderMock = $this->createMock(Standard::class);
         $builderMock->expects($this->once())
             ->method('build')
@@ -91,7 +91,7 @@ class OfferTest extends TestCase
 
         $listing->setBuilder($builderMock);
 
-        /** @var Process|\PHPUnit_Framework_MockObject_MockObject $processMock */
+        /** @var Process|\PHPUnit\Framework\MockObject\MockObject $processMock */
         $processMock = $this->createMock(Process::class);
 
         // Build and save listing product ids in db

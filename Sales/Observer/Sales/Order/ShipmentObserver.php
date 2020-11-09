@@ -4,7 +4,6 @@ namespace MiraklSeller\Sales\Observer\Sales\Order;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Sales\Model\Order;
-use Mirakl\MMP\Common\Domain\Order\OrderState;
 
 class ShipmentObserver extends AbstractObserver implements ObserverInterface
 {

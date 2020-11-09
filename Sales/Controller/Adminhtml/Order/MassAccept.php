@@ -17,7 +17,15 @@ class MassAccept extends AbstractOrder
 
             $params = $this->getRequest()->getParams();
             $acceptAll = isset($params['excluded']) && $params['excluded'] === 'false';
-            $acceptedOrderLineIds = array_filter($this->getRequest()->getParam('selected', []));
+            $acceptedOrderLineIds = $refusedOrderLineIds = [];
+
+            if (isset($params['selected']) && is_array($params['selected'])) {
+                $acceptedOrderLineIds = array_filter($params['selected']);
+            }
+
+            if (isset($params['excluded']) && is_array($params['excluded'])) {
+                $refusedOrderLineIds = array_filter($params['excluded']);
+            }
 
             // Build order lines to accept
             $orderLines = [];
@@ -26,7 +34,9 @@ class MassAccept extends AbstractOrder
             foreach ($miraklOrder->getOrderLines() as $orderLine) {
                 $orderLines[] = [
                     'id'       => $orderLine->getId(),
-                    'accepted' => $acceptAll || in_array($orderLine->getId(), $acceptedOrderLineIds),
+                    'accepted' => $acceptAll
+                        || (!empty($acceptedOrderLineIds) && in_array($orderLine->getId(), $acceptedOrderLineIds))
+                        || (!empty($refusedOrderLineIds) && !in_array($orderLine->getId(), $refusedOrderLineIds))
                 ];
             }
 

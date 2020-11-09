@@ -19,7 +19,7 @@ class OrderTest extends TestCase
      */
     protected $orderHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 

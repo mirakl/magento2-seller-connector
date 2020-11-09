@@ -24,16 +24,16 @@ class ProductTest extends TestCase
     protected $formatter;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $config;
 
     /**
-     * @var Helper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Helper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helper = $this->createMock(Helper::class);
         $this->config = $this->createMock(Config::class);
@@ -54,7 +54,7 @@ class ProductTest extends TestCase
             ->method('getNumberImageMaxToExport')
             ->willReturn(1);
 
-        /** @var Listing|\PHPUnit_Framework_MockObject_MockObject $listingMock */
+        /** @var Listing|\PHPUnit\Framework\MockObject\MockObject $listingMock */
         $listingMock = $this->getMockBuilder(Listing::class)
             ->disableOriginalConstructor()
             ->setMethodsExcept(['validate'])

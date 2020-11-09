@@ -18,19 +18,20 @@ class InvoiceTest extends TestCase
      */
     protected $invoiceCreator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->invoiceCreator = (new ObjectManager($this))->getObject(InvoiceCreator::class);
     }
 
     /**
      * @covers  ::create
-     * @expectedException \Exception
-     * @expectedExceptionMessage Cannot do invoice for the order.
      */
     public function testCreateInvoiceThrowsException()
     {
-        /** @var Order|\PHPUnit_Framework_MockObject_MockObject $order */
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Cannot do invoice for the order.');
+
+        /** @var Order|\PHPUnit\Framework\MockObject\MockObject $order */
         $order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -24,11 +24,11 @@ class ProcessTest extends TestCase
     protected $helper;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $context = $objectManager->getObject(Context::class);
@@ -53,7 +53,7 @@ class ProcessTest extends TestCase
      */
     public function testGetPendingProcess()
     {
-        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $processingMock */
+        /** @var Collection|\PHPUnit\Framework\MockObject\MockObject $processingMock */
         $processingMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -64,7 +64,7 @@ class ProcessTest extends TestCase
             ->method('getColumnValues')
             ->willReturn([]);
 
-        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $pendingMock */
+        /** @var Collection|\PHPUnit\Framework\MockObject\MockObject $pendingMock */
         $pendingMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
