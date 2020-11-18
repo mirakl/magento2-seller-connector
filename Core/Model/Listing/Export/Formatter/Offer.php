@@ -44,7 +44,7 @@ class Offer implements FormatterInterface
     {
         $dataPromotion = $this->computePromotion(
             $data['price'],
-            $data['final_price'],
+            isset($data['final_price']) ? $data['final_price'] : $data['price'],
             isset($data['special_price']) ? $data['special_price'] : 0,
             isset($data['special_from_date']) ? $data['special_from_date'] : '',
             isset($data['special_to_date']) ? $data['special_to_date'] : ''
