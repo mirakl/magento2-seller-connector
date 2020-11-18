@@ -121,8 +121,14 @@ class Offers extends AbstractExport
         if (count($deleteIds)) {
             $collection = $this->productCollectionFactory->create();
             $collection->addFieldToSelect('sku')
+                ->addAttributeToSelect('price')
                 ->setStore($listing->getStoreId())
                 ->addIdFilter($deleteIds);
+
+            // Add attribute corresponding to product-id if not setup as sku
+            if (($productIdValueAttribute = $listing->getProductIdValueAttribute()) != 'sku') {
+                $collection->addAttributeToSelect($productIdValueAttribute);
+            }
 
             foreach ($collection as $product) {
                 $productId = $product['entity_id'];
