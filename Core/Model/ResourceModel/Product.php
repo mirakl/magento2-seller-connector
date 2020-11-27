@@ -36,8 +36,7 @@ class Product
      * @var array
      */
     protected $excludedAttributesRegexpArray = [
-        'custom_layout',
-        'custom_layout_update',
+        'custom_layout.*',
         'options_container',
         'custom_design.*',
         'page_layout',
@@ -46,13 +45,14 @@ class Product
         'recurring_profile',
         'tier_price',
         'group_price',
-        'msrp.*',
         'price.*',
         'status',
         'visibility',
         'url_key',
+        'special_price',
         'special_from_date',
         'special_to_date',
+        'quantity_and_stock_status',
     ];
 
     /**
@@ -60,7 +60,7 @@ class Product
      *
      * @var array
      */
-    protected $excludedTypes = ['price', 'gallery', 'hidden', 'multiline', 'media_image'];
+    protected $excludedTypes = ['gallery', 'hidden', 'multiline', 'media_image'];
 
     /**
      * @param   ProductResourceFactory      $productResourceFactory

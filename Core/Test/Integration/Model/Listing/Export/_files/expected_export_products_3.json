@@ -27,7 +27,6 @@
         "news_to_date": null,
         "pattern": null,
         "performance_fabric": null,
-        "quantity_and_stock_status": null,
         "sale": null,
         "shipment_type": null,
         "short_description": null,
@@ -42,7 +41,9 @@
         "weight_type": null,
         "entity_id": "36",
         "sku": "24-MG04",
-        "custom_layout_update_file": null
+        "cost": null,
+        "msrp_display_actual_price_type": "0",
+        "msrp": null
     },
     "37": {
         "image_1": "http://foobar.com/pub/media/catalog/product/m/g/mg01-bk-0.jpg",
@@ -72,7 +73,6 @@
         "news_to_date": null,
         "pattern": null,
         "performance_fabric": null,
-        "quantity_and_stock_status": null,
         "sale": null,
         "shipment_type": null,
         "short_description": null,
@@ -87,7 +87,9 @@
         "weight_type": null,
         "entity_id": "37",
         "sku": "24-MG01",
-        "custom_layout_update_file": null
+        "cost": null,
+        "msrp_display_actual_price_type": "0",
+        "msrp": null
     },
     "38": {
         "image_1": "http://foobar.com/pub/media/catalog/product/m/g/mg03-br-0.jpg",
@@ -117,7 +119,6 @@
         "news_to_date": null,
         "pattern": null,
         "performance_fabric": null,
-        "quantity_and_stock_status": null,
         "sale": null,
         "shipment_type": null,
         "short_description": null,
@@ -132,6 +133,8 @@
         "weight_type": null,
         "entity_id": "38",
         "sku": "24-MG03",
-        "custom_layout_update_file": null
+        "cost": null,
+        "msrp_display_actual_price_type": "0",
+        "msrp": null
     }
 }

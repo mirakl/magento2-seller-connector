@@ -27,7 +27,6 @@
         "news_to_date": null,
         "pattern": null,
         "performance_fabric": null,
-        "quantity_and_stock_status": "1",
         "sale": null,
         "shipment_type": null,
         "short_description": null,
@@ -42,7 +41,9 @@
         "weight_type": null,
         "entity_id": "341",
         "sku": "MJ09-M-Blue",
-        "custom_layout_update_file": null
+        "cost": null,
+        "msrp_display_actual_price_type": "0",
+        "msrp": null
     },
     "342": {
         "image_1": "http://foobar.com/pub/media/catalog/product/m/j/mj09-white_main_3.jpg",
@@ -72,7 +73,6 @@
         "news_to_date": null,
         "pattern": null,
         "performance_fabric": null,
-        "quantity_and_stock_status": "1",
         "sale": null,
         "shipment_type": null,
         "short_description": null,
@@ -87,7 +87,9 @@
         "weight_type": null,
         "entity_id": "342",
         "sku": "MJ09-M-White",
-        "custom_layout_update_file": null
+        "cost": null,
+        "msrp_display_actual_price_type": "0",
+        "msrp": null
     },
     "343": {
         "image_1": "http://foobar.com/pub/media/catalog/product/m/j/mj09-yellow_main_3.jpg",
@@ -117,7 +119,6 @@
         "news_to_date": null,
         "pattern": null,
         "performance_fabric": null,
-        "quantity_and_stock_status": "1",
         "sale": null,
         "shipment_type": null,
         "short_description": null,
@@ -132,7 +133,9 @@
         "weight_type": null,
         "entity_id": "343",
         "sku": "MJ09-M-Yellow",
-        "custom_layout_update_file": null
+        "cost": null,
+        "msrp_display_actual_price_type": "0",
+        "msrp": null
     },
     "344": {
         "image_1": "http://foobar.com/pub/media/catalog/product/m/j/mj09-blue_main_3.jpg",
@@ -162,7 +165,6 @@
         "news_to_date": null,
         "pattern": null,
         "performance_fabric": null,
-        "quantity_and_stock_status": "1",
         "sale": null,
         "shipment_type": null,
         "short_description": null,
@@ -177,7 +179,9 @@
         "weight_type": null,
         "entity_id": "344",
         "sku": "MJ09-L-Blue",
-        "custom_layout_update_file": null
+        "cost": null,
+        "msrp_display_actual_price_type": "0",
+        "msrp": null
     },
     "345": {
         "image_1": "http://foobar.com/pub/media/catalog/product/m/j/mj09-white_main_3.jpg",
@@ -207,7 +211,6 @@
         "news_to_date": null,
         "pattern": null,
         "performance_fabric": null,
-        "quantity_and_stock_status": "1",
         "sale": null,
         "shipment_type": null,
         "short_description": null,
@@ -222,6 +225,8 @@
         "weight_type": null,
         "entity_id": "345",
         "sku": "MJ09-L-White",
-        "custom_layout_update_file": null
+        "cost": null,
+        "msrp_display_actual_price_type": "0",
+        "msrp": null
     }
 }

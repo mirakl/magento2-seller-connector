@@ -64,7 +64,11 @@ class Config extends \MiraklSeller\Api\Helper\Config
     {
         $value = $this->scopeConfig->getValue(self::XML_PATH_AUTO_ACCEPT_PRICES_VARIATIONS_BEHAVIOR);
 
-        return $value === '' ? null : min((int) $value, 100);
+        if (null === $value || '' === $value) {
+            return null;
+        }
+
+        return min((int) $value, 100);
     }
 
     /**

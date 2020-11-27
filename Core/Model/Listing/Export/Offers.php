@@ -130,6 +130,11 @@ class Offers extends AbstractExport
                 $collection->addAttributeToSelect($productIdValueAttribute);
             }
 
+            // Add attribute corresponding to exported price if customized
+            if ($exportedPricesAttr = $listing->getConnection()->getExportedPricesAttribute()) {
+                $collection->addAttributeToSelect($exportedPricesAttr);
+            }
+
             foreach ($collection as $product) {
                 $productId = $product['entity_id'];
                 $product['qty'] = 0; // Set quantity to zero, do not delete the offer in Mirakl

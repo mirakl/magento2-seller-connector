@@ -1,9 +1,9 @@
-activity;gift_message_available;category_gear;climate;collar;color;country_of_manufacture;custom_layout_update_file;description;sku_type;weight_type;eco_collection;erin_recommends;features_bags;format;gender;manufacturer;material;meta_description;meta_keyword;meta_title;new;pattern;performance_fabric;name;quantity_and_stock_status;sale;news_from_date;news_to_date;shipment_type;short_description;size;sleeve;strap_bags;style_bags;style_bottom;style_general;weight;entity_id;sku;image_1;category;variant_group_code
+activity;gift_message_available;category_gear;climate;collar;color;cost;country_of_manufacture;description;msrp_display_actual_price_type;sku_type;weight_type;eco_collection;erin_recommends;features_bags;format;gender;manufacturer;material;meta_description;meta_keyword;meta_title;msrp;new;pattern;performance_fabric;name;sale;news_from_date;news_to_date;shipment_type;short_description;size;sleeve;strap_bags;style_bags;style_bottom;style_general;weight;entity_id;sku;image_1;category;variant_group_code
 Recreation;;Electronic;;;;;;"<p>Stay light-years ahead of the competition with our Aim Analog Watch. The flexible, rubberized strap is contoured to conform to the shape of your wrist for a comfortable all-day fit. The face features three illuminated hands, a digital read-out of the current time, and stopwatch functions.</p>
 <ul>
 <li>Japanese quartz movement.</li>
 <li>Strap fits 7"" to 8.0"".</li>
-</ul>";;;;;;;Men;;Plastic;;;;;;;"Aim Analog Watch";;;;;;;;;;;;;;36;24-MG04;http://foobar.com/pub/media/catalog/product/m/g/mg04-bk-0.jpg;"Default Category/Gear/Watches";
+</ul>";0;;;;;;;Men;;Plastic;;;;;;;;"Aim Analog Watch";;;;;;;;;;;;;36;24-MG04;http://foobar.com/pub/media/catalog/product/m/g/mg04-bk-0.jpg;"Default Category/Gear/Watches";
 Recreation;;Electronic;;;;;;"<p>It's easy to track and monitor your training progress with the Endurance Watch. You'll see standard info like time, date and day of the week, but it also functions for the serious high-mileage athete: lap counter, stopwatch, distance, heart rate, speed/pace, cadence and altitude.</p>
 <ul>
 <li>Digital display.</li>
@@ -11,7 +11,7 @@ Recreation;;Electronic;;;;;;"<p>It's easy to track and monitor your training pro
 <li>Strap fits 7"" to 10"".</li>
 <li>1-year limited warranty.</li>
 <li>Comes with polished metal case.</li>
-</ul>";;;;;;;Men;;Metal;;;;;;;"Endurance Watch";;;;;;;;;;;;;;37;24-MG01;http://foobar.com/pub/media/catalog/product/m/g/mg01-bk-0.jpg;"Default Category/Gear/Watches";
+</ul>";0;;;;;;;Men;;Metal;;;;;;;;"Endurance Watch";;;;;;;;;;;;;37;24-MG01;http://foobar.com/pub/media/catalog/product/m/g/mg01-bk-0.jpg;"Default Category/Gear/Watches";
 Recreation;;Electronic;;;;;;"<p>Trek high and low in the attractive Summit Watch, which features a digital LED display with time and date, stopwatch, lap counter, and 3-second backlight. It can also calculate the number of steps taken and calories burned.</p>
 <ul>
 <li>Brushed metal case.</li>
@@ -19,4 +19,4 @@ Recreation;;Electronic;;;;;;"<p>Trek high and low in the attractive Summit Watch
 <li>Buckle clasp.</li>
 <li>Strap fits 7"" - 10"".</li>
 <li>1-year limited warranty.</li>
-</ul>";;;;;;;Men;;Metal;;;;1;;;"Summit Watch";;;;;;;;;;;;;;38;24-MG03;http://foobar.com/pub/media/catalog/product/m/g/mg03-br-0.jpg;"Default Category/Collections/New Luma Yoga Collection";
+</ul>";0;;;;;;;Men;;Metal;;;;;1;;;"Summit Watch";;;;;;;;;;;;;38;24-MG03;http://foobar.com/pub/media/catalog/product/m/g/mg03-br-0.jpg;"Default Category/Collections/New Luma Yoga Collection";
