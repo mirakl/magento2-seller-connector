@@ -2,10 +2,10 @@
     "name": "mirakl/connector-magento2-seller-sales",
     "description": "This is the official Mirakl extension for sellers using Magento 2.",
     "type": "magento2-module",
-    "version": "1.1.8",
+    "version": "1.2.0",
     "license": "proprietary",
     "require": {
-        "mirakl/connector-magento2-seller-core": "~1.1"
+        "mirakl/connector-magento2-seller-core": "~1.2"
     },
     "autoload": {
         "files": [

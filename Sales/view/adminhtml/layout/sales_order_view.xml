@@ -1,10 +1,15 @@
 <?xml version="1.0"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <link src="MiraklSeller_Sales::js/mirakl_seller_sales_order_view.js" />
+    </head>
     <body>
         <referenceContainer name="order_info" template="MiraklSeller_Sales::sales/order/view/info.phtml"/>
-        <referenceBlock name="order_history">
-            <action method="setTemplate">
-                <argument name="template" xsi:type="string">MiraklSeller_Sales::sales/order/view/history.phtml</argument>
+        <referenceBlock name="sales_order_tabs">
+            <block class="MiraklSeller\Sales\Block\Adminhtml\Sales\Order\View\Tab\MiraklThreads" name="sales_order_mirakl_seller_threads.grid.container"/>
+            <action method="addTab">
+                <argument name="name" xsi:type="string">mirakl_seller_threads</argument>
+                <argument name="block" xsi:type="string">sales_order_mirakl_seller_threads.grid.container</argument>
             </action>
         </referenceBlock>
     </body>

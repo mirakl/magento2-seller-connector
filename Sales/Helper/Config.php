@@ -29,7 +29,7 @@ class Config extends \MiraklSeller\Api\Helper\Config
     /**
      * Returns behavior selected during order auto acceptance process when a product has backorder enabled
      *
-     * @see MiraklSeller_Sales_Model_Order_Acceptance_Backorder
+     * @see \MiraklSeller\Sales\Model\MiraklOrder\Acceptance\Backorder
      *
      * @return  int
      */
@@ -41,7 +41,7 @@ class Config extends \MiraklSeller\Api\Helper\Config
     /**
      * Returns behavior selected during order auto acceptance process when a product has not enough stock
      *
-     * @see MiraklSeller_Sales_Model_Order_Acceptance_InsufficientStock
+     * @see \MiraklSeller\Sales\Model\MiraklOrder\Acceptance\InsufficientStock
      *
      * @return  int
      */

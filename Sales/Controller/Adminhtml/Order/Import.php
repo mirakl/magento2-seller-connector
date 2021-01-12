@@ -43,7 +43,5 @@ class Import extends AbstractOrder
         } catch (\Exception $e) {
             return $this->redirectError($e->getMessage());
         }
-
-        return $this->_redirect('*/*/');
     }
 }

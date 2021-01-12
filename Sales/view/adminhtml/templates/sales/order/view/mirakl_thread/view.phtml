@@ -1,0 +1,164 @@
+<?php
+/** @var \Magento\Framework\View\TemplateEngine\Php $this **/
+/** @var \MiraklSeller\Sales\Block\Adminhtml\Sales\Order\View\MiraklThread $block */
+if (!$_connection = $block->getConnection()) {
+    return;
+}
+$_thread = $block->getThread();
+/** @var \MiraklSeller\Core\Helper\Thread $_threadHelper */
+$_threadHelper = $this->helper(\MiraklSeller\Core\Helper\Thread::class);
+$_reasons = $block->getThreadReasons();
+?>
+<div class="mirakl-thread">
+    <?php if ($_thread): ?>
+        <h1><?php echo $_threadHelper->getThreadTopic($_connection, $_thread); ?></h1>
+        <ul class="thread-messages">
+            <?php /** @var \Mirakl\MMP\Common\Domain\Message\Thread\ThreadMessage $_message */ ?>
+            <?php foreach ($_thread->getMessages() as $_message): ?>
+                <li class="thread-message <?php echo $block->isSellerMessage($_message) ? 'message-right' : 'message-left' ?> <?php echo strtolower($_message->getFrom()->getType()) ?>">
+                    <p class="meta">
+                        <?php echo __(
+                            'By %1 to %2 - %3',
+                            $block->getSenderName($_message),
+                            implode(', ', $block->getRecipientNames($_message)),
+                            $block->formatDate($_message->getDateCreated()->format(\DateTime::ISO8601), \IntlDateFormatter::SHORT, true)
+                        ) ?>
+                    </p>
+                    <p class="body"><?php echo $block->escapeHtml($_message->getBody(), ['br']) ?></p>
+                    <?php if (!empty($_message->getAttachments())): ?>
+                        <p class="attachment"><?= __('Attachments:') ?>
+                            <?php /** @var \Mirakl\MMP\Common\Domain\Message\Thread\ThreadAttachment $attachment */ ?>
+                            <?php foreach ($_message->getAttachments() as $attachment): ?>
+                                <a href="<?= $block->getAttachmentUrl($attachment)?>" target="_blank"><?= $attachment->getName() ?></a>
+                            <?php endforeach; ?>
+                        </p>
+                    <?php endif; ?>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php endif ?>
+
+    <?= $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
+
+    <?php if ($block->getShowForm() && $_reasons->count()): ?>
+        <section class="admin__page-section mirakl-thread-form">
+            <div class="admin__page-section-title">
+                <span class="title"><?= $block->getFormTitle() ?></span>
+            </div>
+            <form method="post" id="thread-form" action="<?php /* @escapeNotVerified */ echo $block->getFormAction() ?>" class="thread-form" enctype="multipart/form-data">
+                <?php echo $block->getBlockHtml('formkey'); ?>
+                <input type="hidden" name="order_id" value="<?= $block->getRequest()->getParam('order_id') ?>" />
+                <input type="hidden" name="connection_id" value="<?= $block->getRequest()->getParam('connection_id') ?>" />
+                <?php if ($_thread): ?>
+                    <input type="hidden" name="thread_id" value="<?= $block->getRequest()->getParam('thread_id') ?>" />
+                <?php endif; ?>
+                <div class="admin__field _required">
+                    <div class="admin__field-label">
+                        <label for="message_recipients">
+                            <span><?= $block->escapeHtml(__('Recipients')) ?></span>
+                        </label>
+                    </div>
+                    <div class="admin__field-control">
+                        <select name="recipients" id="message_recipients" class="admin__control-select" data-validate="{'validate-select':true}">
+                            <option value=""><?php echo __('-- Please Select --') ?></option>
+                            <?php foreach ($block->getThreadRecipients() as $_type => $_name): ?>
+                                <option value="<?= $_type ?>"><?= $block->escapeHtml($_name) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+                <?php if (!$_thread): ?>
+                    <div class="admin__field _required">
+                        <div class="admin__field-label">
+                            <label for="message_topic">
+                                <span><?= $block->escapeHtml(__('Topic')) ?></span>
+                            </label>
+                        </div>
+                        <div class="admin__field-control">
+                            <select name="topic" id="message_topic" class="admin__control-select" data-validate="{'validate-select':true}">
+                                <option value=""><?php echo __('-- Please Select --') ?></option>
+                                <?php /** @var \Mirakl\MMP\Shop\Domain\Reason $_reason */ ?>
+                                <?php foreach ($_reasons as $_reason): ?>
+                                    <option value="<?php echo $_reason->getCode() ?>"><?php echo $_reason->getLabel() ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                <?php endif; ?>
+                <div class="admin__field _required">
+                    <div class="admin__field-label">
+                        <label for="message_body">
+                            <span><?= $block->escapeHtml(__('Message')) ?></span>
+                        </label>
+                    </div>
+                    <div class="admin__field-control">
+                        <textarea name="body" id="message_body" rows="3" cols="5"
+                                  data-validate="{required:true,minlength:3}"
+                                  class="admin__control-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="admin__field">
+                    <div class="admin__field-label">
+                        <label for="message_file">
+                            <span><?= __('File') ?></span>
+                        </label>
+                    </div>
+                    <div class="admin__field-control">
+                        <input type="file" name="file" id="message_file" />
+                    </div>
+                </div>
+                <div class="admin__field">
+                    <button id="thread-form-btn" title="<?= $block->escapeHtmlAttr(__('Send Message')) ?>" type="button" class="primary scalable action-save">
+                        <span><?= $block->escapeHtml(__('Send Message')) ?></span>
+                    </button>
+                </div>
+            </form>
+            <script type="text/javascript">
+                require(['jquery', 'mage/mage'], function ($) {
+                    let threadForm = $('#thread-form');
+
+                    // Initialize the thread form validation before submit
+                    threadForm.mage('validation', {})
+
+                    // Intercept the form submit button
+                    $('#thread-form-btn').click(function (e) {
+                        if (!threadForm.validation('isValid')) {
+                            return false;
+                        }
+
+                        let formData = new FormData(threadForm[0]);
+
+                        // Post the thread form
+                        $.ajax({
+                            url: threadForm.attr('action'),
+                            type: 'post',
+                            data: formData,
+                            dataType: 'html',
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            showLoader: true,
+                            complete: function (data) {
+                                $('.mirakl-thread-view-content').html(data.responseText);
+                            }
+                        });
+                    });
+
+                    // Refresh the threads grid if a new thread has been created
+                    <?php if ($block->getRefreshList()): ?>
+                        setTimeout(function () {
+                            $.ajax({
+                                type: 'get',
+                                url: '<?= $block->escapeUrl($block->getGridUrl()) ?>',
+                                dataType: 'html',
+                                complete: function (data) {
+                                    $('#mirakl_seller_order_messages').html(data.responseText);
+                                }
+                            });
+                        }, 2000);
+                    <?php endif; ?>
+                });
+            </script>
+        </section>
+    <?php endif; ?>
+</div>

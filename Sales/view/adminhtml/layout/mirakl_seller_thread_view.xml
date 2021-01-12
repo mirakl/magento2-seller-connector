@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="empty"/>
+    <update handle="formkey"/>
+    <body>
+        <referenceContainer name="page.wrapper">
+            <block class="MiraklSeller\Sales\Block\Adminhtml\Sales\Order\View\MiraklThread" name="adminhtml.mirakl_thread.view" template="sales/order/view/mirakl_thread/view.phtml">
+                <arguments>
+                    <argument name="show_form" xsi:type="boolean">true</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

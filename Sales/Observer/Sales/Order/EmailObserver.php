@@ -22,7 +22,7 @@ class EmailObserver extends AbstractObserver implements ObserverInterface
 
         try {
             $this->fail(__('Sending emails is not possible on a Mirakl order. ' .
-                'You can exchange messages with the buyer by using the Comments History section on this order.'), $action);
+                'You can exchange messages with the buyer by using the Mirakl Messages section on this order.'), $action);
         } catch (\Exception $e) {
             $this->messageManager->addErrorMessage(__('An error occurred: %1', $e->getMessage()));
         }

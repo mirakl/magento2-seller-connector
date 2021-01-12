@@ -1,9 +1,13 @@
 <?php
 namespace MiraklSeller\Api\Helper;
 
+use Mirakl\Core\Domain\FileWrapper;
 use Mirakl\MMP\Common\Domain\Collection\Message\OrderMessageCollection;
 use Mirakl\MMP\Common\Domain\Message\MessageCreated;
+use Mirakl\MMP\Common\Domain\Message\Thread\ThreadCreated;
+use Mirakl\MMP\Common\Domain\Order\Message\CreateOrderThread;
 use Mirakl\MMP\Common\Domain\UserType;
+use Mirakl\MMP\Common\Request\Order\Message\CreateOrderThreadRequest;
 use Mirakl\MMP\Shop\Domain\Collection\Order\ShopOrderCollection;
 use Mirakl\MMP\Shop\Domain\Order\ShopOrder;
 use Mirakl\MMP\Shop\Request\Order\Accept\AcceptOrderRequest;
@@ -47,6 +51,8 @@ class Order extends Client\MMP
     /**
      * (OR42) Post a message on an order
      *
+     * @deprecated Use createOrderThread() instead
+     *
      * @param   Connection  $connection
      * @param   string      $orderId
      * @param   string      $subject
@@ -72,6 +78,35 @@ class Order extends Client\MMP
         ];
 
         $request = new CreateOrderMessageRequest($orderId, $message);
+
+        return $this->send($connection, $request);
+    }
+
+    /**
+     * (OR43) Create a thread on an order
+     *
+     * @param   Connection          $connection
+     * @param   ShopOrder           $miraklOrder
+     * @param   CreateOrderThread   $thread
+     * @param   FileWrapper[]       $files
+     * @return  ThreadCreated
+     */
+    public function createOrderThread(
+        Connection $connection,
+        ShopOrder $miraklOrder,
+        CreateOrderThread $thread,
+        $files = []
+    ) {
+        $request = new CreateOrderThreadRequest($miraklOrder->getId(), $thread);
+
+        if (count($files)) {
+            $request->setFiles($files);
+        }
+
+        $this->_eventManager->dispatch('mirakl_seller_api_create_order_thread_before', [
+            'request'      => $request,
+            'mirakl_order' => $miraklOrder,
+        ]);
 
         return $this->send($connection, $request);
     }
@@ -160,6 +195,8 @@ class Order extends Client\MMP
 
     /**
      * (M01) Fetches messages of a Mirakl order
+     *
+     * @deprecated Use \MiraklSeller\Api\Helper\Message::getThreads() instead
      *
      * @param   Connection  $connection
      * @param   ShopOrder   $miraklOrder

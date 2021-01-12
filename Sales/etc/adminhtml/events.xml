@@ -1,8 +1,5 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
-    <event name="controller_action_predispatch_sales_order_addComment">
-        <observer name="mirakl_seller_sales" instance="MiraklSeller\Sales\Observer\Sales\Order\CommentObserver" />
-    </event>
     <event name="controller_action_predispatch_sales_order_edit_start">
         <observer name="mirakl_seller_sales" instance="MiraklSeller\Sales\Observer\Sales\Order\EditObserver" />
     </event>
