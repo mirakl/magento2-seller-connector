@@ -38,11 +38,11 @@ class SyncAllOrders
             return; // Do not do anything if auto import is off
         }
 
-        $processes = $this->orderSync->synchronizeAllConnections(Process::TYPE_CRON);
+        $processes = $this->orderSync->synchronizeAllConnections(Process::TYPE_CRON, Process::STATUS_IDLE);
 
         /** @var Process $process */
         foreach ($processes as $process) {
-            $process->run();
+            $process->run(true);
         }
     }
 }

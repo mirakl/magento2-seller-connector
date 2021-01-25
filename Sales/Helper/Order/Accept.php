@@ -47,17 +47,20 @@ class Accept extends AbstractHelper
 
     /**
      * @param   string  $processType
+     * @param   string  $processStatus
      * @return  Process[]
      */
-    public function acceptAll($processType = Process::TYPE_ADMIN)
-    {
+    public function acceptAll(
+        $processType = Process::TYPE_ADMIN,
+        $processStatus = Process::STATUS_PENDING
+    ) {
         $processes = [];
 
         $connections = $this->connectionCollectionFactory->create();
 
         /** @var Connection $connection */
         foreach ($connections as $connection) {
-            $processes[] = $this->acceptConnection($connection, $processType);
+            $processes[] = $this->acceptConnection($connection, $processType, $processStatus);
         }
 
         return $processes;
@@ -68,12 +71,17 @@ class Accept extends AbstractHelper
      *
      * @param   Connection  $connection
      * @param   string      $processType
+     * @param   string      $processStatus
      * @return  Process
      */
-    public function acceptConnection(Connection $connection, $processType = Process::TYPE_ADMIN)
-    {
+    public function acceptConnection(
+        Connection $connection,
+        $processType = Process::TYPE_ADMIN,
+        $processStatus = Process::STATUS_PENDING
+    ) {
         $process = $this->processFactory->create()
             ->setType($processType)
+            ->setStatus($processStatus)
             ->setName('Accept Mirakl orders')
             ->setHelper(\MiraklSeller\Sales\Helper\Order\Acceptance\Process::class)
             ->setMethod('acceptConnectionOrders')

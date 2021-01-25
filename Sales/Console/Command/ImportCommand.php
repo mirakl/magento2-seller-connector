@@ -108,9 +108,9 @@ class ImportCommand extends Command
      */
     private function importOrdersFromConnection(Connection $connection)
     {
-        $process = $this->orderSync->synchronizeConnection($connection, Process::TYPE_CLI);
+        $process = $this->orderSync->synchronizeConnection($connection, Process::TYPE_CLI, Process::STATUS_IDLE);
 
-        return $process->run();
+        return $process->run(true);
     }
 
     /**
@@ -118,11 +118,11 @@ class ImportCommand extends Command
      */
     private function importOrdersFromAllConnections()
     {
-        $processes = $this->orderSync->synchronizeAllConnections(Process::TYPE_CLI);
+        $processes = $this->orderSync->synchronizeAllConnections(Process::TYPE_CLI, Process::STATUS_IDLE);
 
         /** @var Process $process */
         foreach ($processes as $process) {
-            $process->run();
+            $process->run(true);
         }
 
         return $this;
