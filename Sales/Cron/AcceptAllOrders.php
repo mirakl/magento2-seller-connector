@@ -38,11 +38,11 @@ class AcceptAllOrders
             return; // Do not do anything if auto accept is off
         }
 
-        $processes = $this->orderAccept->acceptAll(Process::TYPE_CRON);
+        $processes = $this->orderAccept->acceptAll(Process::TYPE_CRON, Process::STATUS_IDLE);
 
         /** @var Process $process */
         foreach ($processes as $process) {
-            $process->run();
+            $process->run(true);
         }
     }
 }

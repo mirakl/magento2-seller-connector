@@ -9,6 +9,7 @@ class Config extends \MiraklSeller\Api\Helper\Config
     const XML_PATH_AUTO_ACCEPT_PRICES_VARIATIONS_BEHAVIOR  = 'mirakl_seller_sales/order_acceptance/prices_variations';
 
     const XML_PATH_AUTO_CREATE_INVOICE                 = 'mirakl_seller_sales/order/auto_create_invoice';
+    const XML_PATH_AUTO_PAY_INVOICE                    = 'mirakl_seller_sales/order/auto_pay_invoice';
     const XML_PATH_AUTO_CREATE_SHIPMENT                = 'mirakl_seller_sales/order/auto_create_shipment';
     const XML_PATH_AUTO_CREATE_REFUNDS                 = 'mirakl_seller_sales/order/auto_create_refunds';
     const XML_PATH_AUTO_ORDERS_IMPORT                  = 'mirakl_seller_sales/order/auto_orders_import';
@@ -119,5 +120,16 @@ class Config extends \MiraklSeller\Api\Helper\Config
     public function isAutoOrdersImport()
     {
         return $this->scopeConfig->isSetFlag(self::XML_PATH_AUTO_ORDERS_IMPORT);
+    }
+
+    /**
+     * Returns true if invoice has to be payed automatically or not.
+     * This is only available for pay on delivery and pay on due date orders.
+     *
+     * @return  bool
+     */
+    public function isAutoPayInvoice()
+    {
+        return $this->scopeConfig->isSetFlag(self::XML_PATH_AUTO_PAY_INVOICE);
     }
 }

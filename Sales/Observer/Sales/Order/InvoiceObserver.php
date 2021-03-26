@@ -41,7 +41,7 @@ class InvoiceObserver extends AbstractObserver implements ObserverInterface
             }
 
             // Synchronize Magento and Mirakl orders together
-            $this->synchronizeOrder->synchronize($order, $miraklOrder);
+            $this->synchronizeOrder->synchronize($order, $miraklOrder, $connection);
         } catch (\Exception $e) {
             $this->messageManager->addErrorMessage(__('An error occurred: %1', $e->getMessage()));
         }

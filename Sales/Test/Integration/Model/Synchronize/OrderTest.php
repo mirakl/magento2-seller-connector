@@ -1,14 +1,33 @@
 <?php
 namespace MiraklSeller\Sales\Test\Integration\Model\Synchronize;
 
+use GuzzleHttp\Exception\ClientException;
+use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\CollectionFactory as InvoiceCollectionFactory;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\CollectionFactory as ShipmentCollectionFactory;
+use Mirakl\Core\Domain\Collection\MiraklCollection;
+use Mirakl\MMP\Common\Domain\Collection\SeekableCollection;
 use Mirakl\MMP\Common\Domain\Order\OrderState;
+use Mirakl\MMP\Common\Domain\Shipment\ShipmentStatus;
 use Mirakl\MMP\Shop\Domain\Order\ShopOrder;
+use MiraklSeller\Api\Helper\Shipment as ShipmentApi;
+use MiraklSeller\Api\Model\ConnectionFactory;
+use MiraklSeller\Api\Model\ResourceModel\ConnectionFactory as ConnectionResourceFactory;
+use MiraklSeller\Api\Model\Connection;
 use MiraklSeller\Api\Test\Integration\TestCase;
+use MiraklSeller\Sales\Helper\Config;
+use MiraklSeller\Sales\Helper\Order as OrderHelper;
+use MiraklSeller\Sales\Helper\Shipment as ShipmentHelper;
+use MiraklSeller\Sales\Model\Create\Shipment as ShipmentCreator;
+use MiraklSeller\Sales\Model\Create\Invoice as InvoiceCreator;
 use MiraklSeller\Sales\Model\Create\Order as OrderCreator;
 use MiraklSeller\Sales\Model\Synchronize\Order as OrderSynchronizer;
+use MiraklSeller\Sales\Model\Synchronize\Refunds as SynchronizeRefunds;
+use MiraklSeller\Sales\Model\Synchronize\Shipment as ShipmentSynchronizer;
+use MiraklSeller\Sales\Model\Synchronize\Shipments as SynchronizeShipments;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class OrderTest extends TestCase
 {
@@ -17,16 +36,49 @@ class OrderTest extends TestCase
      */
     protected $orderCreator;
 
-    /**
-     * @var OrderSynchronizer
-     */
-    protected $orderSynchronizer;
-
     protected function setUp(): void
     {
         parent::setUp();
         $this->orderCreator = $this->objectManager->create(OrderCreator::class);
-        $this->orderSynchronizer = $this->objectManager->create(OrderSynchronizer::class);
+    }
+
+    /**
+     * @param   \PHPUnit\Framework\MockObject\MockObject    $shipmentApiMock
+     * @return  OrderSynchronizer
+     */
+    protected function getOrderSynchronizer($shipmentApiMock)
+    {
+        return $this->objectManager->create(OrderSynchronizer::class, [
+            'orderManagement'      => $this->objectManager->create(OrderManagementInterface::class),
+            'invoiceCreator'       => $this->objectManager->create(InvoiceCreator::class),
+            'shipmentCreator'      => $this->objectManager->create(ShipmentCreator::class),
+            'synchronizeRefunds'   => $this->objectManager->create(SynchronizeRefunds::class),
+            'config'               => $this->objectManager->create(Config::class),
+            'orderHelper'          => $this->objectManager->create(OrderHelper::class),
+            'synchronizeShipments' => $this->objectManager->create(SynchronizeShipments::class, [
+                'shipmentApi'               => $shipmentApiMock,
+                'shipmentCreator'           => $this->objectManager->create(ShipmentCreator::class),
+                'shipmentSynchronizer'      => $this->objectManager->create(ShipmentSynchronizer::class),
+                'orderHelper'               => $this->objectManager->create(OrderHelper::class),
+                'shipmentHelper'            => $this->objectManager->create(ShipmentHelper::class),
+                'connectionFactory'         => $this->objectManager->create(ConnectionFactory::class),
+                'connectionResourceFactory' => $this->objectManager->create(ConnectionResourceFactory::class),
+                'stateCodes'                => [
+                    ShipmentStatus::SHIPPED,
+                    ShipmentStatus::TO_COLLECT,
+                    ShipmentStatus::RECEIVED,
+                    ShipmentStatus::CLOSED,
+                ],
+            ])
+        ]);
+    }
+
+    /**
+     * @return  Connection
+     */
+    protected function getConnectionMock()
+    {
+        return $this->createMock(Connection::class);
     }
 
     /**
@@ -56,7 +108,15 @@ class OrderTest extends TestCase
         // Emulates status CANCELED on Mirakl order to cancel the associated Magento order
         $miraklOrderMock->getStatus()->setState(OrderState::CANCELED);
 
-        $updated = $this->orderSynchronizer->synchronize($order, $miraklOrderMock);
+        /** @var ShipmentApi|\PHPUnit\Framework\MockObject\MockObject $shipmentApiMock */
+        $shipmentApiMock = $this->createMock(ShipmentApi::class);
+        $shipmentApiMock->expects($this->any())
+            ->method('getShipments')
+            ->willReturn((new SeekableCollection())->setCollection(new MiraklCollection()));
+
+        $orderSynchronizer = $this->getOrderSynchronizer($shipmentApiMock);
+
+        $updated = $orderSynchronizer->synchronize($order, $miraklOrderMock, $this->getConnectionMock());
 
         $this->assertTrue($updated);
         $this->assertTrue($order->isCanceled());
@@ -79,7 +139,15 @@ class OrderTest extends TestCase
         // Emulates status REFUSED on Mirakl order to hold the associated Magento order
         $miraklOrderMock->getStatus()->setState(OrderState::REFUSED);
 
-        $updated = $this->orderSynchronizer->synchronize($order, $miraklOrderMock);
+        /** @var ShipmentApi|\PHPUnit\Framework\MockObject\MockObject $shipmentApiMock */
+        $shipmentApiMock = $this->createMock(ShipmentApi::class);
+        $shipmentApiMock->expects($this->any())
+            ->method('getShipments')
+            ->willReturn((new SeekableCollection())->setCollection(new MiraklCollection()));
+
+        $orderSynchronizer = $this->getOrderSynchronizer($shipmentApiMock);
+
+        $updated = $orderSynchronizer->synchronize($order, $miraklOrderMock, $this->getConnectionMock());
 
         $this->assertTrue($updated);
         $this->assertTrue($order->getStatus() === Order::STATE_HOLDED);
@@ -103,7 +171,15 @@ class OrderTest extends TestCase
         // Emulates a customer debited date to create an invoice on the associated Magento order
         $miraklOrderMock->setCustomerDebitedDate(new \DateTime('now', new \DateTimeZone('UTC')));
 
-        $updated = $this->orderSynchronizer->synchronize($order, $miraklOrderMock);
+        /** @var ShipmentApi|\PHPUnit\Framework\MockObject\MockObject $shipmentApiMock */
+        $shipmentApiMock = $this->createMock(ShipmentApi::class);
+        $shipmentApiMock->expects($this->any())
+            ->method('getShipments')
+            ->willReturn((new SeekableCollection())->setCollection(new MiraklCollection()));
+
+        $orderSynchronizer = $this->getOrderSynchronizer($shipmentApiMock);
+
+        $updated = $orderSynchronizer->synchronize($order, $miraklOrderMock, $this->getConnectionMock());
 
         $this->assertTrue($updated);
 
@@ -132,7 +208,30 @@ class OrderTest extends TestCase
         // Emulates status SHIPPED on Mirakl order to create shipment on the associated Magento order
         $miraklOrderMock->getStatus()->setState(OrderState::SHIPPED);
 
-        $updated = $this->orderSynchronizer->synchronize($order, $miraklOrderMock);
+        /** @var ResponseInterface|\PHPUnit\Framework\MockObject\MockObject $apiResponseMock */
+        $apiResponseMock = $this->createMock(ResponseInterface::class);
+
+        $apiResponseMock->expects($this->any())
+            ->method('getStatusCode')
+            ->willReturn(404);
+
+        $apiResponseMock->expects($this->any())
+            ->method('getBody')
+            ->willReturn(\GuzzleHttp\Psr7\Utils::streamFor('{"status": 404}'));
+
+        /** @var ShipmentApi|\PHPUnit\Framework\MockObject\MockObject $shipmentApiMock */
+        $shipmentApiMock = $this->createMock(ShipmentApi::class);
+        $shipmentApiMock->expects($this->any())
+            ->method('getShipments')
+            ->willThrowException(new ClientException(
+                'An error occurred',
+                $this->createMock(RequestInterface::class),
+                $apiResponseMock
+            ));
+
+        $orderSynchronizer = $this->getOrderSynchronizer($shipmentApiMock);
+
+        $updated = $orderSynchronizer->synchronize($order, $miraklOrderMock, $this->getConnectionMock());
 
         $this->assertTrue($updated);
 
@@ -156,7 +255,15 @@ class OrderTest extends TestCase
 
         $order = $this->orderCreator->create($miraklOrderMock);
 
-        $updated = $this->orderSynchronizer->synchronize($order, $miraklOrderMock);
+        /** @var ShipmentApi|\PHPUnit\Framework\MockObject\MockObject $shipmentApiMock */
+        $shipmentApiMock = $this->createMock(ShipmentApi::class);
+        $shipmentApiMock->expects($this->any())
+            ->method('getShipments')
+            ->willReturn((new SeekableCollection())->setCollection(new MiraklCollection()));
+
+        $orderSynchronizer = $this->getOrderSynchronizer($shipmentApiMock);
+
+        $updated = $orderSynchronizer->synchronize($order, $miraklOrderMock, $this->getConnectionMock());
 
         $this->assertFalse($updated);
     }

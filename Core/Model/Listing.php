@@ -310,16 +310,14 @@ class Listing extends AbstractModel
      */
     public function getWebsiteId()
     {
-        if ($this->getStoreId() != Store::DEFAULT_STORE_ID) {
-            // Get website of listing's associated store
-            $websiteId = $this->storeManager->getStore($this->getStoreId())->getWebsiteId();
-        } else {
-            // Get website of the default store view
-            $defaultStore = $this->storeManager->getDefaultStoreView();
-            $websiteId = $defaultStore->getWebsiteId();
+        if ($this->getConnection()) {
+            return $this->getConnection()->getWebsiteId();
         }
 
-        return $websiteId;
+        // Get website of the default store view
+        $defaultStore = $this->storeManager->getDefaultStoreView();
+
+        return $defaultStore->getWebsiteId();
     }
 
     /**

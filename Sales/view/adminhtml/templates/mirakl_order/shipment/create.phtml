@@ -1,0 +1,27 @@
+<?php
+/** @var \Magento\Framework\View\TemplateEngine\Php $this **/
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var \MiraklSeller\Sales\Block\Adminhtml\MiraklOrder\Shipment\Create $block */
+?>
+<?php $scriptString = <<<script
+
+require([
+    'mage/template',
+    'prototype'
+], function (mageTemplate) {
+
+//<![CDATA[
+if (trackingControl) {
+    trackingControl.add();
+
+    $('track_row_container')
+        .select('.action-delete')
+        .invoke('hide');
+}
+//]]>
+
+});
+
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

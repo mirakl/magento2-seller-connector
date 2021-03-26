@@ -7,6 +7,9 @@ use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
+use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
+use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 use Mirakl\MMP\Shop\Domain\Order\ShopOrder;
 use MiraklSeller\Api\Helper\Order as ApiOrder;
 use MiraklSeller\Api\Model\Connection;
@@ -72,17 +75,35 @@ class Process extends AbstractHelper
     protected $priceHelper;
 
     /**
-     * @param   Context                     $context
-     * @param   ProductRepositoryInterface  $productRepository
-     * @param   StockRegistryInterface      $stockRegistry
-     * @param   ApiOrder                    $apiOrder
-     * @param   Config                      $config
-     * @param   ConnectionFactory           $connectionFactory
-     * @param   ConnectionResourceFactory   $connectionResourceFactory
-     * @param   Backorder                   $backorderHandler
-     * @param   InsufficientStock           $insufficientStockHandler
-     * @param   PricesVariations            $pricesVariationsHandler
-     * @param   PriceHelper                 $priceHelper
+     * @var GetStockItemConfigurationInterface
+     */
+    protected $getStockItemConfiguration;
+
+    /**
+     * @var StockByWebsiteIdResolverInterface
+     */
+    protected $stockByWebsiteId;
+
+    /**
+     * @var GetProductSalableQtyInterface
+     */
+    protected $getProductSalableQty;
+
+    /**
+     * @param   Context                             $context
+     * @param   ProductRepositoryInterface          $productRepository
+     * @param   StockRegistryInterface              $stockRegistry
+     * @param   ApiOrder                            $apiOrder
+     * @param   Config                              $config
+     * @param   ConnectionFactory                   $connectionFactory
+     * @param   ConnectionResourceFactory           $connectionResourceFactory
+     * @param   Backorder                           $backorderHandler
+     * @param   InsufficientStock                   $insufficientStockHandler
+     * @param   PricesVariations                    $pricesVariationsHandler
+     * @param   PriceHelper                         $priceHelper
+     * @param   GetStockItemConfigurationInterface  $getStockItemConfiguration
+     * @param   StockByWebsiteIdResolverInterface   $stockByWebsiteId
+     * @param   GetProductSalableQtyInterface       $getProductSalableQty
      */
     public function __construct(
         Context $context,
@@ -95,7 +116,10 @@ class Process extends AbstractHelper
         Backorder $backorderHandler,
         InsufficientStock $insufficientStockHandler,
         PricesVariations $pricesVariationsHandler,
-        PriceHelper $priceHelper
+        PriceHelper $priceHelper,
+        GetStockItemConfigurationInterface $getStockItemConfiguration,
+        StockByWebsiteIdResolverInterface $stockByWebsiteId,
+        GetProductSalableQtyInterface $getProductSalableQty
     ) {
         parent::__construct($context);
 
@@ -109,6 +133,9 @@ class Process extends AbstractHelper
         $this->insufficientStockHandler  = $insufficientStockHandler;
         $this->pricesVariationsHandler   = $pricesVariationsHandler;
         $this->priceHelper               = $priceHelper;
+        $this->getStockItemConfiguration = $getStockItemConfiguration;
+        $this->stockByWebsiteId          = $stockByWebsiteId;
+        $this->getProductSalableQty      = $getProductSalableQty;
     }
 
     /**
@@ -157,6 +184,8 @@ class Process extends AbstractHelper
         // Build order lines to accept
         $orderLines = [];
 
+        $stockId = $this->stockByWebsiteId->execute($connection->getWebsiteId())->getStockId();
+
         /** @var \Mirakl\MMP\Common\Domain\Order\ShopOrderLine $orderLine */
         foreach ($miraklOrder->getOrderLines() as $orderLine) {
             $accepted = true; // Order line is accepted by default
@@ -176,9 +205,9 @@ class Process extends AbstractHelper
                 }
 
                 // Try to load associated stock item
-                $stockItem = $this->stockRegistry->getStockItem($product->getId());
+                $stockQty = $this->getProductSalableQty->execute($offerSku, $stockId);
 
-                if (!$stockItem->getIsInStock()) {
+                if (!$stockQty) {
                     // Case we have out of stock flag on product
                     if ($this->insufficientStockHandler->isManageOrderManually()) {
                         return $process->output(__('Product with SKU "%1" is out of stock. Please handle order manually.', $offerSku));
@@ -186,9 +215,10 @@ class Process extends AbstractHelper
 
                     $process->output(__('Product with SKU "%1" is out of stock. Product refused.', $offerSku));
                     $accepted = false; // Insufficient stock config is "auto reject item"
-                } elseif ($stockItem->getQty() < $orderLine->getQuantity()) {
+                } elseif ($stockQty < $orderLine->getQuantity()) {
                     // Case we have stock item qty under order line qty
-                    if (!$stockItem->getBackorders()) {
+                    $stockItemConfig = $this->getStockItemConfiguration->execute($offerSku, $stockId);
+                    if (!$stockItemConfig->getBackorders()) {
                         // Case we have backorders disabled on stock item and not enough stock
                         if ($this->insufficientStockHandler->isManageOrderManually()) {
                             return $process->output(__('Product with SKU "%1" has not enough stock. Please handle order manually.', $offerSku));

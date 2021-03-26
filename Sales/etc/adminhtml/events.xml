@@ -9,9 +9,6 @@
     <event name="controller_action_predispatch_sales_order_invoice_save">
         <observer name="mirakl_seller_sales" instance="MiraklSeller\Sales\Observer\Sales\Order\InvoiceObserver" />
     </event>
-    <event name="controller_action_predispatch_adminhtml_order_shipment_save">
-        <observer name="mirakl_seller_sales" instance="MiraklSeller\Sales\Observer\Sales\Order\ShipmentObserver" />
-    </event>
     <event name="controller_action_predispatch_sales_order_creditmemo_save">
         <observer name="mirakl_seller_sales" instance="MiraklSeller\Sales\Observer\Sales\Order\CreditMemoObserver" />
     </event>

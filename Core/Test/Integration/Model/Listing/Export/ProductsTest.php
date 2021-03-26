@@ -39,7 +39,7 @@ class ProductsTest extends TestCase
      */
     public function testExport($productIds, $expectedResult)
     {
-        /** @var Listing|\PHPUnit\Framework\MockObject\MockObject $listingMock */
+        /** @var Connection|\PHPUnit\Framework\MockObject\MockObject $connectionMock */
         $connectionMock = $this->createMock(Connection::class);
         $connectionMock->expects($this->any())
             ->method('getExportableAttributes')
@@ -90,7 +90,7 @@ class ProductsTest extends TestCase
      */
     public function testExportWithVariantsAttributes($productIds, $variantsAttributes, $expectedResult)
     {
-        /** @var Listing|\PHPUnit\Framework\MockObject\MockObject $listingMock */
+        /** @var Connection|\PHPUnit\Framework\MockObject\MockObject $connectionMock */
         $connectionMock = $this->createMock(Connection::class);
         $connectionMock->expects($this->any())
             ->method('getExportableAttributes')
@@ -140,7 +140,7 @@ class ProductsTest extends TestCase
      */
     public function testExportWithExportableAttributes($productIds, $exportableAttributes, $expectedResult)
     {
-        /** @var Listing|\PHPUnit\Framework\MockObject\MockObject $listingMock */
+        /** @var Connection|\PHPUnit\Framework\MockObject\MockObject $connectionMock */
         $connectionMock = $this->createMock(Connection::class);
         $connectionMock->expects($this->any())
             ->method('getExportableAttributes')

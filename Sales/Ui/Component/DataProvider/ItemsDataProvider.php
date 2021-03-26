@@ -4,6 +4,8 @@ namespace MiraklSeller\Sales\Ui\Component\DataProvider;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
+use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 use Mirakl\MMP\Common\Domain\Order\OrderState;
 use Mirakl\MMP\Shop\Domain\Order\ShopOrder;
 use MiraklSeller\Api\Model\Connection;
@@ -41,16 +43,28 @@ class ItemsDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $miraklOrderLoader;
 
     /**
-     * @param   string                      $name
-     * @param   string                      $primaryFieldName
-     * @param   string                      $requestFieldName
-     * @param   CollectionFactory           $collectionFactory
-     * @param   ProductRepositoryInterface  $productRepository
-     * @param   OrderHelper                 $orderHelper
-     * @param   ConnectionLoader            $connectionLoader
-     * @param   MiraklOrderLoader           $miraklOrderLoader
-     * @param   array                       $meta
-     * @param   array                       $data
+     * @var StockByWebsiteIdResolverInterface
+     */
+    protected $stockByWebsiteId;
+
+    /**
+     * @var GetProductSalableQtyInterface
+     */
+    protected $getProductSalableQty;
+
+    /**
+     * @param   string                              $name
+     * @param   string                              $primaryFieldName
+     * @param   string                              $requestFieldName
+     * @param   CollectionFactory                   $collectionFactory
+     * @param   ProductRepositoryInterface          $productRepository
+     * @param   OrderHelper                         $orderHelper
+     * @param   ConnectionLoader                    $connectionLoader
+     * @param   MiraklOrderLoader                   $miraklOrderLoader
+     * @param   StockByWebsiteIdResolverInterface   $stockByWebsiteId
+     * @param   GetProductSalableQtyInterface       $getProductSalableQty
+     * @param   array                               $meta
+     * @param   array                               $data
      */
     public function __construct(
         $name,
@@ -61,16 +75,20 @@ class ItemsDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         OrderHelper $orderHelper,
         ConnectionLoader $connectionLoader,
         MiraklOrderLoader $miraklOrderLoader,
+        StockByWebsiteIdResolverInterface $stockByWebsiteId,
+        GetProductSalableQtyInterface $getProductSalableQty,
         array $meta = [],
         array $data = []
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
 
-        $this->collection        = $collectionFactory->create();
-        $this->productRepository = $productRepository;
-        $this->orderHelper       = $orderHelper;
-        $this->connectionLoader  = $connectionLoader;
-        $this->miraklOrderLoader = $miraklOrderLoader;
+        $this->collection           = $collectionFactory->create();
+        $this->productRepository    = $productRepository;
+        $this->orderHelper          = $orderHelper;
+        $this->connectionLoader     = $connectionLoader;
+        $this->miraklOrderLoader    = $miraklOrderLoader;
+        $this->stockByWebsiteId     = $stockByWebsiteId;
+        $this->getProductSalableQty = $getProductSalableQty;
 
         $this->prepareUpdateUrl();
     }
@@ -160,6 +178,8 @@ class ItemsDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             return $this;
         }
 
+        $stockId = $this->stockByWebsiteId->execute($connection->getWebsiteId())->getStockId();
+
         /** @var \Mirakl\MMP\Common\Domain\Order\ShopOrderLine $orderLine */
         foreach ($miraklOrder->getOrderLines() as $orderLine) {
             $data                      = $orderLine->getData();
@@ -175,13 +195,15 @@ class ItemsDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $data['total_price']       = $data['subtotal'] + $data['shipping_price'] + $data['tax'];
             $data['product']           = null;
             $data['product_id']        = null;
+            $data['salable_quantity']  = 0;
 
             try {
                 // Try to find attached product in Magento
                 /** @var \Magento\Catalog\Model\Product $product */
                 $product = $this->productRepository->get($data['offer_sku']);
-                $data['product']    = $product;
-                $data['product_id'] = $product->getId();
+                $data['product']          = $product;
+                $data['product_id']       = $product->getId();
+                $data['salable_quantity'] = $this->getProductSalableQty->execute($data['offer_sku'], $stockId);
             } catch (NoSuchEntityException $e) {
                 // Ignore exception if product not found
             }

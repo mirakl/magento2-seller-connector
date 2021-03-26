@@ -4,6 +4,7 @@ namespace MiraklSeller\Sales\Test\Unit\Model\Create;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Order;
 use Mirakl\MMP\Shop\Domain\Order\ShopOrder;
+use MiraklSeller\Api\Model\Connection;
 use MiraklSeller\Sales\Model\Create\Shipment as ShipmentCreator;
 use PHPUnit\Framework\TestCase;
 
@@ -30,7 +31,12 @@ class ShipmentTest extends TestCase
     public function testCreateShipmentThrowsException()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage("Cannot do shipment for the order.");
+        $this->expectExceptionMessage('Cannot do shipment for the order.');
+
+        /** @var Connection|\PHPUnit\Framework\MockObject\MockObject $connection */
+        $connection = $this->getMockBuilder(Connection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         /** @var Order|\PHPUnit\Framework\MockObject\MockObject $order */
         $order = $this->getMockBuilder(Order::class)
@@ -45,6 +51,6 @@ class ShipmentTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->shipmentCreator->create($order, $miraklOrder);
+        $this->shipmentCreator->create($order, $miraklOrder, $connection);
     }
 }

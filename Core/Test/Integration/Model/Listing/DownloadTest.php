@@ -37,7 +37,7 @@ class DownloadTest extends TestCase
      */
     public function testPrepare($productIds, $expectedResult)
     {
-        /** @var Listing|\PHPUnit\Framework\MockObject\MockObject $listingMock */
+        /** @var Connection|\PHPUnit\Framework\MockObject\MockObject $connectionMock */
         $connectionMock = $this->createMock(Connection::class);
         $connectionMock->expects($this->any())
             ->method('getExportableAttributes')

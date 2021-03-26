@@ -152,7 +152,7 @@ class Process extends AbstractHelper
     {
         if ($order = $this->orderHelper->getOrderByMiraklOrderId($miraklOrder->getId())) {
             // Synchronize Magento order if already imported
-            if ($this->synchronizeOrder->synchronize($order, $miraklOrder)) {
+            if ($this->synchronizeOrder->synchronize($order, $miraklOrder, $connection)) {
                 $process->output(__('Mirakl order has been synchronized with Magento'));
             } else {
                 $process->output(__('Mirakl order is already up to date in Magento'));

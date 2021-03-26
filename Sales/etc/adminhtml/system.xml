@@ -47,6 +47,14 @@
                     <comment><![CDATA[If enabled, invoice will be created automatically while importing Mirakl order into Magento.]]></comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="auto_pay_invoice" translate="label comment" type="select" sortOrder="11" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Automatic Invoice Payment</label>
+                    <comment><![CDATA[If enabled, for pay on delivery and pay on due date orders, invoices will be marked as paid automatically at the order creation. Pay on acceptance orders will not be impacted by this configuration.]]></comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="auto_create_invoice">1</field>
+                    </depends>
+                </field>
                 <field id="auto_create_shipment" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Automatic Shipment Creation</label>
                     <comment><![CDATA[If enabled, shipment will be created automatically while importing Mirakl order into Magento (only if the Mirakl order has already been shipped).]]></comment>

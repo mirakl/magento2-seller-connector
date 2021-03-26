@@ -10,6 +10,7 @@ class Connection extends AbstractDb
      * @var array
      */
     protected $_serializableFields = [
+        'carriers_mapping' => [[], []],
         'offer_additional_fields' => [[], []],
         'exportable_attributes' => [[], []],
     ];

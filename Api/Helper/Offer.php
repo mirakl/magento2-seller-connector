@@ -20,10 +20,11 @@ class Offer extends Client\MMP
      * @param   Connection  $connection
      * @param   array       $data
      * @param   string      $importMode
+     * @param   bool        $withProducts
      * @return  OfferProductImportTracking
      * @throws  LocalizedException
      */
-    public function importOffers(Connection $connection, array $data, $importMode = ImportMode::NORMAL)
+    public function importOffers(Connection $connection, array $data, $importMode = ImportMode::NORMAL, $withProducts = false)
     {
         if (empty($data)) {
             throw new LocalizedException(__('No offer to import'));
@@ -36,7 +37,7 @@ class Offer extends Client\MMP
         $file = \Mirakl\create_temp_csv_file($data);
         $request = new OfferImportRequest($file);
         $request->setImportMode($importMode);
-        $request->setWithProducts(in_array('product-sku', $cols));
+        $request->setWithProducts($withProducts);
         $request->setFileName('MGT-OF01-' . time() . '.csv');
 
         $this->_eventManager->dispatch('mirakl_seller_api_import_offers_before', [

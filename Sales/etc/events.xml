@@ -3,8 +3,11 @@
     <event name="mirakl_api_connection_delete_before">
         <observer name="mirakl_seller_sales" instance="MiraklSeller\Sales\Observer\Connection\DeleteObserver" />
     </event>
-    <event name="sales_order_shipment_save_after">
-        <observer name="mirakl_seller_sales_shipment_save" instance="MiraklSeller\Sales\Observer\Sales\Order\ShipmentSaveAfterObserver" />
+    <event name="sales_order_shipment_save_before">
+        <observer name="mirakl_seller_sales_shipment_save_before" instance="MiraklSeller\Sales\Observer\Sales\Order\ShipmentSaveBeforeObserver" />
+    </event>
+    <event name="sales_order_shipment_track_save_before">
+        <observer name="mirakl_seller_sales_shipment_track_save_before" instance="MiraklSeller\Sales\Observer\Sales\Order\ShipmentSaveTrackBeforeObserver" />
     </event>
     <event name="order_cancel_after">
         <observer name="mirakl_seller_sales" instance="MiraklSeller\Sales\Observer\Sales\Order\CancelObserver" />

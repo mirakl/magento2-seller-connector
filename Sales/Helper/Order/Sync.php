@@ -47,17 +47,20 @@ class Sync extends AbstractHelper
 
     /**
      * @param   string  $processType
+     * @param   string  $processStatus
      * @return  Process[]
      */
-    public function synchronizeAllConnections($processType = Process::TYPE_ADMIN)
-    {
+    public function synchronizeAllConnections(
+        $processType = Process::TYPE_ADMIN,
+        $processStatus = Process::STATUS_PENDING
+    ) {
         $processes = [];
 
         $connections = $this->connectionCollectionFactory->create();
 
         /** @var Connection $connection */
         foreach ($connections as $connection) {
-            $processes[] = $this->synchronizeConnection($connection, $processType);
+            $processes[] = $this->synchronizeConnection($connection, $processType, $processStatus);
         }
 
         return $processes;
@@ -68,12 +71,17 @@ class Sync extends AbstractHelper
      *
      * @param   Connection  $connection
      * @param   string      $processType
+     * @param   string      $processStatus
      * @return  Process
      */
-    public function synchronizeConnection(Connection $connection, $processType = Process::TYPE_ADMIN)
-    {
+    public function synchronizeConnection(
+        Connection $connection,
+        $processType = Process::TYPE_ADMIN,
+        $processStatus = Process::STATUS_PENDING
+    ) {
         $process = $this->processFactory->create()
             ->setType($processType)
+            ->setStatus($processStatus)
             ->setName('Synchronize Mirakl orders')
             ->setHelper(\MiraklSeller\Sales\Helper\Order\Process::class)
             ->setMethod('synchronizeConnection')

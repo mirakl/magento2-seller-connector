@@ -29,7 +29,7 @@ class CancelObserver extends AbstractObserver implements ObserverInterface
 
         try {
             // Synchronize Magento and Mirakl orders together
-            $this->synchronizeOrder->synchronize($order, $miraklOrder);
+            $this->synchronizeOrder->synchronize($order, $miraklOrder, $connection);
 
             // Block order cancelation if not possible
             if (!$miraklOrder->getData('can_cancel')) {

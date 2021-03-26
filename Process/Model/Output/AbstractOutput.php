@@ -44,7 +44,10 @@ abstract class AbstractOutput implements OutputInterface
      */
     public function close()
     {
-        $this->display(__('Memory Peak Usage: %1', $this->processHelper->formatSize(memory_get_peak_usage(true))));
+        $memory = $this->processHelper->formatSize(memory_get_peak_usage(true));
+        $this->display(
+            sprintf('memory: %s, sapi: %s, pid: %s, uid: %s', $memory, PHP_SAPI, getmypid(), getmyuid())
+        );
 
         return $this;
     }

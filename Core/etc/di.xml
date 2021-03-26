@@ -47,6 +47,7 @@
                 <item name="offer_import_status" xsi:type="object">MiraklSeller\Core\Ui\DataProvider\Offer\AddFilterToCollection</item>
                 <item name="offer_import_message" xsi:type="object">MiraklSeller\Core\Ui\DataProvider\Offer\AddFilterToCollection</item>
             </argument>
+            <argument name="modifiersPool" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\Listing\Modifier\Pool</argument>
         </arguments>
     </type>
 </config>

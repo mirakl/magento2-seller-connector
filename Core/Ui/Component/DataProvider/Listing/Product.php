@@ -7,6 +7,8 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Registry;
 use Magento\Ui\DataProvider\AddFieldToCollectionInterface;
 use Magento\Ui\DataProvider\AddFilterToCollectionInterface;
+use Magento\Ui\DataProvider\Modifier\ModifierInterface;
+use Magento\Ui\DataProvider\Modifier\PoolInterface;
 use MiraklSeller\Core\Helper\Config as ConfigHelper;
 use MiraklSeller\Core\Model\Listing;
 use MiraklSeller\Core\Model\ListingFactory as ListingFactory;
@@ -52,6 +54,11 @@ class Product extends BaseProductDataProvider
     protected $offerFormatter;
 
     /**
+     * @var PoolInterface
+     */
+    protected $modifiersPool;
+
+    /**
      * @var bool
      */
     protected $promotionComputed = false;
@@ -83,6 +90,7 @@ class Product extends BaseProductDataProvider
      * @param OfferFormatter                    $offerFormatter
      * @param AddFieldToCollectionInterface[]   $addFieldStrategies
      * @param AddFilterToCollectionInterface[]  $addFilterStrategies
+     * @param PoolInterface|null                $modifiersPool
      * @param array                             $meta
      * @param array                             $data
      */
@@ -98,6 +106,7 @@ class Product extends BaseProductDataProvider
         RequestInterface $request,
         OfferResourceFactory $offerResourceFactory,
         OfferFormatter $offerFormatter,
+        PoolInterface $modifiersPool,
         array $addFieldStrategies = [],
         array $addFilterStrategies = [],
         array $meta = [],
@@ -113,6 +122,7 @@ class Product extends BaseProductDataProvider
         $this->listingModelFactory = $listingModelFactory;
         $this->offerResourceFactory = $offerResourceFactory;
         $this->offerFormatter = $offerFormatter;
+        $this->modifiersPool = $modifiersPool;
 
         $this->addListingInfo();
 
@@ -155,10 +165,17 @@ class Product extends BaseProductDataProvider
 
         $items = $this->getCollection()->toArray();
 
-        return [
+        $data = [
             'totalRecords' => $this->getCollection()->getSize(),
             'items' => array_values($items),
         ];
+
+        /** @var ModifierInterface $modifier */
+        foreach ($this->modifiersPool->getModifiersInstances() as $modifier) {
+            $data = $modifier->modifyData($data);
+        }
+
+        return $data;
     }
 
     /**
@@ -205,5 +222,20 @@ class Product extends BaseProductDataProvider
         $this->listingModelFactory->create()->load($listing, $listingId);
 
         return $listing;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMeta()
+    {
+        $meta = [];
+
+        /** @var ModifierInterface $modifier */
+        foreach ($this->modifiersPool->getModifiersInstances() as $modifier) {
+            $meta = $modifier->modifyMeta($meta);
+        }
+
+        return $meta;
     }
 }

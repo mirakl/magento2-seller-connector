@@ -31,7 +31,7 @@ class Refunds
      */
     public function __construct(
         RefundCreator $refundCreator,
-        CreditMemoSynchronizer  $creditMemoSynchronizer,
+        CreditMemoSynchronizer $creditMemoSynchronizer,
         CreditMemoHelper $creditMemoHelper
     ) {
         $this->refundCreator = $refundCreator;

@@ -36,4 +36,14 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="MiraklSeller\Sales\Model\Synchronize\Shipments">
+        <arguments>
+            <argument name="stateCodes" xsi:type="array">
+                <item name="0" xsi:type="const">\Mirakl\MMP\Common\Domain\Shipment\ShipmentStatus::SHIPPED</item>
+                <item name="1" xsi:type="const">\Mirakl\MMP\Common\Domain\Shipment\ShipmentStatus::TO_COLLECT</item>
+                <item name="2" xsi:type="const">\Mirakl\MMP\Common\Domain\Shipment\ShipmentStatus::RECEIVED</item>
+                <item name="3" xsi:type="const">\Mirakl\MMP\Common\Domain\Shipment\ShipmentStatus::CLOSED</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

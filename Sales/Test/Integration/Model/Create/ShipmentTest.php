@@ -3,6 +3,7 @@ namespace MiraklSeller\Sales\Test\Integration\Model\Create;
 
 use Magento\Sales\Model\Order\Shipment;
 use Mirakl\MMP\Shop\Domain\Order\ShopOrder;
+use MiraklSeller\Api\Model\Connection;
 use MiraklSeller\Api\Test\Integration\TestCase;
 use MiraklSeller\Sales\Model\Create\Order as OrderCreator;
 use MiraklSeller\Sales\Model\Create\Shipment as ShipmentCreator;
@@ -14,6 +15,9 @@ class ShipmentTest extends TestCase
      */
     public function testCreateShipment()
     {
+        /** @var Connection $connectionMock */
+        $connectionMock = $this->createMock(Connection::class);
+
         /** @var OrderCreator $orderCreator */
         $orderCreator = $this->objectManager->create(OrderCreator::class, [
             'customerEmail' => 'test@do-not-use.com',
@@ -29,7 +33,7 @@ class ShipmentTest extends TestCase
         /** @var ShipmentCreator $shipmentCreator */
         $shipmentCreator = $this->objectManager->create(ShipmentCreator::class);
 
-        $shipment = $shipmentCreator->create($order, $miraklOrderMock);
+        $shipment = $shipmentCreator->create($order, $miraklOrderMock, $connectionMock);
 
         $this->assertInstanceOf(Shipment::class, $shipment);
 

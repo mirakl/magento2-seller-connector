@@ -11,6 +11,7 @@ use Mirakl\MMP\Common\Domain\Order\OrderState;
 use Mirakl\MMP\Common\Domain\Order\ShopOrderLine;
 use Mirakl\MMP\Common\Domain\Order\State\OrderStatus;
 use Mirakl\MMP\Common\Domain\Order\Tax\OrderTaxAmount;
+use Mirakl\MMP\Common\Domain\Payment\PaymentWorkflow;
 use Mirakl\MMP\Shop\Domain\Order\ShopOrder;
 use MiraklSeller\Api\Model\Connection;
 
@@ -197,6 +198,22 @@ class Order extends AbstractHelper
         $collection->addFieldToFilter('mirakl_order_id', $miraklOrderId);
 
         return $collection->count() ? $collection->getFirstItem() : null;
+    }
+
+    /**
+     * @param   ShopOrder   $miraklOrder
+     * @return  bool
+     */
+    public function isAutoPayInvoice(ShopOrder $miraklOrder)
+    {
+        if (!$this->config->isAutoPayInvoice()) {
+            return false;
+        }
+
+        return in_array($miraklOrder->getPaymentWorkflow(), [
+            PaymentWorkflow::PAY_ON_DELIVERY,
+            PaymentWorkflow::PAY_ON_DUE_DATE,
+        ]);
     }
 
     /**

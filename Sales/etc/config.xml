@@ -10,6 +10,7 @@
             </order_acceptance>
             <order>
                 <auto_create_invoice>1</auto_create_invoice>
+                <auto_pay_invoice>0</auto_pay_invoice>
                 <auto_create_shipment>1</auto_create_shipment>
                 <auto_create_refunds>1</auto_create_refunds>
                 <auto_orders_import>1</auto_orders_import>

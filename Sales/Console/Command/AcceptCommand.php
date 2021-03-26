@@ -108,9 +108,9 @@ class AcceptCommand extends Command
      */
     private function acceptOrdersFromConnection(Connection $connection)
     {
-        $process = $this->orderAccept->acceptConnection($connection, Process::TYPE_CLI);
+        $process = $this->orderAccept->acceptConnection($connection, Process::TYPE_CLI, Process::STATUS_IDLE);
 
-        return $process->run();
+        return $process->run(true);
     }
 
     /**
@@ -118,11 +118,11 @@ class AcceptCommand extends Command
      */
     private function acceptOrdersFromAllConnections()
     {
-        $processes = $this->orderAccept->acceptAll(Process::TYPE_CLI);
+        $processes = $this->orderAccept->acceptAll(Process::TYPE_CLI, Process::STATUS_IDLE);
 
         /** @var Process $process */
         foreach ($processes as $process) {
-            $process->run();
+            $process->run(true);
         }
 
         return $this;

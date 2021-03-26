@@ -8,6 +8,8 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 use MiraklSeller\Api\Helper\Shop as ShopApi;
 
 /**
@@ -15,6 +17,7 @@ use MiraklSeller\Api\Helper\Shop as ShopApi;
  * @method  $this   setApiUrl(string $apiUrl)
  * @method  string  getApiKey()
  * @method  $this   setApiKey(string $apiKey)
+ * @method  $this   setCarriersMapping(string $carriersMapping)
  * @method  string  getErrorsCode()
  * @method  $this   setErrorsCode(string $errorsCode)
  * @method  string  getExportedPricesAttribute()
@@ -29,7 +32,9 @@ use MiraklSeller\Api\Helper\Shop as ShopApi;
  * @method  string  getName()
  * @method  $this   setName(string $name)
  * @method  $this   setOfferAdditionalFields(string $offerAdditionalFields)
- * @method  string  getShopId()
+ * @method  string  getShipmentSourceAlgorithm()
+ * @method  $this   setShipmentSourceAlgorithm(string $shipmentSourceAlgorithm)
+ * @method  int     getShopId()
  * @method  $this   setShopId(int $shopId)
  * @method  string  getSkuCode()
  * @method  $this   setSkuCode(string $skuCode)
@@ -59,9 +64,15 @@ class Connection extends AbstractModel
     protected $shopApi;
 
     /**
+     * @var StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
      * @param   Context                 $context
      * @param   Registry                $registry
      * @param   ShopApi                 $shopApi
+     * @param   StoreManagerInterface   $storeManager
      * @param   AbstractResource|null   $resource
      * @param   AbstractDb|null         $resourceCollection
      * @param   array                   $data
@@ -70,12 +81,14 @@ class Connection extends AbstractModel
         Context $context,
         Registry $registry,
         ShopApi $shopApi,
+        StoreManagerInterface $storeManager,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->shopApi = $shopApi;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -106,6 +119,21 @@ class Connection extends AbstractModel
     /**
      * @return  array
      */
+    public function getCarriersMapping()
+    {
+        $values = $this->_getData('carriers_mapping');
+        if (empty($values)) {
+            $values = [];
+        } elseif (is_string($values)) {
+            $values = json_decode($values, true);
+        }
+
+        return $values;
+    }
+
+    /**
+     * @return  array
+     */
     public function getOfferAdditionalFields()
     {
         $fields = $this->_getData('offer_additional_fields');
@@ -131,6 +159,25 @@ class Connection extends AbstractModel
         }
 
         return $fields;
+    }
+
+    /**
+     * Returns website associated with the current connection
+     *
+     * @return  int
+     */
+    public function getWebsiteId()
+    {
+        if ($this->getStoreId() != Store::DEFAULT_STORE_ID) {
+            // Get website of connection's associated store
+            $websiteId = $this->storeManager->getStore($this->getStoreId())->getWebsiteId();
+        } else {
+            // Get website of the default store view
+            $defaultStore = $this->storeManager->getDefaultStoreView();
+            $websiteId = $defaultStore->getWebsiteId();
+        }
+
+        return $websiteId;
     }
 
     /**

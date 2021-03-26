@@ -33,6 +33,10 @@ class UpgradeData implements UpgradeDataInterface
             $this->addRefundAttributes($setup);
         }
 
+        if (version_compare($context->getVersion(), '1.0.2', '<')) {
+            $this->addShipmentAttributes($setup);
+        }
+
         $setup->endSetup();
     }
 
@@ -70,6 +74,38 @@ class UpgradeData implements UpgradeDataInterface
             $setup->getTable('sales_creditmemo'),
             $salesSetup->getConnection()->getIndexName('sales_creditmemo', ['mirakl_refund_id']),
             ['mirakl_refund_id']
+        );
+
+        return $this;
+    }
+
+    /**
+     * @param   ModuleDataSetupInterface    $setup
+     * @return  $this
+     */
+    private function addShipmentAttributes(ModuleDataSetupInterface $setup)
+    {
+        $salesSetup = $this->getSalesSetup($setup);
+
+        $attributes = [
+            'shipment' => [
+                'mirakl_shipment_id' => [
+                    'type' => 'varchar',
+                ],
+            ],
+        ];
+
+        foreach ($attributes as $entityTypeId => $attrParams) {
+            foreach ($attrParams as $code => $params) {
+                $params['visible'] = false;
+                $salesSetup->addAttribute($entityTypeId, $code, $params);
+            }
+        }
+
+        $salesSetup->getConnection()->addIndex(
+            $setup->getTable('sales_shipment'),
+            $salesSetup->getConnection()->getIndexName('sales_shipment', ['mirakl_shipment_id']),
+            ['mirakl_shipment_id']
         );
 
         return $this;

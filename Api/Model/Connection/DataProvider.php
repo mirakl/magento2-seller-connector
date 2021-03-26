@@ -2,6 +2,7 @@
 namespace MiraklSeller\Api\Model\Connection;
 
 use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Shipping\Model\Config as ShippingConfig;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 use MiraklSeller\Api\Model\Connection;
@@ -21,37 +22,43 @@ class DataProvider extends AbstractDataProvider
     protected $dataPersistor;
 
     /**
+     * @var ShippingConfig
+     */
+    protected $shippingConfig;
+
+    /**
      * @var array
      */
     protected $loadedData;
 
     /**
-     * @param string                  $name
-     * @param string                  $primaryFieldName
-     * @param string                  $requestFieldName
-     * @param CollectionFactory       $pageCollectionFactory
-     * @param DataPersistorInterface  $dataPersistor
-     * @param array                   $meta
-     * @param array                   $data
+     * @param   string                  $name
+     * @param   string                  $primaryFieldName
+     * @param   string                  $requestFieldName
+     * @param   CollectionFactory       $connectionCollectionFactory
+     * @param   DataPersistorInterface  $dataPersistor
+     * @param   ShippingConfig          $shippingConfig
+     * @param   array                   $meta
+     * @param   array                   $data
      */
     public function __construct(
         $name,
         $primaryFieldName,
         $requestFieldName,
-        CollectionFactory $pageCollectionFactory,
+        CollectionFactory $connectionCollectionFactory,
         DataPersistorInterface $dataPersistor,
+        ShippingConfig $shippingConfig,
         array $meta = [],
         array $data = []
     ) {
-        $this->collection = $pageCollectionFactory->create();
+        $this->collection = $connectionCollectionFactory->create();
         $this->dataPersistor = $dataPersistor;
+        $this->shippingConfig = $shippingConfig;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->meta = $this->prepareMeta($meta);
     }
 
     /**
-     * Prepares Meta
-     *
      * @param   array   $meta
      * @return  array
      */
@@ -65,7 +72,7 @@ class DataProvider extends AbstractDataProvider
     }
 
     /**
-     * @return array
+     * @return  array
      */
     public function getData()
     {
@@ -100,6 +107,8 @@ class DataProvider extends AbstractDataProvider
             $fieldValues['exportable_attributes'] = json_decode($fieldValues['exportable_attributes'], true);
         }
 
+        $fieldValues['carriers_mapping'] = $this->getCarriersMapping($fieldValues['carriers_mapping'] ?? [], $fieldValues['store_id']);
+
         $result = [];
         foreach ($this->getFieldsMap() as $fieldSet => $fields) {
             foreach ($fields as $field) {
@@ -129,7 +138,7 @@ class DataProvider extends AbstractDataProvider
     }
 
     /**
-     * @return array
+     * @return  array
      */
     protected function getFieldsMap()
     {
@@ -153,20 +162,57 @@ class DataProvider extends AbstractDataProvider
                 'exportable_attributes',
                 'exported_prices_attribute',
             ],
+            'order' => [
+                'carriers_mapping',
+                'shipment_source_algorithm',
+            ],
         ];
     }
 
     /**
-     * @return array
+     * @return  array
      */
     protected function getAttributesMeta()
     {
         return [
-            'dataType' => 'text',
-            'formElement' => 'input',
-            'visible' => '1',
-            'sortOrder' => 1,
+            'dataType'      => 'text',
+            'formElement'   => 'input',
+            'visible'       => '1',
+            'sortOrder'     => 1,
             'componentType' => Field::NAME,
         ];
+    }
+
+    /**
+     * @param   string|array    $originMapping
+     * @param   int             $storeId
+     * @return  array
+     */
+    private function getCarriersMapping($originMapping, $storeId = null)
+    {
+        if (empty($originMapping)) {
+            $originMapping = [];
+        } else if (is_string($originMapping)) {
+            $originMapping = json_decode($originMapping, true);
+        }
+
+        $key = array_map(function($item) {
+            return $item['magento_code'] ?? '';
+        }, $originMapping);
+        $originMapping = array_combine($key, $originMapping);
+
+        $mapping = [];
+        $carrierInstances = $this->shippingConfig->getAllCarriers($storeId);
+        foreach ($carrierInstances as $code => $carrier) {
+            if ($carrier->isTrackingAvailable()) {
+                $mapping[] = [
+                    'magento_code'   => $code,
+                    'magento_label'  => $carrier->getConfigData('title'),
+                    'mirakl_carrier' => $originMapping[$code]['mirakl_carrier'] ?? '',
+                ];
+            }
+        }
+
+        return $mapping;
     }
 }

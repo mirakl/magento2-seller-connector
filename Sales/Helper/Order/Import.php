@@ -12,7 +12,7 @@ use MiraklSeller\Sales\Helper\Config as SalesConfig;
 use MiraklSeller\Sales\Helper\Order as OrderHelper;
 use MiraklSeller\Sales\Model\Create\Invoice as InvoiceCreator;
 use MiraklSeller\Sales\Model\Create\Order as OrderCreator;
-use MiraklSeller\Sales\Model\Create\Shipment as ShipmentCreator;
+use MiraklSeller\Sales\Model\Synchronize\Shipments as SynchronizeShipments;
 
 class Import extends AbstractHelper
 {
@@ -42,9 +42,9 @@ class Import extends AbstractHelper
     protected $invoiceCreator;
 
     /**
-     * @var ShipmentCreator
+     * @var SynchronizeShipments
      */
-    protected $shipmentCreator;
+    protected $synchronizeShipments;
 
     /**
      * @param   Context                 $context
@@ -53,7 +53,7 @@ class Import extends AbstractHelper
      * @param   SalesConfig             $salesConfig
      * @param   OrderCreator            $orderCreator
      * @param   InvoiceCreator          $invoiceCreator
-     * @param   ShipmentCreator         $shipmentCreator
+     * @param   SynchronizeShipments    $synchronizeShipments
      */
     public function __construct(
         Context $context,
@@ -62,35 +62,46 @@ class Import extends AbstractHelper
         SalesConfig $salesConfig,
         OrderCreator $orderCreator,
         InvoiceCreator $invoiceCreator,
-        ShipmentCreator $shipmentCreator
+        SynchronizeShipments $synchronizeShipments
     ) {
         parent::__construct($context);
 
-        $this->orderResourceFactory = $orderResourceFactory;
-        $this->orderHelper          = $orderHelper;
-        $this->salesConfig          = $salesConfig;
-        $this->orderCreator         = $orderCreator;
-        $this->invoiceCreator       = $invoiceCreator;
-        $this->shipmentCreator      = $shipmentCreator;
+        $this->orderResourceFactory  = $orderResourceFactory;
+        $this->orderHelper           = $orderHelper;
+        $this->salesConfig           = $salesConfig;
+        $this->orderCreator          = $orderCreator;
+        $this->invoiceCreator        = $invoiceCreator;
+        $this->synchronizeShipments  = $synchronizeShipments;
     }
 
     /**
      * Converts a Mirakl order into a Magento order
      *
      * @param   ShopOrder   $miraklOrder
-     * @param   mixed       $store
+     * @param   Connection  $connection
      * @return  Order
      */
-    public function createOrder(ShopOrder $miraklOrder, $store = null)
+    public function createOrder(ShopOrder $miraklOrder, Connection $connection)
     {
-        $order = $this->orderCreator->create($miraklOrder, $store);
+        $order = $this->orderCreator->create($miraklOrder, $connection->getStoreId());
 
-        if ($this->salesConfig->isAutoCreateInvoice() && $this->orderHelper->isMiraklOrderInvoiced($miraklOrder)) {
+        // Save some Mirakl information to be able to associate actions on it later
+        $order->setMiraklConnectionId($connection->getId());
+        $order->setMiraklOrderId($miraklOrder->getId());
+
+        /** @var \Magento\Sales\Model\ResourceModel\Order $orderResource */
+        $orderResource = $this->orderResourceFactory->create();
+        $orderResource->saveAttribute($order, ['mirakl_connection_id', 'mirakl_order_id']);
+
+        if ($this->salesConfig->isAutoCreateInvoice()
+            && ($this->orderHelper->isMiraklOrderInvoiced($miraklOrder) || $this->orderHelper->isAutoPayInvoice($miraklOrder))
+        ) {
             $this->invoiceCreator->create($order);
         }
 
-        if ($this->salesConfig->isAutoCreateShipment() && $this->orderHelper->isMiraklOrderShipped($miraklOrder)) {
-            $this->shipmentCreator->create($order, $miraklOrder);
+
+        if ($this->salesConfig->isAutoCreateShipment()) {
+            $this->synchronizeShipments->synchronize($order, $miraklOrder);
         }
 
         return $order;
@@ -114,17 +125,6 @@ class Import extends AbstractHelper
             ));
         }
 
-        // Create the Magento order
-        $order = $this->createOrder($miraklOrder, $connection->getStoreId());
-
-        // Save some Mirakl information to be able to associate actions on it later
-        $order->setMiraklConnectionId($connection->getId());
-        $order->setMiraklOrderId($miraklOrder->getId());
-
-        /** @var \Magento\Sales\Model\ResourceModel\Order $orderResource */
-        $orderResource = $this->orderResourceFactory->create();
-        $orderResource->save($order);
-
-        return $order;
+        return $this->createOrder($miraklOrder, $connection);
     }
 }

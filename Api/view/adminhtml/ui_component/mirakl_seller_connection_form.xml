@@ -113,7 +113,7 @@
             <settings>
                 <dataType>int</dataType>
                 <label translate="true">Store View</label>
-                <notice translate="true"><![CDATA[Store view to use for catalog product translation during products export and for the currency (associated to the website) used during prices & stocks export. Selected store view will also be used to create Magento orders when importing Mirakl orders.]]></notice>
+                <notice translate="true"><![CDATA[Store view to use for catalog product translation during products export, for the currency and the stock (associated to the website) used during prices & stocks export. Selected store view will also be used to create Magento orders when importing Mirakl orders.]]></notice>
                 <dataScope>store_id</dataScope>
             </settings>
             <formElements>
@@ -300,5 +300,88 @@
                 </select>
             </formElements>
         </field>
+    </fieldset>
+    <fieldset name="order">
+        <settings>
+            <label translate="true">Order Settings</label>
+        </settings>
+        <field name="shipment_source_algorithm" sortOrder="10" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">connection</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Source Algorithm for Shipment Creation</label>
+                <notice translate="true">Only used when multi-source inventory is enabled. The selected source algorithm will be used automatically when importing order shipments from Mirakl.</notice>
+                <dataScope>shipment_source_algorithm</dataScope>
+                <componentType>field</componentType>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="MiraklSeller\Api\Model\Connection\Source\ShipmentSourceAlgorithm"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <dynamicRows name="carriers_mapping" sortOrder="200">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataScope" xsi:type="string" />
+                </item>
+            </argument>
+            <settings>
+                <dndConfig>
+                    <param name="enabled" xsi:type="boolean">false</param>
+                </dndConfig>
+                <addButton>false</addButton>
+                <scopeLabel>[GLOBAL]</scopeLabel>
+                <label translate="true">Carriers Mapping</label>
+                <componentType>dynamicRows</componentType>
+            </settings>
+            <container name="record" component="Magento_Ui/js/dynamic-rows/record">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="isTemplate" xsi:type="boolean">true</item>
+                        <item name="is_collection" xsi:type="boolean">true</item>
+                        <item name="componentType" xsi:type="string">container</item>
+                    </item>
+                </argument>
+                <field name="magento_code" formElement="input">
+                    <settings>
+                        <dataType>text</dataType>
+                        <label>Magento Carrier Code</label>
+                        <disabled>true</disabled>
+                        <visible>false</visible>
+                        <dataScope>magento_code</dataScope>
+                    </settings>
+                </field>
+                <field name="magento_label" formElement="input">
+                    <settings>
+                        <dataType>text</dataType>
+                        <label translate="true">Magento Carrier</label>
+                        <elementTmpl>ui/form/element/html</elementTmpl>
+                        <visible>true</visible>
+                        <dataScope>magento_label</dataScope>
+                    </settings>
+                </field>
+                <field name="mirakl_carrier" formElement="select">
+                    <settings>
+                        <dataType>select</dataType>
+                        <label translate="true">Mirakl Carrier</label>
+                        <dataScope>mirakl_carrier</dataScope>
+                    </settings>
+                    <formElements>
+                        <select>
+                            <settings>
+                                <options class="MiraklSeller\Api\Ui\Component\Connection\Column\MiraklCarriers"/>
+                            </settings>
+                        </select>
+                    </formElements>
+                </field>
+            </container>
+        </dynamicRows>
     </fieldset>
 </form>

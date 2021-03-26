@@ -9,8 +9,11 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Shipment\Track;
+use Mirakl\MMP\Common\Domain\Shipment\Shipment as MiraklShipment;
 use Mirakl\MMP\Shop\Domain\Order\ShopOrder;
 use MiraklSeller\Api\Helper\Order as ApiOrder;
+use MiraklSeller\Api\Helper\Shipment as ApiShipment;
 use MiraklSeller\Api\Model\Connection;
 use MiraklSeller\Api\Model\ConnectionFactory;
 use MiraklSeller\Api\Model\ResourceModel\ConnectionFactory as ConnectionResourceFactory;
@@ -65,6 +68,11 @@ abstract class AbstractObserver
     protected $connectionResourceFactory;
 
     /**
+     * @var ApiShipment
+     */
+    protected $apiShipment;
+
+    /**
      * @param   ManagerInterface            $messageManager
      * @param   OrderRepositoryInterface    $orderRepository
      * @param   Registry                    $registry
@@ -74,6 +82,7 @@ abstract class AbstractObserver
      * @param   ConnectionHelper            $connectionHelper
      * @param   ConnectionFactory           $connectionFactory
      * @param   ConnectionResourceFactory   $connectionResourceFactory
+     * @param   ApiShipment                 $apiShipment
      */
     public function __construct(
         ManagerInterface $messageManager,
@@ -84,7 +93,8 @@ abstract class AbstractObserver
         OrderSynchronizer $synchronizeOrder,
         ConnectionHelper $connectionHelper,
         ConnectionFactory $connectionFactory,
-        ConnectionResourceFactory $connectionResourceFactory
+        ConnectionResourceFactory $connectionResourceFactory,
+        ApiShipment $apiShipment
     ) {
         $this->messageManager            = $messageManager;
         $this->orderRepository           = $orderRepository;
@@ -95,6 +105,7 @@ abstract class AbstractObserver
         $this->connectionHelper          = $connectionHelper;
         $this->connectionFactory         = $connectionFactory;
         $this->connectionResourceFactory = $connectionResourceFactory;
+        $this->apiShipment               = $apiShipment;
     }
 
     /**
@@ -159,6 +170,23 @@ abstract class AbstractObserver
     }
 
     /**
+     * Returns order total quantity to ship
+     *
+     * @param   Order  $order
+     * @return  int
+     */
+    protected function getOrderQtyToShip($order)
+    {
+        $qtyToShip = 0;
+        /** @var Order\Item $item */
+        foreach ($order->getAllVisibleItems() as $item) {
+            $qtyToShip += $item->getQtyToShip();
+        }
+
+        return $qtyToShip;
+    }
+
+    /**
      * @param   Connection  $connection
      * @param   string      $miraklOrderId
      * @return  ShopOrder
@@ -180,6 +208,30 @@ abstract class AbstractObserver
     }
 
     /**
+     * @param   Connection  $connection
+     * @param   string      $miraklOrderId
+     * @param   string      $miraklShipmentId
+     * @return  MiraklShipment
+     * @throws  \Exception
+     */
+    protected function getMiraklShipment(Connection $connection, $miraklOrderId, $miraklShipmentId)
+    {
+        $shipments = $this->apiShipment->getShipments($connection, [$miraklOrderId]);
+
+        /** @var MiraklShipment $shipment */
+        foreach ($shipments->getCollection() as $shipment) {
+            if ($shipment->getId() === $miraklShipmentId) {
+                return $shipment;
+            }
+        }
+
+        $this->fail(__(
+            "Could not find Mirakl order shipment for id '%1' with order '%2' and connection '%3'.",
+            $miraklShipmentId, $miraklOrderId, $connection->getId()
+        ));
+    }
+
+    /**
      * @param   Order   $order
      * @return  bool
      */
@@ -194,5 +246,23 @@ abstract class AbstractObserver
     protected function resetLastAddedMessageEscaping()
     {
         $this->messageManager->getMessages()->getLastAddedMessage()->setIdentifier(null);
+    }
+
+    /**
+     * @param   Connection  $connection
+     * @param   Track       $track
+     * @return  string
+     */
+    public function getMiraklCarrierCode(Connection $connection, Track $track)
+    {
+        if (is_array($connection->getCarriersMapping())) {
+            foreach ($connection->getCarriersMapping() as $mapping) {
+                if ($mapping['magento_code'] == $track->getCarrierCode()) {
+                    return $mapping['mirakl_carrier'];
+                }
+            }
+        }
+
+        return '';
     }
 }

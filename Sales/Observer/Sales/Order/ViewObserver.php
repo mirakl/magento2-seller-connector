@@ -29,12 +29,18 @@ class ViewObserver extends AbstractObserver implements ObserverInterface
             $this->messageManager->addNoticeMessage(__(
                 'This is a Mirakl Marketplace order from the connection "%1".', $connection->getName()
             ));
+        } catch (\Exception $e) {
+            $this->messageManager->addErrorMessage(
+                __('An error occurred while downloading the Mirakl order information: %1', $e->getMessage())
+            );
+        }
 
-            $updated = $this->synchronizeOrder->synchronize($order, $miraklOrder);
+        try {
+            $updated = $this->synchronizeOrder->synchronize($order, $miraklOrder, $connection);
             $miraklOrderUrl = $this->connectionHelper->getMiraklOrderUrl($connection, $miraklOrder);
 
             if ($updated) {
-                $this->messageManager->addNoticeMessage(__(
+                $this->messageManager->addSuccessMessage(__(
                     'Your order <a href="%1" target="_blank">%2</a> has been synchronized with Mirakl.',
                     $miraklOrderUrl,
                     $miraklOrder->getId()
@@ -50,7 +56,7 @@ class ViewObserver extends AbstractObserver implements ObserverInterface
             }
         } catch (\Exception $e) {
             $this->messageManager->addErrorMessage(
-                __('An error occurred while downloading the Mirakl order information: %1', $e->getMessage())
+                __('An error occurred while synchronizing the Mirakl order: %1', $e->getMessage())
             );
         }
     }
