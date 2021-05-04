@@ -2,10 +2,10 @@
 namespace MiraklSeller\Sales\Ui\Component\DataProvider;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
-use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Mirakl\MMP\Common\Domain\Order\OrderState;
 use Mirakl\MMP\Shop\Domain\Order\ShopOrder;
 use MiraklSeller\Api\Model\Connection;
@@ -28,6 +28,11 @@ class ItemsDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $productRepository;
 
     /**
+     * @var StockRegistryInterface
+     */
+    protected $stockRegistry;
+
+    /**
      * @var OrderHelper
      */
     protected $orderHelper;
@@ -43,28 +48,28 @@ class ItemsDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $miraklOrderLoader;
 
     /**
-     * @var StockByWebsiteIdResolverInterface
+     * @var ObjectManagerInterface
      */
-    protected $stockByWebsiteId;
+    protected $objectManager;
 
     /**
-     * @var GetProductSalableQtyInterface
+     * @var bool
      */
-    protected $getProductSalableQty;
+    protected $isMsiEnabled;
 
     /**
-     * @param   string                              $name
-     * @param   string                              $primaryFieldName
-     * @param   string                              $requestFieldName
-     * @param   CollectionFactory                   $collectionFactory
-     * @param   ProductRepositoryInterface          $productRepository
-     * @param   OrderHelper                         $orderHelper
-     * @param   ConnectionLoader                    $connectionLoader
-     * @param   MiraklOrderLoader                   $miraklOrderLoader
-     * @param   StockByWebsiteIdResolverInterface   $stockByWebsiteId
-     * @param   GetProductSalableQtyInterface       $getProductSalableQty
-     * @param   array                               $meta
-     * @param   array                               $data
+     * @param   string                      $name
+     * @param   string                      $primaryFieldName
+     * @param   string                      $requestFieldName
+     * @param   CollectionFactory           $collectionFactory
+     * @param   ProductRepositoryInterface  $productRepository
+     * @param   StockRegistryInterface      $stockRegistry
+     * @param   OrderHelper                 $orderHelper
+     * @param   ConnectionLoader            $connectionLoader
+     * @param   MiraklOrderLoader           $miraklOrderLoader
+     * @param   ObjectManagerInterface      $objectManager
+     * @param   array                       $meta
+     * @param   array                       $data
      */
     public function __construct(
         $name,
@@ -72,11 +77,11 @@ class ItemsDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $requestFieldName,
         CollectionFactory $collectionFactory,
         ProductRepositoryInterface $productRepository,
+        StockRegistryInterface $stockRegistry,
         OrderHelper $orderHelper,
         ConnectionLoader $connectionLoader,
         MiraklOrderLoader $miraklOrderLoader,
-        StockByWebsiteIdResolverInterface $stockByWebsiteId,
-        GetProductSalableQtyInterface $getProductSalableQty,
+        ObjectManagerInterface $objectManager,
         array $meta = [],
         array $data = []
     ) {
@@ -84,11 +89,12 @@ class ItemsDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
         $this->collection           = $collectionFactory->create();
         $this->productRepository    = $productRepository;
+        $this->stockRegistry        = $stockRegistry;
         $this->orderHelper          = $orderHelper;
         $this->connectionLoader     = $connectionLoader;
         $this->miraklOrderLoader    = $miraklOrderLoader;
-        $this->stockByWebsiteId     = $stockByWebsiteId;
-        $this->getProductSalableQty = $getProductSalableQty;
+        $this->objectManager        = $objectManager;
+        $this->isMsiEnabled         = $objectManager->get(\MiraklSeller\Core\Helper\Data::class)->isMsiEnabled();
 
         $this->prepareUpdateUrl();
     }
@@ -178,7 +184,12 @@ class ItemsDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             return $this;
         }
 
-        $stockId = $this->stockByWebsiteId->execute($connection->getWebsiteId())->getStockId();
+        $stockId = 1;
+        if ($this->isMsiEnabled) {
+            /** @var \Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface $stockByWebsiteId */
+            $stockByWebsiteId = $this->objectManager->get('Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface');
+            $stockId = $stockByWebsiteId->execute($connection->getWebsiteId())->getStockId();
+        }
 
         /** @var \Mirakl\MMP\Common\Domain\Order\ShopOrderLine $orderLine */
         foreach ($miraklOrder->getOrderLines() as $orderLine) {
@@ -203,7 +214,7 @@ class ItemsDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 $product = $this->productRepository->get($data['offer_sku']);
                 $data['product']          = $product;
                 $data['product_id']       = $product->getId();
-                $data['salable_quantity'] = $this->getProductSalableQty->execute($data['offer_sku'], $stockId);
+                $data['salable_quantity'] = $this->getSalableQuantity($data['offer_sku'], $product->getId(), $stockId);
             } catch (NoSuchEntityException $e) {
                 // Ignore exception if product not found
             }
@@ -214,5 +225,25 @@ class ItemsDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->collection->setIsLoaded();
 
         return $this;
+    }
+
+    /**
+     * @param   string  $sku
+     * @param   int     $productId
+     * @param   int     $stockId
+     * @return  float
+     */
+    public function getSalableQuantity($sku, $productId, $stockId)
+    {
+        if (!$this->isMsiEnabled) {
+            $stockItem = $this->stockRegistry->getStockItem($productId);
+
+            return $stockItem ? $stockItem->getQty() : 0;
+        }
+
+        /** @var \Magento\InventorySalesApi\Api\GetProductSalableQtyInterface $getProductSalableQty */
+        $getProductSalableQty = $this->objectManager->get('Magento\InventorySalesApi\Api\GetProductSalableQtyInterface');
+
+        return $getProductSalableQty->execute($sku, $stockId);
     }
 }

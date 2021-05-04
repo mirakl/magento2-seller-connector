@@ -76,4 +76,12 @@ class DataTest extends TestCase
             ['2017-01-01', '2017-01-01', new \DateTime('2016-12-31'), false],
         ];
     }
+
+    /**
+     * @covers ::isMsiEnabled
+     */
+    public function testIsMsiEnabled()
+    {
+        $this->assertTrue(\MiraklSeller\Core\Helper\Data::isMsiEnabled());
+    }
 }

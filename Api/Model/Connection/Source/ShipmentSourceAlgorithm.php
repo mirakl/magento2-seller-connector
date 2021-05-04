@@ -2,15 +2,19 @@
 namespace MiraklSeller\Api\Model\Connection\Source;
 
 use Magento\Framework\Data\OptionSourceInterface;
-use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionAlgorithmInterface;
-use Magento\InventorySourceSelectionApi\Api\GetSourceSelectionAlgorithmListInterface;
+use Magento\Framework\ObjectManagerInterface;
 
 class ShipmentSourceAlgorithm implements OptionSourceInterface
 {
     /**
-     * @var GetSourceSelectionAlgorithmListInterface
+     * @var ObjectManagerInterface
      */
-    private $getSourceSelectionAlgorithmList;
+    protected $objectManager;
+
+    /**
+     * @var bool
+     */
+    protected $isMsiEnabled;
 
     /**
      * @var array
@@ -18,11 +22,12 @@ class ShipmentSourceAlgorithm implements OptionSourceInterface
     protected $options;
 
     /**
-     * @param GetSourceSelectionAlgorithmListInterface $getSourceSelectionAlgorithmList
+     * @param ObjectManagerInterface $objectManager
      */
-    public function __construct(GetSourceSelectionAlgorithmListInterface $getSourceSelectionAlgorithmList)
+    public function __construct(ObjectManagerInterface $objectManager)
     {
-        $this->getSourceSelectionAlgorithmList = $getSourceSelectionAlgorithmList;
+        $this->objectManager = $objectManager;
+        $this->isMsiEnabled  = $objectManager->get(\MiraklSeller\Core\Helper\Data::class)->isMsiEnabled();
     }
 
     /**
@@ -30,6 +35,15 @@ class ShipmentSourceAlgorithm implements OptionSourceInterface
      */
     public function toOptionArray()
     {
+        if (!$this->isMsiEnabled) {
+            return [
+                [
+                    'value' => '',
+                    'label' => __('-- Not Applicable --'),
+                ]
+            ];
+        }
+
         if ($this->options !== null) {
             return $this->options;
         }
@@ -41,10 +55,13 @@ class ShipmentSourceAlgorithm implements OptionSourceInterface
             ],
         ];
 
-        $algorithmsList = $this->getSourceSelectionAlgorithmList->execute();
+        /** @var \Magento\InventorySourceSelectionApi\Api\GetSourceSelectionAlgorithmListInterface $getSourceSelectionAlgorithmList */
+        $getSourceSelectionAlgorithmList = $this->objectManager
+            ->get('Magento\InventorySourceSelectionApi\Api\GetSourceSelectionAlgorithmListInterface');
+        $algorithmsList = $getSourceSelectionAlgorithmList->execute();
 
         foreach ($algorithmsList as $algorithm) {
-            /** @var SourceSelectionAlgorithmInterface $algorithm */
+            /** @var \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionAlgorithmInterface $algorithm */
             $this->options[] = [
                 'value' => $algorithm->getCode(),
                 'label' => $algorithm->getTitle(),

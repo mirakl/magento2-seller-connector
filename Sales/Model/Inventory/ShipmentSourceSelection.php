@@ -1,56 +1,48 @@
 <?php
 namespace MiraklSeller\Sales\Model\Inventory;
 
-use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface;
-use Magento\InventorySourceSelectionApi\Api\GetDefaultSourceSelectionAlgorithmCodeInterface;
-use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;
-use Magento\InventorySourceSelectionApi\Model\GetInventoryRequestFromOrder;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Api\Data\ShipmentItemInterface;
 
 class ShipmentSourceSelection
 {
     /**
-     * @var GetInventoryRequestFromOrder
+     * @var ObjectManagerInterface
      */
-    private $getInventoryRequestFromOrder;
+    protected $objectManager;
 
     /**
-     * @var GetDefaultSourceSelectionAlgorithmCodeInterface
+     * @var bool
      */
-    private $getDefaultSourceSelectionAlgorithmCode;
+    protected $isMsiEnabled;
 
     /**
-     * @var SourceSelectionServiceInterface
+     * @param ObjectManagerInterface $objectManager
      */
-    private $sourceSelectionService;
-
-    /**
-     * @param GetInventoryRequestFromOrder                    $getInventoryRequestFromOrder
-     * @param GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
-     * @param SourceSelectionServiceInterface                 $sourceSelectionService
-     */
-    public function __construct(
-        GetInventoryRequestFromOrder $getInventoryRequestFromOrder,
-        GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode,
-        SourceSelectionServiceInterface $sourceSelectionService
-    ) {
-        $this->getInventoryRequestFromOrder = $getInventoryRequestFromOrder;
-        $this->getDefaultSourceSelectionAlgorithmCode = $getDefaultSourceSelectionAlgorithmCode;
-        $this->sourceSelectionService = $sourceSelectionService;
+    public function __construct(ObjectManagerInterface $objectManager)
+    {
+        $this->objectManager = $objectManager;
+        $this->isMsiEnabled  = $objectManager->get(\MiraklSeller\Core\Helper\Data::class)->isMsiEnabled();
     }
 
     /**
      * @param   ShipmentInterface   $shipment
      * @param   string              $algorithmCode
-     * @return  SourceSelectionResultInterface
+     * @return  \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface
      */
     public function execute(ShipmentInterface $shipment, $algorithmCode)
     {
+        if (!$this->isMsiEnabled) {
+            return null;
+        }
+
         $orderId = $shipment->getOrderId();
 
         if (empty($algorithmCode)) {
-            $algorithmCode = $this->getDefaultSourceSelectionAlgorithmCode->execute();
+            $getDefaultSourceSelectionAlgorithmCode = $this->objectManager
+                ->get('Magento\InventorySourceSelectionApi\Api\GetDefaultSourceSelectionAlgorithmCodeInterface');
+            $algorithmCode = $getDefaultSourceSelectionAlgorithmCode->execute();
         }
 
         $requestItems = [];
@@ -62,8 +54,13 @@ class ShipmentSourceSelection
             ];
         }
 
-        $inventoryRequest = $this->getInventoryRequestFromOrder->execute($orderId, $requestItems);
+        $getInventoryRequestFromOrder = $this->objectManager
+            ->get('Magento\InventorySourceSelectionApi\Model\GetInventoryRequestFromOrder');
+        $sourceSelectionService = $this->objectManager
+            ->get('Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface');
 
-        return $this->sourceSelectionService->execute($inventoryRequest, $algorithmCode);
+        $inventoryRequest = $getInventoryRequestFromOrder->execute($orderId, $requestItems);
+
+        return $sourceSelectionService->execute($inventoryRequest, $algorithmCode);
     }
 }

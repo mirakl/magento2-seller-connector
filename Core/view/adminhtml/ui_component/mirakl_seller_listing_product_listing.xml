@@ -62,7 +62,7 @@
         </massaction>
         <paging name="listing_paging"/>
     </listingToolbar>
-    <columns name="product_columns" class="Magento\Catalog\Ui\Component\Listing\Columns" component="MiraklSeller_Core/js/form/components/listing">
+    <columns name="product_columns" class="MiraklSeller\Core\Ui\Component\Listing\Columns" component="MiraklSeller_Core/js/form/components/listing">
         <settings>
             <childDefaults>
                 <param name="fieldAction" xsi:type="array">
@@ -210,16 +210,6 @@
                 <addField>true</addField>
                 <filter>textRange</filter>
                 <label translate="true">Qty</label>
-            </settings>
-        </column>
-        <column name="salable_quantity"
-                class="Magento\InventorySalesAdminUi\Ui\Component\Listing\Column\SalableQuantity"
-                component="Magento_InventorySalesAdminUi/js/product/grid/cell/salable-quantity"
-                sortOrder="77">
-            <settings>
-                <filter>false</filter>
-                <sortable>false</sortable>
-                <label translate="true">Salable Quantity</label>
             </settings>
         </column>
         <column name="visibility" component="Magento_Ui/js/grid/columns/select" sortOrder="80">

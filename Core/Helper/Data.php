@@ -41,4 +41,12 @@ class Data extends ApiHelper
     {
         return class_exists('Magento\Enterprise\Model\ProductMetadata');
     }
+
+    /**
+     * @return  bool
+     */
+    public function isMsiEnabled()
+    {
+        return $this->isModuleOutputEnabled('Magento_InventorySalesApi');
+    }
 }

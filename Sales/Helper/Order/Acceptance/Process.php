@@ -7,9 +7,7 @@ use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
-use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
-use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Mirakl\MMP\Shop\Domain\Order\ShopOrder;
 use MiraklSeller\Api\Helper\Order as ApiOrder;
 use MiraklSeller\Api\Model\Connection;
@@ -75,35 +73,28 @@ class Process extends AbstractHelper
     protected $priceHelper;
 
     /**
-     * @var GetStockItemConfigurationInterface
+     * @var ObjectManagerInterface
      */
-    protected $getStockItemConfiguration;
+    protected $objectManager;
 
     /**
-     * @var StockByWebsiteIdResolverInterface
+     * @var bool
      */
-    protected $stockByWebsiteId;
+    protected $isMsiEnabled;
 
     /**
-     * @var GetProductSalableQtyInterface
-     */
-    protected $getProductSalableQty;
-
-    /**
-     * @param   Context                             $context
-     * @param   ProductRepositoryInterface          $productRepository
-     * @param   StockRegistryInterface              $stockRegistry
-     * @param   ApiOrder                            $apiOrder
-     * @param   Config                              $config
-     * @param   ConnectionFactory                   $connectionFactory
-     * @param   ConnectionResourceFactory           $connectionResourceFactory
-     * @param   Backorder                           $backorderHandler
-     * @param   InsufficientStock                   $insufficientStockHandler
-     * @param   PricesVariations                    $pricesVariationsHandler
-     * @param   PriceHelper                         $priceHelper
-     * @param   GetStockItemConfigurationInterface  $getStockItemConfiguration
-     * @param   StockByWebsiteIdResolverInterface   $stockByWebsiteId
-     * @param   GetProductSalableQtyInterface       $getProductSalableQty
+     * @param   Context                     $context
+     * @param   ProductRepositoryInterface  $productRepository
+     * @param   StockRegistryInterface      $stockRegistry
+     * @param   ApiOrder                    $apiOrder
+     * @param   Config                      $config
+     * @param   ConnectionFactory           $connectionFactory
+     * @param   ConnectionResourceFactory   $connectionResourceFactory
+     * @param   Backorder                   $backorderHandler
+     * @param   InsufficientStock           $insufficientStockHandler
+     * @param   PricesVariations            $pricesVariationsHandler
+     * @param   PriceHelper                 $priceHelper
+     * @param   ObjectManagerInterface      $objectManager
      */
     public function __construct(
         Context $context,
@@ -117,9 +108,7 @@ class Process extends AbstractHelper
         InsufficientStock $insufficientStockHandler,
         PricesVariations $pricesVariationsHandler,
         PriceHelper $priceHelper,
-        GetStockItemConfigurationInterface $getStockItemConfiguration,
-        StockByWebsiteIdResolverInterface $stockByWebsiteId,
-        GetProductSalableQtyInterface $getProductSalableQty
+        ObjectManagerInterface $objectManager
     ) {
         parent::__construct($context);
 
@@ -133,9 +122,8 @@ class Process extends AbstractHelper
         $this->insufficientStockHandler  = $insufficientStockHandler;
         $this->pricesVariationsHandler   = $pricesVariationsHandler;
         $this->priceHelper               = $priceHelper;
-        $this->getStockItemConfiguration = $getStockItemConfiguration;
-        $this->stockByWebsiteId          = $stockByWebsiteId;
-        $this->getProductSalableQty      = $getProductSalableQty;
+        $this->objectManager             = $objectManager;
+        $this->isMsiEnabled              = $objectManager->get(\MiraklSeller\Core\Helper\Data::class)->isMsiEnabled();
     }
 
     /**
@@ -184,7 +172,11 @@ class Process extends AbstractHelper
         // Build order lines to accept
         $orderLines = [];
 
-        $stockId = $this->stockByWebsiteId->execute($connection->getWebsiteId())->getStockId();
+        $stockId = 1;
+        if ($this->isMsiEnabled) {
+            $stockByWebsiteId = $this->objectManager->get('Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface');
+            $stockId = $stockByWebsiteId->execute($connection->getWebsiteId())->getStockId();
+        }
 
         /** @var \Mirakl\MMP\Common\Domain\Order\ShopOrderLine $orderLine */
         foreach ($miraklOrder->getOrderLines() as $orderLine) {
@@ -205,7 +197,14 @@ class Process extends AbstractHelper
                 }
 
                 // Try to load associated stock item
-                $stockQty = $this->getProductSalableQty->execute($offerSku, $stockId);
+                $stockItem = null;
+                if ($this->isMsiEnabled) {
+                    $getProductSalableQty = $this->objectManager->get('Magento\InventorySalesApi\Api\GetProductSalableQtyInterface');
+                    $stockQty = $getProductSalableQty->execute($offerSku, $stockId);
+                } else {
+                    $stockItem = $this->stockRegistry->getStockItem($product->getId());
+                    $stockQty = $stockItem->getIsInStock() ? $stockItem->getQty() : 0;
+                }
 
                 if (!$stockQty) {
                     // Case we have out of stock flag on product
@@ -217,8 +216,15 @@ class Process extends AbstractHelper
                     $accepted = false; // Insufficient stock config is "auto reject item"
                 } elseif ($stockQty < $orderLine->getQuantity()) {
                     // Case we have stock item qty under order line qty
-                    $stockItemConfig = $this->getStockItemConfiguration->execute($offerSku, $stockId);
-                    if (!$stockItemConfig->getBackorders()) {
+                    if ($this->isMsiEnabled) {
+                        $getStockItemConfiguration = $this->objectManager
+                            ->get('Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface');
+                        $stockItemConfig = $getStockItemConfiguration->execute($offerSku, $stockId);
+                        $canBackorder = $stockItemConfig->getBackorders();
+                    } else {
+                        $canBackorder = $stockItem->getBackorders();
+                    }
+                    if (!$canBackorder) {
                         // Case we have backorders disabled on stock item and not enough stock
                         if ($this->insufficientStockHandler->isManageOrderManually()) {
                             return $process->output(__('Product with SKU "%1" has not enough stock. Please handle order manually.', $offerSku));

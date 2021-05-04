@@ -2,9 +2,7 @@
 namespace MiraklSeller\Core\Model\Listing\Export;
 
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
-use Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface;
-use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
-use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
+use Magento\Framework\ObjectManagerInterface;
 use MiraklSeller\Core\Helper\Config;
 use MiraklSeller\Core\Helper\Listing\Product as ProductHelper;
 use MiraklSeller\Core\Model\Listing;
@@ -34,33 +32,26 @@ class Offers extends AbstractExport
     protected $productCollectionFactory;
 
     /**
-     * @var IsSingleSourceModeInterface
+     * @var ObjectManagerInterface
      */
-    protected $isSingleSourceMode;
+    protected $objectManager;
 
     /**
-     * @var StockByWebsiteIdResolverInterface
+     * @var bool
      */
-    protected $stockByWebsiteId;
+    protected $isMsiEnabled;
 
     /**
-     * @var GetProductSalableQtyInterface
-     */
-    protected $getProductSalableQty;
-
-    /**
-     * @param   Config                              $config
-     * @param   ProductHelper                       $productHelper
-     * @param   OfferFormatter                      $offerFormatter
-     * @param   ProductFormatter                    $productFormatter
-     * @param   AdditionalFieldFormatter            $additionalFieldFormatter
-     * @param   ProductResource                     $productResource
-     * @param   AttributeFactory                    $attributeFactory
-     * @param   OfferFactory                        $offerFactory
-     * @param   ProductCollectionFactory            $productCollectionFactory
-     * @param   IsSingleSourceModeInterface         $isSingleSourceMode
-     * @param   StockByWebsiteIdResolverInterface   $stockByWebsiteId
-     * @param   GetProductSalableQtyInterface       $getProductSalableQty
+     * @param   Config                      $config
+     * @param   ProductHelper               $productHelper
+     * @param   OfferFormatter              $offerFormatter
+     * @param   ProductFormatter            $productFormatter
+     * @param   AdditionalFieldFormatter    $additionalFieldFormatter
+     * @param   ProductResource             $productResource
+     * @param   AttributeFactory            $attributeFactory
+     * @param   OfferFactory                $offerFactory
+     * @param   ProductCollectionFactory    $productCollectionFactory
+     * @param   ObjectManagerInterface      $objectManager
      */
     public function __construct(
         Config $config,
@@ -72,9 +63,7 @@ class Offers extends AbstractExport
         AttributeFactory $attributeFactory,
         OfferFactory $offerFactory,
         ProductCollectionFactory $productCollectionFactory,
-        IsSingleSourceModeInterface $isSingleSourceMode,
-        StockByWebsiteIdResolverInterface $stockByWebsiteId,
-        GetProductSalableQtyInterface $getProductSalableQty
+        ObjectManagerInterface $objectManager
     ) {
         parent::__construct(
             $config,
@@ -85,12 +74,11 @@ class Offers extends AbstractExport
             $productResource
         );
 
-        $this->attributeFactory = $attributeFactory;
-        $this->offerFactory = $offerFactory;
+        $this->attributeFactory         = $attributeFactory;
+        $this->offerFactory             = $offerFactory;
         $this->productCollectionFactory = $productCollectionFactory;
-        $this->isSingleSourceMode = $isSingleSourceMode;
-        $this->stockByWebsiteId = $stockByWebsiteId;
-        $this->getProductSalableQty = $getProductSalableQty;
+        $this->objectManager            = $objectManager;
+        $this->isMsiEnabled             = $objectManager->get(\MiraklSeller\Core\Helper\Data::class)->isMsiEnabled();
     }
 
     /**
@@ -135,7 +123,12 @@ class Offers extends AbstractExport
         $collection->load(); // Load collection to be able to use methods below
         $collection->overrideByParentData([], [], true);
 
-        $stockId = $this->stockByWebsiteId->execute($listing->getWebsiteId())->getStockId();
+        $stockId = 1;
+        if ($this->isMsiEnabled) {
+            /** @var \Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface $stockByWebsiteId */
+            $stockByWebsiteId = $this->objectManager->get('Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface');
+            $stockId = $stockByWebsiteId->execute($listing->getWebsiteId())->getStockId();
+        }
 
         $data = [];
         foreach ($collection as $product) {
@@ -183,9 +176,16 @@ class Offers extends AbstractExport
         if ($product['offer_import_status'] == Offer::OFFER_DELETE) {
             // Set quantity to zero if offer has been flagged as "to delete"
             return 0;
-        } elseif (!$this->isSingleSourceMode->execute()) {
-            // Handle multi-source inventory if enabled
-            return $this->getProductSalableQty->execute($product['sku'], $stockId);
+        } elseif ($this->isMsiEnabled) {
+            /** @var \Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface $isSingleSourceMode */
+            $isSingleSourceMode = $this->objectManager->get('Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface');
+            if (!$isSingleSourceMode->execute()) {
+                // Handle multi-source inventory if enabled
+                /** @var \Magento\InventorySalesApi\Api\GetProductSalableQtyInterface $getProductSalableQty */
+                $getProductSalableQty = $this->objectManager->get('Magento\InventorySalesApi\Api\GetProductSalableQtyInterface');
+
+                return $getProductSalableQty->execute($product['sku'], $stockId);
+            }
         }
 
         return $product['qty'];

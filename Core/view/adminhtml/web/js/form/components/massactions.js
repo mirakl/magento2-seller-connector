@@ -17,10 +17,7 @@ define([
          * @returns {Function} Callback function.
          */
         _getCallback: function (action, selections) {
-            console.log(this.source.ns + '.' + this.source.parentName
-                + '.' + this.source.parentName + '_columns');
-            var listing = registry.get(this.source.ns + '.' + this.source.parentName
-                + '.' + this.source.parentName + '_columns');
+            var listing = registry.get(this.source.ns + '.' + this.source.parentName + '.product_columns');
 
             return function() {
                 listing.executeMassAction(action, selections);
