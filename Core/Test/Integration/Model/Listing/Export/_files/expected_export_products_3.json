@@ -1,6 +1,6 @@
 {
     "36": {
-        "image_1": "http://foobar.com/pub/media/catalog/product/m/g/mg04-bk-0.jpg",
+        "image_1": "http://foobar.com/media/catalog/product/m/g/mg04-bk-0.jpg",
         "category": "Default Category/Gear/Watches",
         "variant_group_code": "",
         "activity": "Recreation",
@@ -43,10 +43,11 @@
         "sku": "24-MG04",
         "cost": null,
         "msrp_display_actual_price_type": "0",
-        "msrp": null
+        "msrp": null,
+        "tax_class_id": "2"
     },
     "37": {
-        "image_1": "http://foobar.com/pub/media/catalog/product/m/g/mg01-bk-0.jpg",
+        "image_1": "http://foobar.com/media/catalog/product/m/g/mg01-bk-0.jpg",
         "category": "Default Category/Gear/Watches",
         "variant_group_code": "",
         "activity": "Recreation",
@@ -89,10 +90,11 @@
         "sku": "24-MG01",
         "cost": null,
         "msrp_display_actual_price_type": "0",
-        "msrp": null
+        "msrp": null,
+        "tax_class_id": "2"
     },
     "38": {
-        "image_1": "http://foobar.com/pub/media/catalog/product/m/g/mg03-br-0.jpg",
+        "image_1": "http://foobar.com/media/catalog/product/m/g/mg03-br-0.jpg",
         "category": "Default Category/Collections/New Luma Yoga Collection",
         "variant_group_code": "",
         "activity": "Recreation",
@@ -135,6 +137,7 @@
         "sku": "24-MG03",
         "cost": null,
         "msrp_display_actual_price_type": "0",
-        "msrp": null
+        "msrp": null,
+        "tax_class_id": "2"
     }
 }

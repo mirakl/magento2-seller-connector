@@ -1,6 +1,6 @@
 {
     "267": {
-        "image_1": "http://foobar.com/pub/media/catalog/product/m/j/mj01-orange_main_2.jpg",
+        "image_1": "http://foobar.com/media/catalog/product/m/j/mj01-orange_main_2.jpg",
         "category": "Default Category/Men/Tops/Jackets",
         "variant_group_code": "MJ01-Orange-XL",
         "activity": null,
@@ -43,10 +43,11 @@
         "sku": "MJ01-XL-Orange",
         "cost": null,
         "msrp_display_actual_price_type": "0",
-        "msrp": null
+        "msrp": null,
+        "tax_class_id": "2"
     },
     "268": {
-        "image_1": "http://foobar.com/pub/media/catalog/product/m/j/mj01-red_main_2.jpg",
+        "image_1": "http://foobar.com/media/catalog/product/m/j/mj01-red_main_2.jpg",
         "category": "Default Category/Men/Tops/Jackets",
         "variant_group_code": "MJ01-Red-XL",
         "activity": null,
@@ -89,10 +90,11 @@
         "sku": "MJ01-XL-Red",
         "cost": null,
         "msrp_display_actual_price_type": "0",
-        "msrp": null
+        "msrp": null,
+        "tax_class_id": "2"
     },
     "269": {
-        "image_1": "http://foobar.com/pub/media/catalog/product/m/j/mj01-yellow_main_2.jpg",
+        "image_1": "http://foobar.com/media/catalog/product/m/j/mj01-yellow_main_2.jpg",
         "category": "Default Category/Men/Tops/Jackets",
         "variant_group_code": "MJ01-Yellow-XL",
         "activity": null,
@@ -135,6 +137,7 @@
         "sku": "MJ01-XL-Yellow",
         "cost": null,
         "msrp_display_actual_price_type": "0",
-        "msrp": null
+        "msrp": null,
+        "tax_class_id": "2"
     }
 }

@@ -6,6 +6,7 @@ use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Model\ResourceModel\ProductFactory as ProductResourceFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as AttributeCollection;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
+use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 
 class Product
@@ -40,7 +41,6 @@ class Product
         'options_container',
         'custom_design.*',
         'page_layout',
-        'tax_class_id',
         'is_recurring',
         'recurring_profile',
         'tier_price',
@@ -75,6 +75,20 @@ class Product
         $this->productResource = $productResourceFactory->create();
         $this->attributeCollectionFactory = $attributeCollectionFactory;
         $this->eventManager = $eventManager;
+    }
+
+    /**
+     * @return  array
+     */
+    public function getExcludedAttributesRegexp()
+    {
+        $regexp = new DataObject(['excluded_attributes' => $this->excludedAttributesRegexpArray]);
+
+        $this->eventManager->dispatch('mirakl_seller_excluded_attributes_regexp', [
+            'regexp' => $regexp,
+        ]);
+
+        return $regexp->getData('excluded_attributes');
     }
 
     /**
@@ -122,7 +136,7 @@ class Product
      */
     protected function isAttributeExportable(EavAttribute $attribute)
     {
-        $exclAttrRegexp = sprintf('/^(%s)$/i', implode('|', $this->excludedAttributesRegexpArray));
+        $exclAttrRegexp = sprintf('/^(%s)$/i', implode('|', $this->getExcludedAttributesRegexp()));
 
         return $attribute->getFrontendLabel()
             && !$attribute->isStatic()

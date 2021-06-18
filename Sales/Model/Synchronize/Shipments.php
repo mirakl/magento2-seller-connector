@@ -139,7 +139,7 @@ class Shipments
 
                     try {
                         $updated = true;
-                        $this->shipmentCreator->createFull($magentoOrder, $miraklOrder);
+                        $this->shipmentCreator->createFull($magentoOrder, $miraklOrder, $connection);
                     } catch (\Exception $e) {
                         throw new LocalizedException(__('An error occurred: %1', $e->getMessage()));
                     }

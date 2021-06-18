@@ -1,6 +1,6 @@
 {
     "341": {
-        "image_1": "http://foobar.com/pub/media/catalog/product/m/j/mj09-blue_main_3.jpg",
+        "image_1": "http://foobar.com/media/catalog/product/m/j/mj09-blue_main_3.jpg",
         "category": "Default Category/Men/Tops/Jackets",
         "variant_group_code": "MJ09",
         "activity": null,
@@ -43,10 +43,11 @@
         "sku": "MJ09-M-Blue",
         "cost": null,
         "msrp_display_actual_price_type": "0",
-        "msrp": null
+        "msrp": null,
+        "tax_class_id": "2"
     },
     "342": {
-        "image_1": "http://foobar.com/pub/media/catalog/product/m/j/mj09-white_main_3.jpg",
+        "image_1": "http://foobar.com/media/catalog/product/m/j/mj09-white_main_3.jpg",
         "category": "Default Category/Men/Tops/Jackets",
         "variant_group_code": "MJ09",
         "activity": null,
@@ -89,10 +90,11 @@
         "sku": "MJ09-M-White",
         "cost": null,
         "msrp_display_actual_price_type": "0",
-        "msrp": null
+        "msrp": null,
+        "tax_class_id": "2"
     },
     "343": {
-        "image_1": "http://foobar.com/pub/media/catalog/product/m/j/mj09-yellow_main_3.jpg",
+        "image_1": "http://foobar.com/media/catalog/product/m/j/mj09-yellow_main_3.jpg",
         "category": "Default Category/Men/Tops/Jackets",
         "variant_group_code": "MJ09",
         "activity": null,
@@ -135,10 +137,11 @@
         "sku": "MJ09-M-Yellow",
         "cost": null,
         "msrp_display_actual_price_type": "0",
-        "msrp": null
+        "msrp": null,
+        "tax_class_id": "2"
     },
     "344": {
-        "image_1": "http://foobar.com/pub/media/catalog/product/m/j/mj09-blue_main_3.jpg",
+        "image_1": "http://foobar.com/media/catalog/product/m/j/mj09-blue_main_3.jpg",
         "category": "Default Category/Men/Tops/Jackets",
         "variant_group_code": "MJ09",
         "activity": null,
@@ -181,10 +184,11 @@
         "sku": "MJ09-L-Blue",
         "cost": null,
         "msrp_display_actual_price_type": "0",
-        "msrp": null
+        "msrp": null,
+        "tax_class_id": "2"
     },
     "345": {
-        "image_1": "http://foobar.com/pub/media/catalog/product/m/j/mj09-white_main_3.jpg",
+        "image_1": "http://foobar.com/media/catalog/product/m/j/mj09-white_main_3.jpg",
         "category": "Default Category/Men/Tops/Jackets",
         "variant_group_code": "MJ09",
         "activity": null,
@@ -227,6 +231,7 @@
         "sku": "MJ09-L-White",
         "cost": null,
         "msrp_display_actual_price_type": "0",
-        "msrp": null
+        "msrp": null,
+        "tax_class_id": "2"
     }
 }

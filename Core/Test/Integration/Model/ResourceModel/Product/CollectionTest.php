@@ -481,16 +481,16 @@ class CollectionTest extends TestCase
         return [
             [
                 [12, 14, 17], [
-                    12 => ['entity_id' => '12', 'image_1' => 'http://foobar.com/pub/media/catalog/product/w/b/wb03-purple-0.jpg'],
-                    14 => ['entity_id' => '14', 'image_1' => 'http://foobar.com/pub/media/catalog/product/w/b/wb04-blue-0.jpg'],
-                    17 => ['entity_id' => '17', 'image_1' => 'http://foobar.com/pub/media/catalog/product/u/g/ug04-bk-0.jpg'],
+                    12 => ['entity_id' => '12', 'image_1' => 'http://foobar.com/media/catalog/product/w/b/wb03-purple-0.jpg'],
+                    14 => ['entity_id' => '14', 'image_1' => 'http://foobar.com/media/catalog/product/w/b/wb04-blue-0.jpg'],
+                    17 => ['entity_id' => '17', 'image_1' => 'http://foobar.com/media/catalog/product/u/g/ug04-bk-0.jpg'],
                 ],
             ],
             [
                 [876, 877, 878], [
-                    876 => ['entity_id' => '876', 'image_1' => 'http://foobar.com/pub/media/catalog/product/m/p/mp12-red_main_2.jpg'],
-                    877 => ['entity_id' => '877', 'image_1' => 'http://foobar.com/pub/media/catalog/product/m/p/mp12-black_main_2.jpg'],
-                    878 => ['entity_id' => '878', 'image_1' => 'http://foobar.com/pub/media/catalog/product/m/p/mp12-blue_main_2.jpg'],
+                    876 => ['entity_id' => '876', 'image_1' => 'http://foobar.com/media/catalog/product/m/p/mp12-red_main_2.jpg'],
+                    877 => ['entity_id' => '877', 'image_1' => 'http://foobar.com/media/catalog/product/m/p/mp12-black_main_2.jpg'],
+                    878 => ['entity_id' => '878', 'image_1' => 'http://foobar.com/media/catalog/product/m/p/mp12-blue_main_2.jpg'],
                 ],
             ],
             [
