@@ -124,7 +124,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         }
 
         $attributeCode = $attribute->getAttributeCode();
-        $entityCol = $this->_isEnterprise ? 'row_id' : 'entity_id';
+        $entityCol = $this->getEntityCol();
 
         $valueTable1 = $attributeCode . '_t1';
         $valueTable2 = $attributeCode . '_t2';
@@ -310,7 +310,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
         /** @var EavAttribute $attribute */
         $attribute = $this->_eavConfig->getAttribute('catalog_category', 'name');
-        $entityCol = $this->_isEnterprise ? 'row_id' : 'entity_id';
+        $entityCol = $this->getEntityCol();
 
         $colsExprSql = [
             'category_id' => 'categories.entity_id',
@@ -425,10 +425,16 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         }
 
         // Retrieve products images
-        $productImages = $this->getProductImages($productIds);
+        $productImagesDefault = $this->getProductImages($productIds);
+
+        if (!$storeId = $this->getStoreId()) {
+            $storeId = $this->_storeManager->getDefaultStoreView()->getId();
+        }
+
+        $productImagesStore = $this->getProductImages($productIds, $storeId);
 
         // Retrieve parent product images for products without image associated
-        $productsWithoutImages = array_diff_key($this->_items, $productImages);
+        $productsWithoutImages = array_diff_key($this->_items, $productImagesDefault);
         if (!empty($productsWithoutImages)) {
             $parentProductIds = $this->getParentProductIds(array_keys($productsWithoutImages));
             if (!empty($parentProductIds)) {
@@ -441,7 +447,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                 foreach ($parentProductIds as $productId => $parentIds) {
                     foreach ($parentIds as $parentId) {
                         if (isset($parentProductImages[$parentId])) {
-                            $productImages[$productId] = $parentProductImages[$parentId];
+                            $productImagesDefault[$productId] = $parentProductImages[$parentId];
                             continue 2; // skip this product as soon as we have found some images for it
                         }
                     }
@@ -449,16 +455,21 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             }
         }
 
-        foreach ($productImages as $productId => $images) {
+        foreach ($productImagesDefault as $productId => $images) {
+            if (!empty($productImagesStore[$productId])) {
+                // Override default images by store view images if available
+                $images = $productImagesStore[$productId];
+            }
             foreach ($images as $i => $image) {
                 if ($nbImage <= $i) {
                     break;
                 }
                 $imageKey = \MiraklSeller\Core\Model\Listing\Export\Formatter\Product::IMAGE_FIELD . ($i + 1);
-                $this->_items[$productId][$imageKey] = $this->getMediaUrl($image['file_default']);
+                $this->_items[$productId][$imageKey] = $this->getMediaUrl($image['file']);
             }
         }
-        unset($productImages);
+        unset($productImagesDefault);
+        unset($productImagesStore);
 
         $this->setFlag('images_url_added', true);
 
@@ -476,7 +487,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             return $this;
         }
 
-        $entityCol = $this->_isEnterprise ? 'row_id' : 'entity_id';
+        $entityCol = $this->getEntityCol();
         $tierPricesSql = new \Zend_Db_Expr("GROUP_CONCAT(DISTINCT CONCAT_WS('|', FLOOR(tier_prices.qty), ROUND(tier_prices.value, 2)) SEPARATOR ',')");
         $this->getSelect()
             ->joinLeft(
@@ -624,6 +635,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * @return  string
+     */
+    protected function getEntityCol()
+    {
+        return $this->getEntity()->getLinkField();
+    }
+
+    /**
      * @param   string  $file
      * @return  string
      */
@@ -691,29 +710,25 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @param   array   $productIds
+     * @param   int     $storeId
      * @return  array
      */
-    public function getProductImages(array $productIds)
+    public function getProductImages(array $productIds, $storeId = 0)
     {
         if (empty($productIds)) {
             return [];
         }
 
-        $storeId = $this->getStoreId();
-        if (!$storeId) {
-            // Use default store view to avoid joining tables twice on store_id = 0
-            $storeId = $this->_storeManager->getDefaultStoreView()->getId();
-        }
-
         $attribute = $this->getAttribute('image');
         $attributeId = $attribute ? $attribute->getId() : null;
 
-        $entityCol = $this->_isEnterprise ? 'row_id' : 'entity_id';
+        $entityCol = $this->getEntityCol();
+
         $select = $this->_conn->select()
             ->from(['cpe' => $this->getTable('catalog_product_entity')], 'entity_id')
             ->joinLeft(
                 ['mgv' => $this->getTable('catalog_product_entity_media_gallery_value')],
-                "(mgv.$entityCol = cpe.$entityCol AND mgv.store_id = $storeId)",
+                "(mgv.$entityCol = cpe.$entityCol AND mgv.store_id = $storeId AND mgv.disabled = 0)",
                 ['label', 'position']
             )
             ->joinLeft(
@@ -725,31 +740,20 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                 ['mgvbi' => $this->getTable('catalog_product_entity_varchar')],
                 "(mgvbi.$entityCol = cpe.$entityCol AND mg1.value = mgvbi.value AND " .
                 "mgvbi.store_id = $storeId AND mgvbi.attribute_id = $attributeId)",
-                ['base_image' => 'value_id']
+                []
             )
-            ->joinLeft(
-                ['mgdv' => $this->getTable('catalog_product_entity_media_gallery_value')],
-                "(mgdv.$entityCol = cpe.$entityCol AND mgdv.store_id = 0)",
-                ['label_default' => 'label', 'position_default' => 'position']
-            )
-            ->joinLeft(
-                ['mg2' => $this->getTable('catalog_product_entity_media_gallery')],
-                'mg2.value_id = mgdv.value_id',
-                ['file_default' => 'value']
-            )
-            ->joinLeft(
-                ['mgdvbi' => $this->getTable('catalog_product_entity_varchar')],
-                "(mgdvbi.$entityCol = cpe.$entityCol AND mg2.value = mgdvbi.value AND " .
-                "mgdvbi.store_id = $storeId AND mgdvbi.attribute_id = $attributeId)",
-                ['base_image_default' => 'value_id']
-            )
-            ->where('cpe.entity_id IN (?)', $productIds)
-            ->order(['base_image DESC', 'base_image_default DESC', 'position ASC', 'position_default ASC', 'file ASC', 'file_default ASC']);
+            ->where('cpe.entity_id IN (?)', $productIds);
+
+        if ($storeId) {
+            $select->where('mg1.value IS NOT NULL');
+        }
+
+        $select->order(['entity_id ASC', 'position ASC', 'file ASC']);
 
         $images = [];
         $stmt = $this->_conn->query($select);
         while ($row = $stmt->fetch()) {
-            if (empty($row['file']) && empty($row['file_default'])) {
+            if (empty($row['file'])) {
                 continue;
             }
             $productId = $row['entity_id'];
@@ -892,7 +896,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
         $storeId = $this->getStoreId();
 
-        $entityCol = $this->_isEnterprise ? 'row_id' : 'entity_id';
+        $entityCol = $this->getEntityCol();
         $linkCol = $this->_isEnterprise ? 'child.row_id' : 'link.product_id';
         $visibilityAttribute = $this->_eavConfig->getAttribute(
             \Magento\Catalog\Model\Product::ENTITY,

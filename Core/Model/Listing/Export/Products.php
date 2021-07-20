@@ -33,6 +33,7 @@ class Products extends AbstractExport
         $defaultProductData = $this->getDefaultProductData();
 
         if ($nbImageToExport >= 1) {
+            $collection->setStoreId($listing->getStoreId());
             $collection->addMediaGalleryAttribute($nbImageToExport);
         }
 
