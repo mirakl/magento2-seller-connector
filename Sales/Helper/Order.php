@@ -118,6 +118,97 @@ class Order extends AbstractHelper
     }
 
     /**
+     * Will return Mirakl order tax details like that:
+     * <code>
+     * [
+     *     'product' => [
+     *         'sku_1' => [
+     *             'tax_code_1' => 7.20,
+     *             'tax_code_2' => 2.08,
+     *         ],
+     *         'sku_2' => [
+     *             'tax_code_1' => 3.81,
+     *             'tax_code_2' => 0.87,
+     *             'tax_code_3' => 0.19,
+     *         ],
+     *     ],
+     *     'shipping' => [
+     *         'sku_1' => [
+     *             'tax_code_1' => 1.78,
+     *         ],
+     *         'sku_2' => [
+     *             'tax_code_1' => 0.99,
+     *         ],
+     *     ],
+     * ]
+     * </code>
+     *
+     * @param   ShopOrder   $miraklOrder
+     * @return  array
+     */
+    public function getMiraklOrderTaxDetails($miraklOrder)
+    {
+        $result = [];
+
+        /** @var \Mirakl\MMP\Common\Domain\Order\ShopOrderLine $orderLine */
+        foreach ($miraklOrder->getOrderLines() as $orderLine) {
+            if (in_array($orderLine->getStatus()->getState(), [OrderState::REFUSED, OrderState::CANCELED])) {
+                continue; // Do not use refused or canceled order lines
+            }
+
+            $sku = $orderLine->getOffer()->getSku();
+
+            /** @var \Mirakl\MMP\Common\Domain\Order\Tax\OrderTaxAmount $tax */
+            foreach ($orderLine->getTaxes() as $tax) {
+                if (!isset($result['product'][$sku][$tax->getCode()])) {
+                    $result['product'][$sku][$tax->getCode()] = 0;
+                }
+                $result['product'][$sku][$tax->getCode()] += $tax->getAmount();
+            }
+
+            foreach ($orderLine->getShippingTaxes() as $tax) {
+                if (!isset($result['shipping'][$sku][$tax->getCode()])) {
+                    $result['shipping'][$sku][$tax->getCode()] = 0;
+                }
+                $result['shipping'][$sku][$tax->getCode()] += $tax->getAmount();
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Will return Mirakl order tax details like that:
+     * <code>
+     * [
+     *     'tax_code_1' => 13.78,
+     *     'tax_code_2' => 2.95,
+     *     'tax_code_3' => 0.19,
+     * ]
+     * </code>
+     *
+     * @param   ShopOrder   $miraklOrder
+     * @return  array
+     */
+    public function getMiraklOrderTaxDetailsComputed($miraklOrder)
+    {
+        $result = [];
+
+        foreach ($this->getMiraklOrderTaxDetails($miraklOrder) as $orderLineTaxes) {
+            foreach ($orderLineTaxes as $taxDetails) {
+                foreach ($taxDetails as $code => $amount) {
+                    if (!isset($result[$code])) {
+                        $result[$code] = 0;
+                    }
+                    $result[$code] += $amount;
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * @param   ShopOrder   $miraklOrder
      * @param   bool        $withShipping
      * @return  float
@@ -142,7 +233,7 @@ class Order extends AbstractHelper
     {
         $taxAmount = 0;
 
-        if ($miraklOrderLine->getStatus()->getState() !== OrderState::REFUSED) {
+        if (!in_array($miraklOrderLine->getStatus()->getState(), [OrderState::REFUSED, OrderState::CANCELED])) {
             /** @var OrderTaxAmount $shippingTax */
             foreach ($miraklOrderLine->getTaxes() as $tax) {
                 $taxAmount += $tax->getAmount();
@@ -160,7 +251,7 @@ class Order extends AbstractHelper
     {
         $taxAmount = 0;
 
-        if ($miraklOrderLine->getStatus()->getState() !== OrderState::REFUSED) {
+        if (!in_array($miraklOrderLine->getStatus()->getState(), [OrderState::REFUSED, OrderState::CANCELED])) {
             /** @var OrderTaxAmount $shippingTax */
             foreach ($miraklOrderLine->getShippingTaxes() as $tax) {
                 $taxAmount += $tax->getAmount();
@@ -198,6 +289,23 @@ class Order extends AbstractHelper
         $collection->addFieldToFilter('mirakl_order_id', $miraklOrderId);
 
         return $collection->count() ? $collection->getFirstItem() : null;
+    }
+
+    /**
+     * @param   OrderModel  $order
+     * @param   string      $sku
+     * @return  OrderModel\Item|null
+     */
+    public function getOrderItemBySku(OrderModel $order, $sku)
+    {
+        /** @var OrderModel\Item $orderItem */
+        foreach ($order->getAllVisibleItems() as $orderItem) {
+            if ($orderItem->getSku() == $sku) {
+                return $orderItem;
+            }
+        }
+
+        return null;
     }
 
     /**

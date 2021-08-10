@@ -38,12 +38,12 @@ class ConnectionTest extends TestCase
 
         $this->responseMock = $this->getMockBuilder(Response::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStatusCode'])
+            ->onlyMethods(['getStatusCode'])
             ->getMock();
 
         $shopApi = $this->getMockBuilder(ShopApi::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAccount'])
+            ->onlyMethods(['getAccount'])
             ->getMock();
         $shopApi->expects($this->any())
             ->method('getAccount')

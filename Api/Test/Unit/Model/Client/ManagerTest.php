@@ -55,7 +55,7 @@ class ManagerTest extends TestCase
         /** @var Connection|\PHPUnit\Framework\MockObject\MockObject $connection */
         $connection = $this->getMockBuilder(Connection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMock();
         $connection->expects($this->any())
             ->method('getId')

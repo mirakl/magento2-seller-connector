@@ -16,9 +16,7 @@ class InvoiceTest extends TestCase
     public function testCreateInvoice()
     {
         /** @var OrderCreator $orderCreator */
-        $orderCreator = $this->objectManager->create(OrderCreator::class, [
-            'customerEmail' => 'test@do-not-use.com',
-        ]);
+        $orderCreator = $this->objectManager->create(OrderCreator::class);
 
         /** @var ShopOrder $miraklOrderMock */
         $miraklOrderMock = $this->objectManager->create(ShopOrder::class, [

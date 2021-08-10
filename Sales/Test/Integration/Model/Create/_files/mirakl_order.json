@@ -15,12 +15,12 @@
             "country": "France",
             "firstname": "Johann",
             "lastname": "Reinké",
-            "phone": "0619874662",
+            "phone": "0601020304",
             "phone_secondary": "0123456789",
             "state": null,
-            "street_1": "45 rue de la Bienfaisance",
+            "street_1": "12 rue de Lübeck",
             "street_2": "",
-            "zip_code": "75008"
+            "zip_code": "75116"
         },
         "civility": "Mr",
         "customer_id": "34053485",
@@ -38,9 +38,9 @@
             "phone": "0987654321",
             "phone_secondary": "0123456789",
             "state": null,
-            "street_1": "45 rue de la Bienfaisance",
-            "street_2": "Etage 4",
-            "zip_code": "75008"
+            "street_1": "12 rue de Lübeck",
+            "street_2": "Étage 4",
+            "zip_code": "75116"
         }
     },
     "has_customer_message": true,

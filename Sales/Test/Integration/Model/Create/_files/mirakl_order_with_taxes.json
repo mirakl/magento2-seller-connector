@@ -1,0 +1,229 @@
+{
+    "acceptance_decision_date": "2021-08-04T15:13:31Z",
+    "can_cancel": false,
+    "can_shop_ship": true,
+    "channel": null,
+    "commercial_id": "000000086",
+    "created_date": "2021-08-04T15:12:50Z",
+    "currency_iso_code": "EUR",
+    "customer": {
+        "billing_address": {
+            "city": "Paris",
+            "company": "Mirakl",
+            "country": "France",
+            "country_iso_code": "FRA",
+            "firstname": "Veronica",
+            "lastname": "Costello",
+            "phone": "0601020304",
+            "state": "Paris",
+            "street_1": "12 rue de Lübeck",
+            "street_2": "",
+            "zip_code": "75116"
+        },
+        "civility": "Mr",
+        "customer_id": "1",
+        "firstname": "Veronica",
+        "lastname": "Costello",
+        "locale": "en_US",
+        "shipping_address": {
+            "additional_info": null,
+            "city": "Paris",
+            "company": null,
+            "country": "France",
+            "country_iso_code": "FRA",
+            "firstname": "Veronica",
+            "lastname": "Costello",
+            "phone": "0987654321",
+            "state": "Paris",
+            "street_1": "12 rue de Lübeck",
+            "street_2": "Étage 2",
+            "zip_code": "75116"
+        }
+    },
+    "customer_debited_date": "2021-08-04T15:15:22.652Z",
+    "customer_notification_email": "",
+    "delivery_date": null,
+    "fulfillment": {
+        "center": {
+            "code": "DEFAULT"
+        }
+    },
+    "has_customer_message": false,
+    "has_incident": false,
+    "has_invoice": false,
+    "last_updated_date": "2021-08-04T15:15:22Z",
+    "leadtime_to_ship": 5,
+    "order_additional_fields": [],
+    "order_id": "000000086-A",
+    "order_lines": [
+        {
+            "can_refund": true,
+            "cancelations": [],
+            "category_code": "4",
+            "category_label": "Bags",
+            "commission_fee": 4.71,
+            "commission_rate_vat": 20.0000,
+            "commission_taxes": [
+                {
+                    "amount": 0.94,
+                    "code": "TAXDEFAULT",
+                    "rate": 20.0000
+                }
+            ],
+            "commission_vat": 0.94,
+            "created_date": "2021-08-04T15:12:50Z",
+            "debited_date": "2021-08-04T15:15:22Z",
+            "description": null,
+            "last_updated_date": "2021-08-04T15:15:22Z",
+            "offer_id": 2238,
+            "offer_sku": "24-MB01",
+            "offer_state_code": "11",
+            "order_line_additional_fields": [],
+            "order_line_id": "139",
+            "order_line_index": 1,
+            "order_line_state": "SHIPPING",
+            "order_line_state_reason_code": null,
+            "order_line_state_reason_label": null,
+            "price": 15.64,
+            "price_additional_info": null,
+            "price_unit": 7.82,
+            "product_medias": [],
+            "product_sku": "24-MB01",
+            "product_title": "Joust Duffle Bag",
+            "promotions": [],
+            "quantity": 2,
+            "received_date": null,
+            "refunds": [],
+            "shipped_date": null,
+            "shipping_price": 7.90,
+            "shipping_price_additional_unit": null,
+            "shipping_price_unit": null,
+            "shipping_taxes": [
+                {
+                    "amount": 0.52,
+                    "code": "TVA5.5",
+                    "tax_calculation_rule": "NONE"
+                },
+                {
+                    "amount": 1.58,
+                    "code": "TVA20",
+                    "tax_calculation_rule": "NONE"
+                }
+            ],
+            "taxes": [
+                {
+                    "amount": 1.03,
+                    "code": "TVA5.5",
+                    "tax_calculation_rule": "NONE"
+                },
+                {
+                    "amount": 3.13,
+                    "code": "TVA20",
+                    "tax_calculation_rule": "NONE"
+                }
+            ],
+            "total_commission": 5.65,
+            "total_price": 23.54
+        },
+        {
+            "can_refund": true,
+            "cancelations": [],
+            "category_code": "6",
+            "category_label": "Watches",
+            "commission_fee": 14.12,
+            "commission_rate_vat": 20.0000,
+            "commission_taxes": [
+                {
+                    "amount": 2.82,
+                    "code": "TAXDEFAULT",
+                    "rate": 20.0000
+                }
+            ],
+            "commission_vat": 2.82,
+            "created_date": "2021-08-04T15:12:50Z",
+            "debited_date": "2021-08-04T15:15:22Z",
+            "description": null,
+            "last_updated_date": "2021-08-04T15:15:22Z",
+            "offer_id": 2226,
+            "offer_sku": "24-WG09",
+            "offer_state_code": "5",
+            "order_line_additional_fields": [],
+            "order_line_id": "140",
+            "order_line_index": 2,
+            "order_line_state": "SHIPPING",
+            "order_line_state_reason_code": null,
+            "order_line_state_reason_label": null,
+            "price": 69.00,
+            "price_additional_info": "PC040210",
+            "price_unit": 69.00,
+            "product_medias": [
+                {
+                    "media_url": "/media/product/image/31006711-1c46-4104-b051-bc06ced3adb0",
+                    "mime_type": null,
+                    "type": "MEDIUM"
+                },
+                {
+                    "media_url": "/media/product/image/639b7855-e0a6-4178-8ffb-f83bc1323acb",
+                    "mime_type": null,
+                    "type": "LARGE"
+                },
+                {
+                    "media_url": "/media/product/image/6ba7c472-c466-4201-a6d1-a55a7d2439f6",
+                    "mime_type": null,
+                    "type": "SMALL"
+                }
+            ],
+            "product_sku": "24-WG09",
+            "product_title": "Luma Analog Watch",
+            "promotions": [],
+            "quantity": 1,
+            "received_date": null,
+            "refunds": [],
+            "shipped_date": null,
+            "shipping_price": 1.58,
+            "shipping_price_additional_unit": null,
+            "shipping_price_unit": null,
+            "shipping_taxes": [
+                {
+                    "amount": 0.10,
+                    "code": "TVA5.5",
+                    "tax_calculation_rule": "NONE"
+                },
+                {
+                    "amount": 0.32,
+                    "code": "TVA20",
+                    "tax_calculation_rule": "NONE"
+                }
+            ],
+            "taxes": [],
+            "total_commission": 16.94,
+            "total_price": 70.58
+        }
+    ],
+    "order_state": "SHIPPING",
+    "order_state_reason_code": null,
+    "order_state_reason_label": null,
+    "order_tax_mode": "TAX_EXCLUDED",
+    "paymentType": "checkmo",
+    "payment_type": "checkmo",
+    "payment_workflow": "PAY_ON_ACCEPTANCE",
+    "price": 84.64,
+    "promotions": {
+        "applied_promotions": [],
+        "total_deduced_amount": 0
+    },
+    "quote_id": null,
+    "shipping_carrier_code": null,
+    "shipping_company": null,
+    "shipping_deadline": "2021-08-09T15:14:41.399Z",
+    "shipping_price": 9.48,
+    "shipping_pudo_id": null,
+    "shipping_tracking": null,
+    "shipping_tracking_url": null,
+    "shipping_type_code": "STD",
+    "shipping_type_label": "Standard",
+    "shipping_zone_code": "FR",
+    "shipping_zone_label": "France",
+    "total_commission": 22.59,
+    "total_price": 94.12
+}

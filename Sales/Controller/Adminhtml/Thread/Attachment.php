@@ -35,7 +35,6 @@ class Attachment extends AbstractThread
                 ->setHeader('Pragma', 'public', true)
                 ->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true)
                 ->setHeader('Content-type', $document->getContentType(), true)
-                ->setHeader('Content-Length', $contentSize)
                 ->setHeader('Content-Disposition', 'attachment; filename=' . $document->getFileName());
 
             $result->setContents($document->getFile()->fread($contentSize));

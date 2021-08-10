@@ -6,6 +6,7 @@ use Mirakl\MMP\Common\Domain\Collection\Message\OrderMessageCollection;
 use Mirakl\MMP\Common\Domain\Message\MessageCreated;
 use Mirakl\MMP\Common\Domain\Message\Thread\ThreadCreated;
 use Mirakl\MMP\Common\Domain\Order\Message\CreateOrderThread;
+use Mirakl\MMP\Common\Domain\Order\Tax\OrderTaxMode;
 use Mirakl\MMP\Common\Domain\UserType;
 use Mirakl\MMP\Common\Request\Order\Message\CreateOrderThreadRequest;
 use Mirakl\MMP\Shop\Domain\Collection\Order\ShopOrderCollection;
@@ -138,7 +139,7 @@ class Order extends Client\MMP
     }
 
     /**
-     * (OR11) Get offers import information and stats
+     * (OR11) Fetches list of Mirakl orders from specified connection
      *
      * @param   Connection  $connection
      * @param   int         $offset
@@ -164,12 +165,14 @@ class Order extends Client\MMP
 
         if (!in_array('has_incident', $request->queryParams)) {
             // Add 'has_incident' query parameter manually if SDK version < 1.9.2
-            $request->queryParams = array_merge($request->queryParams, array('has_incident'));
+            $request->queryParams = array_merge($request->queryParams, ['has_incident']);
         }
 
         foreach ($params as $key => $value) {
             $request->setData($key, $value);
         }
+
+        $request->setOrderTaxMode(OrderTaxMode::TAX_EXCLUDED);
 
         $this->_eventManager->dispatch('mirakl_seller_api_get_orders_before', [
             'request'    => $request,

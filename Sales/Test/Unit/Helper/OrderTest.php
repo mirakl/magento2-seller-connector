@@ -26,7 +26,7 @@ class OrderTest extends TestCase
         // Mock the config object to match default values
         $configMock = $this->getMockBuilder(\MiraklSeller\Sales\Helper\Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAllowedStatusesForOrdersImport'])
+            ->onlyMethods(['getAllowedStatusesForOrdersImport'])
             ->getMock();
         $configMock->expects($this->any())
             ->method('getAllowedStatusesForOrdersImport')

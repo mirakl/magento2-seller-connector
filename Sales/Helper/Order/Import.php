@@ -99,7 +99,6 @@ class Import extends AbstractHelper
             $this->invoiceCreator->create($order);
         }
 
-
         if ($this->salesConfig->isAutoCreateShipment()) {
             $this->synchronizeShipments->synchronize($order, $miraklOrder);
         }
