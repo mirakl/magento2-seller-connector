@@ -10,6 +10,7 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use MiraklSeller\Api\Helper\Shop as ShopApi;
@@ -76,6 +77,11 @@ class Connection extends AbstractModel
     protected $attributeRepository;
 
     /**
+     * @var Json
+     */
+    protected $json;
+
+    /**
      * @var array
      */
     private $productAttributes = [];
@@ -89,6 +95,7 @@ class Connection extends AbstractModel
      * @param StoreManagerInterface               $storeManager
      * @param AbstractResource|null               $resource
      * @param AbstractDb|null                     $resourceCollection
+     * @param Json                                $json
      * @param ProductAttributeRepositoryInterface $attributeRepository
      * @param array                               $data
      */
@@ -99,6 +106,7 @@ class Connection extends AbstractModel
         StoreManagerInterface $storeManager,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
+        Json $json,
         ProductAttributeRepositoryInterface $attributeRepository,
         array $data = []
     ) {
@@ -111,6 +119,7 @@ class Connection extends AbstractModel
         );
         $this->shopApi = $shopApi;
         $this->storeManager = $storeManager;
+        $this->json = $json;
         $this->attributeRepository = $attributeRepository;
     }
 
@@ -148,7 +157,7 @@ class Connection extends AbstractModel
         if (empty($values)) {
             $values = [];
         } elseif (is_string($values)) {
-            $values = json_decode($values, true);
+            $values = $this->json->unserialize($values);
         }
 
         return $values;
@@ -163,7 +172,7 @@ class Connection extends AbstractModel
         if (empty($fields)) {
             $fields = [];
         } elseif (is_string($fields)) {
-            $fields = json_decode($fields, true);
+            $fields = $this->json->unserialize($fields);
         }
 
         return $fields;
@@ -178,7 +187,7 @@ class Connection extends AbstractModel
         if (empty($fields)) {
             $fields = [];
         } elseif (is_string($fields)) {
-            $fields = json_decode($fields, true);
+            $fields = $this->json->unserialize($fields);
         }
 
         $attributes = [];
