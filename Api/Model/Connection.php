@@ -2,8 +2,10 @@
 namespace MiraklSeller\Api\Model;
 
 use GuzzleHttp\Exception\RequestException;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
@@ -69,13 +71,26 @@ class Connection extends AbstractModel
     protected $storeManager;
 
     /**
-     * @param   Context                 $context
-     * @param   Registry                $registry
-     * @param   ShopApi                 $shopApi
-     * @param   StoreManagerInterface   $storeManager
-     * @param   AbstractResource|null   $resource
-     * @param   AbstractDb|null         $resourceCollection
-     * @param   array                   $data
+     * @var ProductAttributeRepositoryInterface
+     */
+    protected $attributeRepository;
+
+    /**
+     * @var array
+     */
+    private $productAttributes = [];
+
+    /**
+     * Connection constructor.
+     *
+     * @param Context                             $context
+     * @param Registry                            $registry
+     * @param ShopApi                             $shopApi
+     * @param StoreManagerInterface               $storeManager
+     * @param AbstractResource|null               $resource
+     * @param AbstractDb|null                     $resourceCollection
+     * @param ProductAttributeRepositoryInterface $attributeRepository
+     * @param array                               $data
      */
     public function __construct(
         Context $context,
@@ -84,11 +99,19 @@ class Connection extends AbstractModel
         StoreManagerInterface $storeManager,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
+        ProductAttributeRepositoryInterface $attributeRepository,
         array $data = []
     ) {
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $resource,
+            $resourceCollection,
+            $data
+        );
         $this->shopApi = $shopApi;
         $this->storeManager = $storeManager;
+        $this->attributeRepository = $attributeRepository;
     }
 
     /**
@@ -158,7 +181,20 @@ class Connection extends AbstractModel
             $fields = json_decode($fields, true);
         }
 
-        return $fields;
+        $attributes = [];
+        foreach ($fields as $attributeId) {
+            if (!isset($this->productAttributes[$attributeId])) {
+                try {
+                    $attribute = $this->attributeRepository->get($attributeId);
+                } catch (NoSuchEntityException $e) {
+                    continue;
+                }
+                $this->productAttributes[$attributeId] = $attribute->getAttributeCode();
+            }
+            $attributes[$attributeId] = $this->productAttributes[$attributeId];
+        }
+
+        return $attributes;
     }
 
     /**
