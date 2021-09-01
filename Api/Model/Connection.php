@@ -2,12 +2,15 @@
 namespace MiraklSeller\Api\Model;
 
 use GuzzleHttp\Exception\RequestException;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use MiraklSeller\Api\Helper\Shop as ShopApi;
@@ -69,26 +72,53 @@ class Connection extends AbstractModel
     protected $storeManager;
 
     /**
-     * @param   Context                 $context
-     * @param   Registry                $registry
-     * @param   ShopApi                 $shopApi
-     * @param   StoreManagerInterface   $storeManager
-     * @param   AbstractResource|null   $resource
-     * @param   AbstractDb|null         $resourceCollection
-     * @param   array                   $data
+     * @var ProductAttributeRepositoryInterface
+     */
+    protected $attributeRepository;
+
+    /**
+     * @var Json
+     */
+    protected $json;
+
+    /**
+     * @var array
+     */
+    private $productAttributes = [];
+
+    /**
+     * @param Context                             $context
+     * @param Registry                            $registry
+     * @param ShopApi                             $shopApi
+     * @param StoreManagerInterface               $storeManager
+     * @param Json                                $json
+     * @param ProductAttributeRepositoryInterface $attributeRepository
+     * @param AbstractResource|null               $resource
+     * @param AbstractDb|null                     $resourceCollection
+     * @param array                               $data
      */
     public function __construct(
         Context $context,
         Registry $registry,
         ShopApi $shopApi,
         StoreManagerInterface $storeManager,
+        Json $json,
+        ProductAttributeRepositoryInterface $attributeRepository,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $resource,
+            $resourceCollection,
+            $data
+        );
         $this->shopApi = $shopApi;
         $this->storeManager = $storeManager;
+        $this->json = $json;
+        $this->attributeRepository = $attributeRepository;
     }
 
     /**
@@ -125,7 +155,7 @@ class Connection extends AbstractModel
         if (empty($values)) {
             $values = [];
         } elseif (is_string($values)) {
-            $values = json_decode($values, true);
+            $values = $this->json->unserialize($values);
         }
 
         return $values;
@@ -140,7 +170,7 @@ class Connection extends AbstractModel
         if (empty($fields)) {
             $fields = [];
         } elseif (is_string($fields)) {
-            $fields = json_decode($fields, true);
+            $fields = $this->json->unserialize($fields);
         }
 
         return $fields;
@@ -155,10 +185,23 @@ class Connection extends AbstractModel
         if (empty($fields)) {
             $fields = [];
         } elseif (is_string($fields)) {
-            $fields = json_decode($fields, true);
+            $fields = $this->json->unserialize($fields);
         }
 
-        return $fields;
+        $attributes = [];
+        foreach ($fields as $attributeId) {
+            if (!isset($this->productAttributes[$attributeId])) {
+                try {
+                    $attribute = $this->attributeRepository->get($attributeId);
+                } catch (NoSuchEntityException $e) {
+                    continue;
+                }
+                $this->productAttributes[$attributeId] = $attribute->getAttributeCode();
+            }
+            $attributes[$attributeId] = $this->productAttributes[$attributeId];
+        }
+
+        return $attributes;
     }
 
     /**
