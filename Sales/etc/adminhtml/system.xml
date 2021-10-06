@@ -78,6 +78,12 @@
                         <field id="auto_orders_import">1</field>
                     </depends>
                 </field>
+                <field id="country_labels_mapping" translate="label comment" type="select" sortOrder="35" showInDefault="1" showInStore="0" showInWebsite="0">
+                    <label>Country Labels Mapping</label>
+                    <comment>This table is used when the address country from the Mirakl order is not recognized automatically by Magento. You can manually add as many countries as you want and map them to the right countries in Magento.</comment>
+                    <frontend_model>MiraklSeller\Sales\Block\Adminhtml\System\Config\Form\Field\CountryLabelsMapping</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                </field>
             </group>
         </section>
     </system>

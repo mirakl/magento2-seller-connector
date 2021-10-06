@@ -6,6 +6,7 @@ use Magento\Sales\Model\ResourceModel\Order\Tax\Item as OrderTaxItemResource;
 use Mirakl\MMP\Shop\Domain\Order\ShopOrder;
 use MiraklSeller\Api\Test\Integration\TestCase;
 use MiraklSeller\Sales\Model\Create\Order as OrderCreator;
+use MiraklSeller\Sales\Model\Mapper\CountryNotFoundException;
 
 class OrderTest extends TestCase
 {
@@ -214,5 +215,21 @@ class OrderTest extends TestCase
         $this->assertSame(3.13, (float) $orderTaxItem6['real_base_amount']);
         $this->assertSame('TVA20', $orderTaxItem6['code']);
         $this->assertSame('TVA20', $orderTaxItem6['title']);
+    }
+
+    public function testCreateOrderWithCountryNotFound()
+    {
+        $this->expectException(CountryNotFoundException::class);
+        $this->expectExceptionMessage('Could not map country for label "France Métropolitaine"');
+
+        /** @var OrderCreator $orderCreator */
+        $orderCreator = $this->objectManager->create(OrderCreator::class);
+
+        /** @var ShopOrder $miraklOrderMock */
+        $miraklOrderMock = $this->objectManager->create(ShopOrder::class, [
+            'data' => $this->_getJsonFileContents('mirakl_order_with_unknown_country.json')
+        ]);
+
+        $orderCreator->create($miraklOrderMock);
     }
 }

@@ -10,8 +10,10 @@ use Mirakl\MMP\Shop\Domain\Order\ShopOrder;
 use MiraklSeller\Api\Model\Connection;
 use MiraklSeller\Sales\Helper\Config as SalesConfig;
 use MiraklSeller\Sales\Helper\Order as OrderHelper;
+use MiraklSeller\Sales\Model\Address\CountryMapper;
 use MiraklSeller\Sales\Model\Create\Invoice as InvoiceCreator;
 use MiraklSeller\Sales\Model\Create\Order as OrderCreator;
+use MiraklSeller\Sales\Model\Mapper\CountryNotFoundException;
 use MiraklSeller\Sales\Model\Synchronize\Shipments as SynchronizeShipments;
 
 class Import extends AbstractHelper
@@ -47,6 +49,11 @@ class Import extends AbstractHelper
     protected $synchronizeShipments;
 
     /**
+     * @var CountryMapper
+     */
+    protected $countryMapper;
+
+    /**
      * @param   Context                 $context
      * @param   OrderResourceFactory    $orderResourceFactory
      * @param   OrderHelper             $orderHelper
@@ -54,6 +61,7 @@ class Import extends AbstractHelper
      * @param   OrderCreator            $orderCreator
      * @param   InvoiceCreator          $invoiceCreator
      * @param   SynchronizeShipments    $synchronizeShipments
+     * @param   CountryMapper           $countryMapper
      */
     public function __construct(
         Context $context,
@@ -62,16 +70,18 @@ class Import extends AbstractHelper
         SalesConfig $salesConfig,
         OrderCreator $orderCreator,
         InvoiceCreator $invoiceCreator,
-        SynchronizeShipments $synchronizeShipments
+        SynchronizeShipments $synchronizeShipments,
+        CountryMapper $countryMapper
     ) {
         parent::__construct($context);
 
-        $this->orderResourceFactory  = $orderResourceFactory;
-        $this->orderHelper           = $orderHelper;
-        $this->salesConfig           = $salesConfig;
-        $this->orderCreator          = $orderCreator;
-        $this->invoiceCreator        = $invoiceCreator;
-        $this->synchronizeShipments  = $synchronizeShipments;
+        $this->orderResourceFactory = $orderResourceFactory;
+        $this->orderHelper          = $orderHelper;
+        $this->salesConfig          = $salesConfig;
+        $this->orderCreator         = $orderCreator;
+        $this->invoiceCreator       = $invoiceCreator;
+        $this->synchronizeShipments = $synchronizeShipments;
+        $this->countryMapper        = $countryMapper;
     }
 
     /**
@@ -83,7 +93,15 @@ class Import extends AbstractHelper
      */
     public function createOrder(ShopOrder $miraklOrder, Connection $connection)
     {
-        $order = $this->orderCreator->create($miraklOrder, $connection->getStoreId());
+        try {
+            $order = $this->orderCreator->create($miraklOrder, $connection->getStoreId());
+        } catch (CountryNotFoundException $e) {
+            if ($country = $e->getCountry()) {
+                $this->countryMapper->add($country);
+            }
+
+            throw $e;
+        }
 
         // Save some Mirakl information to be able to associate actions on it later
         $order->setMiraklConnectionId($connection->getId());

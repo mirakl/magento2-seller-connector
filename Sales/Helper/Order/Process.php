@@ -11,6 +11,7 @@ use MiraklSeller\Api\Model\ResourceModel\ConnectionFactory as ConnectionResource
 use MiraklSeller\Process\Model\Process as ProcessModel;
 use MiraklSeller\Sales\Helper\Order as OrderHelper;
 use MiraklSeller\Sales\Helper\Order\Import as OrderImportHelper;
+use MiraklSeller\Sales\Model\Mapper\CountryNotFoundException;
 use MiraklSeller\Sales\Model\Synchronize\Order as OrderSynchronizer;
 
 class Process extends AbstractHelper
@@ -115,6 +116,12 @@ class Process extends AbstractHelper
             try {
                 $process->output(__('Processing Mirakl order #%1 ...', $miraklOrder->getId()));
                 $this->synchronizeMiraklOrder($process, $connection, $miraklOrder);
+            } catch (CountryNotFoundException $e) {
+                $process->output(__('ERROR: %1', $e->getMessage()));
+                $process->output(
+                    __('Please map the country label in ' .
+                        '"Mirakl Seller > Configuration > Mirakl Orders > Mirakl Orders Import Settings > Country Labels Mapping"')
+                );
             } catch (\Exception $e) {
                 $process->output(__('ERROR: %1', $e->getMessage()));
             }

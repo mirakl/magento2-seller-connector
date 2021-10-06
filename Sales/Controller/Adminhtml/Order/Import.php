@@ -2,6 +2,7 @@
 namespace MiraklSeller\Sales\Controller\Adminhtml\Order;
 
 use MiraklSeller\Core\Controller\Adminhtml\RawMessagesTrait;
+use MiraklSeller\Sales\Model\Mapper\CountryNotFoundException;
 
 class Import extends AbstractOrder
 {
@@ -40,6 +41,11 @@ class Import extends AbstractOrder
                 'connection_id' => $params['connection_id'],
                 '_current' => true
             ]);
+        } catch (CountryNotFoundException $e) {
+            $this->messageManager->addErrorMessage($e->getMessage());
+
+            return $this->redirectError(__('Please map the country label in ' .
+                '"Mirakl Seller > Configuration > Mirakl Orders > Mirakl Orders Import Settings > Country Labels Mapping"'));
         } catch (\Exception $e) {
             return $this->redirectError($e->getMessage());
         }

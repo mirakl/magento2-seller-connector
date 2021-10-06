@@ -1,8 +1,13 @@
 <?php
 namespace MiraklSeller\Api\Helper;
 
+use Magento\Config\Model\ResourceModel\Config as MagentoConfig;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Serialize\Serializer\Json as Serializer;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use MiraklSeller\Api\Model\Client\Manager;
 use MiraklSeller\Api\Model\Log\LogOptions;
 
@@ -12,9 +17,42 @@ class Config extends AbstractHelper
     const XML_PATH_API_DEVELOPER_LOG_FILTER = 'mirakl_seller_api_developer/log/log_filter';
 
     /**
+     * @var MagentoConfig
+     */
+    protected $configuration;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
+     * @var Serializer
+     */
+    protected $serializer;
+
+    /**
      * @var bool
      */
     protected $_apiEnabled = true;
+
+    /**
+     * @param   Context                 $context
+     * @param   MagentoConfig           $configuration
+     * @param   StoreManagerInterface   $storeManager
+     * @param   Serializer              $serializer
+     */
+    public function __construct(
+        Context $context,
+        MagentoConfig $configuration,
+        StoreManagerInterface $storeManager,
+        Serializer $serializer
+    ) {
+        parent::__construct($context);
+        $this->configuration = $configuration;
+        $this->storeManager = $storeManager;
+        $this->serializer = $serializer;
+    }
 
     /**
      * @return  $this
@@ -94,5 +132,28 @@ class Config extends AbstractHelper
     public function isApiLogEnabled($store = null)
     {
         return $this->getApiLogOption($store) !== LogOptions::LOG_DISABLED;
+    }
+
+    /**
+     * @return  void
+     */
+    protected function resetConfig()
+    {
+        $this->storeManager->getStore()->resetConfig();
+    }
+
+    /**
+     * Set a config value
+     *
+     * @param   string  $path
+     * @param   string  $value
+     * @param   string  $scope
+     * @param   int     $scopeId
+     * @return  void
+     */
+    public function setValue($path, $value, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeId = 0)
+    {
+        $this->configuration->saveConfig($path, $value, $scope, $scopeId);
+        $this->resetConfig();
     }
 }
