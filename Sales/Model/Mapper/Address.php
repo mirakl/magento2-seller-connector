@@ -25,6 +25,12 @@ class Address implements MapperInterface
     {
         $countryId = $this->countryResolver->resolve($data, $locale);
 
+        if (false === $countryId) {
+            throw new CountryNotFoundException(
+                __('Could not map country for label "%1"', $data['country']), null, 0, $data['country']
+            );
+        }
+
         $phone = $data['phone'] ?? '';
         if (!$phone && !empty($data['phone_secondary'])) {
             $phone = $data['phone_secondary'];

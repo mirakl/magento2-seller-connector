@@ -12,6 +12,7 @@ class CountryResolverTest extends TestCase
      * @param   string          $defaultLocale
      * @param   string|false    $expected
      * @dataProvider getTestResolveDataProvider
+     * @magentoConfigFixture current_store mirakl_seller_sales/order/country_labels_mapping {"0":{"country_label":"France M\u00e9tropolitaine","country_id":"FR"}}
      */
     public function testResolve(array $data, $locale, $defaultLocale, $expected)
     {
@@ -37,6 +38,7 @@ class CountryResolverTest extends TestCase
             [['country' => 'United Kingdom'], 'fr_FR', 'en_US', 'GB'],
             [['country' => ''], 'en_US', 'en_US', false],
             [['country' => 'foobar'], 'en_GB', 'en_GB', false],
+            [['country' => 'France Métropolitaine'], 'foo', 'bar', 'FR'],
         ];
     }
 }

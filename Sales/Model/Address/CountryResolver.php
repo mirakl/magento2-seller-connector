@@ -1,20 +1,25 @@
 <?php
 namespace MiraklSeller\Sales\Model\Address;
 
-use Magento\Directory\Model\ResourceModel\Region\CollectionFactory as RegionCollectionFactory;
+use Magento\Directory\Model\ResourceModel\Country\CollectionFactory as CountryCollectionFactory;
 use MiraklSeller\Sales\Helper\Order as OrderHelper;
 
 class CountryResolver
 {
     /**
-     * @var RegionCollectionFactory
+     * @var CountryCollectionFactory
      */
-    private $regionCollectionFactory;
+    private $countryCollectionFactory;
 
     /**
      * @var OrderHelper
      */
     private $orderHelper;
+
+    /**
+     * @var CountryMapper
+     */
+    private $countryMapper;
 
     /**
      * @var string
@@ -24,15 +29,18 @@ class CountryResolver
     /**
      * @param   RegionCollectionFactory $regionCollectionFactory
      * @param   OrderHelper             $orderHelper
+     * @param   CountryMapper           $countryMapper
      * @param   string                  $defaultLocale
      */
     public function __construct(
-        RegionCollectionFactory $regionCollectionFactory,
+        CountryCollectionFactory $countryCollectionFactory,
         OrderHelper $orderHelper,
+        CountryMapper $countryMapper,
         $defaultLocale = 'en_US'
     ) {
-        $this->regionCollectionFactory = $regionCollectionFactory;
+        $this->countryCollectionFactory = $countryCollectionFactory;
         $this->orderHelper = $orderHelper;
+        $this->countryMapper = $countryMapper;
         $this->defaultLocale = $defaultLocale;
     }
 
@@ -42,14 +50,14 @@ class CountryResolver
      */
     private function getCountryIdByIso3Code($countryIso3Code)
     {
-        /** @var \Magento\Directory\Model\ResourceModel\Region\Collection $collection */
-        $collection = $this->regionCollectionFactory->create();
-        $collection->addCountryCodeFilter($countryIso3Code);
+        /** @var \Magento\Directory\Model\ResourceModel\Country\Collection $collection */
+        $collection = $this->countryCollectionFactory->create();
+        $collection->addCountryCodeFilter($countryIso3Code, 'iso3');
 
-        /** @var \Magento\Directory\Model\Region $region */
-        $region = $collection->getFirstItem();
+        /** @var \Magento\Directory\Model\Country $country */
+        $country = $collection->getFirstItem();
 
-        return $region->getCountryId() ?: false;
+        return $country->getCountryId() ?: false;
     }
 
     /**
@@ -59,6 +67,12 @@ class CountryResolver
      */
     private function getCountryIdByLabel($countryLabel, $locale = null)
     {
+        $countryLabel = trim($countryLabel);
+
+        if (false !== ($countryId = $this->countryMapper->get($countryLabel))) {
+            return $countryId;
+        }
+
         $countries = $this->orderHelper->getCountryList($locale);
 
         return array_search($countryLabel, $countries);

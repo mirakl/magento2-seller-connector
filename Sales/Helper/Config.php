@@ -8,12 +8,14 @@ class Config extends \MiraklSeller\Api\Helper\Config
     const XML_PATH_AUTO_ACCEPT_BACKORDER_BEHAVIOR          = 'mirakl_seller_sales/order_acceptance/backorder';
     const XML_PATH_AUTO_ACCEPT_PRICES_VARIATIONS_BEHAVIOR  = 'mirakl_seller_sales/order_acceptance/prices_variations';
 
-    const XML_PATH_AUTO_CREATE_INVOICE                 = 'mirakl_seller_sales/order/auto_create_invoice';
-    const XML_PATH_AUTO_PAY_INVOICE                    = 'mirakl_seller_sales/order/auto_pay_invoice';
-    const XML_PATH_AUTO_CREATE_SHIPMENT                = 'mirakl_seller_sales/order/auto_create_shipment';
-    const XML_PATH_AUTO_CREATE_REFUNDS                 = 'mirakl_seller_sales/order/auto_create_refunds';
-    const XML_PATH_AUTO_ORDERS_IMPORT                  = 'mirakl_seller_sales/order/auto_orders_import';
-    const XML_PATH_AUTO_ORDERS_IMPORT_ALLOWED_STATUSES = 'mirakl_seller_sales/order/auto_orders_import_allowed_statuses';
+    const XML_PATH_AUTO_CREATE_INVOICE                     = 'mirakl_seller_sales/order/auto_create_invoice';
+    const XML_PATH_AUTO_PAY_INVOICE                        = 'mirakl_seller_sales/order/auto_pay_invoice';
+    const XML_PATH_AUTO_CREATE_SHIPMENT                    = 'mirakl_seller_sales/order/auto_create_shipment';
+    const XML_PATH_AUTO_CREATE_REFUNDS                     = 'mirakl_seller_sales/order/auto_create_refunds';
+    const XML_PATH_AUTO_ORDERS_IMPORT                      = 'mirakl_seller_sales/order/auto_orders_import';
+    const XML_PATH_AUTO_ORDERS_IMPORT_ALLOWED_STATUSES     = 'mirakl_seller_sales/order/auto_orders_import_allowed_statuses';
+
+    const XML_PATH_ORDERS_COUNTRY_LABELS_MAPPING           = 'mirakl_seller_sales/order/country_labels_mapping';
 
     /**
      * Returns the Mirakl order statuses allowed for orders import in Magento
@@ -37,6 +39,21 @@ class Config extends \MiraklSeller\Api\Helper\Config
     public function getBackorderBehavior()
     {
         return (int) $this->scopeConfig->getValue(self::XML_PATH_AUTO_ACCEPT_BACKORDER_BEHAVIOR);
+    }
+
+    /**
+     * @return  array
+     */
+    public function getCountryLabelsMapping()
+    {
+        $values = [];
+        $config = $this->getValue(self::XML_PATH_ORDERS_COUNTRY_LABELS_MAPPING);
+
+        if (is_string($config) && !empty($config)) {
+            $values = $this->serializer->unserialize($config);
+        }
+
+        return $values;
     }
 
     /**
@@ -131,5 +148,14 @@ class Config extends \MiraklSeller\Api\Helper\Config
     public function isAutoPayInvoice()
     {
         return $this->scopeConfig->isSetFlag(self::XML_PATH_AUTO_PAY_INVOICE);
+    }
+
+    /**
+     * @param   array   $values
+     */
+    public function saveCountryLabelsMapping(array $values)
+    {
+        $config = $this->serializer->serialize($values);
+        $this->setValue(self::XML_PATH_ORDERS_COUNTRY_LABELS_MAPPING, $config);
     }
 }
