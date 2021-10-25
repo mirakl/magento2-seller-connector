@@ -124,21 +124,21 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         }
 
         $attributeCode = $attribute->getAttributeCode();
-        $entityCol = $this->getEntityCol();
+        $entityLinkColumn = $this->getEntity()->getLinkField();
 
         $valueTable1 = $attributeCode . '_t1';
         $valueTable2 = $attributeCode . '_t2';
         $this->getSelect()
             ->joinLeft(
                 [$valueTable1 => $attribute->getBackend()->getTable()],
-                "e.{$entityCol} = {$valueTable1}.{$entityCol}"
+                "e.{$entityLinkColumn} = {$valueTable1}.{$entityLinkColumn}"
                 . " AND {$valueTable1}.attribute_id = {$attribute->getId()}"
                 . " AND {$valueTable1}.store_id = 0",
                 []
             )
             ->joinLeft(
                 [$valueTable2 => $attribute->getBackend()->getTable()],
-                "e.{$entityCol} = {$valueTable2}.{$entityCol}"
+                "e.{$entityLinkColumn} = {$valueTable2}.{$entityLinkColumn}"
                 . " AND {$valueTable2}.attribute_id = {$attribute->getId()}"
                 . " AND {$valueTable2}.store_id = {$storeId}",
                 []
@@ -310,10 +310,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
         /** @var EavAttribute $attribute */
         $attribute = $this->_eavConfig->getAttribute('catalog_category', 'name');
-        $entityCol = $this->getEntityCol();
+
+        $entityIdColumn = $this->getEntity()->getEntityIdField();
+        $entityLinkColumn = $this->getEntity()->getLinkField();
 
         $colsExprSql = [
-            'category_id' => 'categories.entity_id',
+            'category_id' => "categories.$entityIdColumn",
             'path' => 'categories.path',
             'name' => $this->_conn->getIfNullSql('category_name_t2.value', 'category_name_t1.value')
         ];
@@ -322,14 +324,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             ->from(['categories' => $this->getTable('catalog_category_entity')], $colsExprSql)
             ->joinLeft(
                 ['category_name_t1' => $attribute->getBackend()->getTable()],
-                "categories.$entityCol = category_name_t1.$entityCol"
+                "categories.$entityLinkColumn = category_name_t1.$entityLinkColumn"
                 . " AND category_name_t1.attribute_id = {$attribute->getId()}"
                 . " AND category_name_t1.store_id = 0",
                 []
             )
             ->joinLeft(
                 ['category_name_t2' => $attribute->getBackend()->getTable()],
-                "categories.$entityCol = category_name_t2.$entityCol"
+                "categories.$entityLinkColumn = category_name_t2.$entityLinkColumn"
                 . " AND category_name_t2.attribute_id = {$attribute->getId()}"
                 . " AND category_name_t2.store_id = {$storeId}",
                 []
@@ -487,13 +489,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             return $this;
         }
 
-        $entityCol = $this->getEntityCol();
+        $entityLinkColumn = $this->getEntity()->getLinkField();
         $tierPricesSql = new \Zend_Db_Expr("GROUP_CONCAT(DISTINCT CONCAT_WS('|', FLOOR(tier_prices.qty), ROUND(tier_prices.value, 2)) SEPARATOR ',')");
         $this->getSelect()
             ->joinLeft(
                 ['tier_prices' => $this->getTable('catalog_product_entity_tier_price')],
                 sprintf(
-                    "e.$entityCol = tier_prices.$entityCol AND (tier_prices.website_id = %d OR tier_prices.website_id = 0) AND (customer_group_id = %d OR all_groups = 1)",
+                    "e.$entityLinkColumn = tier_prices.$entityLinkColumn AND (tier_prices.website_id = %d OR tier_prices.website_id = 0) AND (customer_group_id = %d OR all_groups = 1)",
                     $websiteId,
                     $groupId
                 ),
@@ -635,14 +637,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * @return  string
-     */
-    protected function getEntityCol()
-    {
-        return $this->getEntity()->getLinkField();
-    }
-
-    /**
      * @param   string  $file
      * @return  string
      */
@@ -722,13 +716,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $attribute = $this->getAttribute('image');
         $attributeId = $attribute ? $attribute->getId() : null;
 
-        $entityCol = $this->getEntityCol();
+        $entityLinkColumn = $this->getEntity()->getLinkField();
 
         $select = $this->_conn->select()
             ->from(['cpe' => $this->getTable('catalog_product_entity')], 'entity_id')
             ->joinLeft(
                 ['mgv' => $this->getTable('catalog_product_entity_media_gallery_value')],
-                "(mgv.$entityCol = cpe.$entityCol AND mgv.store_id = $storeId AND mgv.disabled = 0)",
+                "(mgv.$entityLinkColumn = cpe.$entityLinkColumn AND mgv.store_id = $storeId AND mgv.disabled = 0)",
                 ['label', 'position']
             )
             ->joinLeft(
@@ -738,7 +732,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             )
             ->joinLeft(
                 ['mgvbi' => $this->getTable('catalog_product_entity_varchar')],
-                "(mgvbi.$entityCol = cpe.$entityCol AND mg1.value = mgvbi.value AND " .
+                "(mgvbi.$entityLinkColumn = cpe.$entityLinkColumn AND mg1.value = mgvbi.value AND " .
                 "mgvbi.store_id = $storeId AND mgvbi.attribute_id = $attributeId)",
                 []
             )
@@ -896,8 +890,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
         $storeId = $this->getStoreId();
 
-        $entityCol = $this->getEntityCol();
-        $linkCol = $this->_isEnterprise ? 'child.row_id' : 'link.product_id';
+        $entityIdColumn = $this->getEntity()->getEntityIdField();
+        $entityLinkColumn = $this->getEntity()->getLinkField();
+        $linkColumn = $this->_isEnterprise ? "child.$entityLinkColumn" : 'link.product_id';
+
         $visibilityAttribute = $this->_eavConfig->getAttribute(
             \Magento\Catalog\Model\Product::ENTITY,
             'visibility'
@@ -909,34 +905,34 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
         $select->joinLeft(
             ['link' => $this->getTable('catalog_product_super_link')],
-            'link.parent_id = e.entity_id',
+            "link.parent_id = e.$entityLinkColumn",
             ['entity_ids' => $childIdsSql]
         );
 
         if ($this->_isEnterprise) {
             $select->joinLeft(
                 ['child' => $this->getTable('catalog_product_entity')],
-                'link.product_id = child.entity_id',
+                "link.product_id = child.$entityIdColumn",
                 []
             );
         }
 
         $select->joinLeft(
                 ['visibiliy_store' => $this->getTable('catalog_product_entity_int')],
-                "visibiliy_store.$entityCol = $linkCol AND " .
+                "visibiliy_store.$entityLinkColumn = $linkColumn AND " .
                 "visibiliy_store.attribute_id = $visibilityId AND visibiliy_store.store_id = $storeId",
                 []
             )
             ->joinLeft(
                 ['default_visibiliy_store' => $this->getTable('catalog_product_entity_int')],
-                "default_visibiliy_store.$entityCol = $linkCol AND " .
+                "default_visibiliy_store.$entityLinkColumn = $linkColumn AND " .
                 "default_visibiliy_store.attribute_id = $visibilityId AND default_visibiliy_store.store_id = 0",
                 []
             )
             ->where('link.product_id IN (?)', $childrenIds)
             ->where("visibiliy_store.value NOT IN ($visibilityValues) OR " .
                 "(visibiliy_store.value IS NULL AND default_visibiliy_store.value NOT IN ($visibilityValues))")
-            ->group('e.entity_id');
+            ->group("e.$entityLinkColumn");
 
         return $this;
     }
