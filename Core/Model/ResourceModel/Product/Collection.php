@@ -662,8 +662,19 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         }
 
         $select = $this->_conn->select()
-            ->from($this->getTable('catalog_product_super_link'), ['product_id', 'parent_id'])
-            ->where('product_id IN (?)', $productIds);
+            ->from(['cpsl' => $this->getTable('catalog_product_super_link')],
+                   ['product_id', 'parent_id']);
+
+        if ($this->_isEnterprise) {
+            // In M2 Enterprise, row_id is used as parent_id to link products
+            // We need to join results to catalog_product_entity table to fetch real products entity ids
+            $select->joinLeft(['cpe' => $this->getTable('catalog_product_entity')],
+                'cpsl.parent_id = cpe.row_id',
+                ['parent_id' => 'cpe.entity_id']
+            );
+        }
+
+        $select->where('cpsl.product_id IN (?)', $productIds);
 
         $parentIds = array_fill_keys($productIds, []);
         foreach ($this->_conn->fetchAll($select) as $row) {
