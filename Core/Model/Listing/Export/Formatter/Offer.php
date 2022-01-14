@@ -50,7 +50,7 @@ class Offer implements FormatterInterface
             isset($data['special_to_date']) ? $data['special_to_date'] : ''
         );
 
-        foreach ($this->config->getOfferFieldsMapping() as $key => $value) {
+        foreach ($this->config->getOfferFieldsMapping($listing->getStoreId()) as $key => $value) {
             // Override default key by its configured mapping if value is available and not empty in $data
             if (empty($data[$key]) || !empty($value)) {
                 $data[$key] = !empty($value) && !empty($data[$value]) ? $data[$value] : '';

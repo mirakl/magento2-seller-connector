@@ -162,6 +162,8 @@
 "Pay on acceptance","Paiement à l'acceptation"
 "Pay on delivery","Paiement à la livraison"
 "Pay on due date","Paiement différé"
+"Pay on shipment","Paiement à l'expédition"
+"No payment confirmation","Pas de confirmation de paiement"
 "An error occurred: %1","Une erreur est survenue : %1"
 "Show in Mirakl","Voir dans Mirakl"
 "A refund has been issued on this Mirakl order.","Cette commande Mirakl a fait l'objet d'un remboursement."

@@ -76,7 +76,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function addAdditionalFieldsAttributes(Listing $listing)
     {
         $additionalFieldsValues = $listing->getOfferAdditionalFieldsValues();
-        foreach ($additionalFieldsValues as $attrCode => $additionalFieldValue) {
+        foreach ($additionalFieldsValues as $additionalFieldValue) {
             if (isset($additionalFieldValue['attribute']) && $additionalFieldValue['attribute']) {
                 $this->addAttribute($additionalFieldValue['attribute']);
             }

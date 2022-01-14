@@ -31,9 +31,11 @@ class Data extends AbstractHelper
      * @var array
      */
     protected $_paymentWorkflowList = [
-        'PAY_ON_ACCEPTANCE' => 'Pay on acceptance',
-        'PAY_ON_DELIVERY'   => 'Pay on delivery',
-        'PAY_ON_DUE_DATE'   => 'Pay on due date',
+        'PAY_ON_ACCEPTANCE'                => 'Pay on acceptance',
+        'PAY_ON_DELIVERY'                  => 'Pay on delivery',
+        'PAY_ON_DUE_DATE'                  => 'Pay on due date',
+        'PAY_ON_SHIPMENT'                  => 'Pay on shipment',
+        'NO_CUSTOMER_PAYMENT_CONFIRMATION' => 'No payment confirmation',
     ];
 
     /**

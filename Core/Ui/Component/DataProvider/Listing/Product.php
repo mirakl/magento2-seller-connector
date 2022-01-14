@@ -127,6 +127,7 @@ class Product extends BaseProductDataProvider
         $this->addListingInfo();
 
         $this->collection->addAttributeToSelect(['special_price' , 'special_from_date', 'special_to_date']);
+        $this->collection->addStoreFilter($this->getListing()->getStoreId());
     }
 
     /**

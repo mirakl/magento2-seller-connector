@@ -12,6 +12,7 @@ use MiraklSeller\Core\Model\Listing\Export\Formatter\Product as ProductFormatter
 use MiraklSeller\Core\Model\Offer;
 use MiraklSeller\Core\Model\ResourceModel\OfferFactory;
 use MiraklSeller\Core\Model\ResourceModel\Product as ProductResource;
+use MiraklSeller\Core\Model\ResourceModel\Product\Collection as ProductCollection;
 use MiraklSeller\Core\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 
 class Offers extends AbstractExport
@@ -82,6 +83,32 @@ class Offers extends AbstractExport
     }
 
     /**
+     * @param   ProductCollection   $collection
+     * @param   Listing             $listing
+     */
+    protected function addMappedFieldsToCollection(ProductCollection $collection, Listing $listing)
+    {
+        // Add mapped attributes to select
+        foreach ($this->config->getOfferFieldsMapping($listing->getStoreId()) as $value) {
+            if (!$value) {
+                continue;
+            }
+
+            /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
+            $attribute = $this->attributeFactory->create()->loadByCode(
+                \Magento\Catalog\Model\Product::ENTITY,
+                $value
+            );
+
+            if ($collection->isAttributeUsingOptions($attribute)) {
+                $collection->addAttributeOptionValue($attribute);
+            } else {
+                $collection->addAttributeToSelect($value);
+            }
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function export(Listing $listing)
@@ -92,22 +119,8 @@ class Offers extends AbstractExport
             ->addQuantityToSelect()
             ->addAttributeToSelect(['description', 'special_price', 'special_from_date', 'special_to_date']);
 
-        // Add mapped attributes to select
-        foreach ($this->config->getOfferFieldsMapping($listing->getStoreId()) as $value) {
-            if ($value) {
-                /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
-                $attribute = $this->attributeFactory->create()->loadByCode(
-                    \Magento\Catalog\Model\Product::ENTITY,
-                    $value
-                );
-
-                if ($collection->isAttributeUsingOptions($attribute)) {
-                    $collection->addAttributeOptionValue($attribute);
-                } else {
-                    $collection->addAttributeToSelect($value);
-                }
-            }
-        }
+        // Add offer fields mapped in config
+        $this->addMappedFieldsToCollection($collection, $listing);
 
         // Add attribute corresponding to product-id if not setup as sku
         if (($productIdValueAttribute = $listing->getProductIdValueAttribute()) != 'sku') {
@@ -146,10 +159,16 @@ class Offers extends AbstractExport
                 ->setStore($listing->getStoreId())
                 ->addIdFilter($deleteIds);
 
+            // Add offer fields mapped in config
+            $this->addMappedFieldsToCollection($collection, $listing);
+
             // Add attribute corresponding to product-id if not setup as sku
             if (($productIdValueAttribute = $listing->getProductIdValueAttribute()) != 'sku') {
                 $collection->addAttributeToSelect($productIdValueAttribute);
             }
+
+            // Add potential attributes associated with offer additional fields
+            $collection->addAdditionalFieldsAttributes($listing);
 
             // Add attribute corresponding to exported price if customized
             if ($exportedPricesAttr = $listing->getConnection()->getExportedPricesAttribute()) {
