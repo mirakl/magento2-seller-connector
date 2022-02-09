@@ -1,0 +1,32 @@
+{
+    "mirakl_seller_process": {
+        "column": {
+            "id": true,
+            "parent_id": true,
+            "type": true,
+            "name": true,
+            "status": true,
+            "mirakl_status": true,
+            "synchro_id": true,
+            "output": true,
+            "duration": true,
+            "file": true,
+            "helper": true,
+            "method": true,
+            "params": true,
+            "hash": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "MIRAKL_SELLER_PROCESS_TYPE": true,
+            "MIRAKL_SELLER_PROCESS_STATUS": true,
+            "MIRAKL_SELLER_PROCESS_MIRAKL_STATUS": true,
+            "MIRAKL_SELLER_PROCESS_HASH": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "MIRAKL_SELLER_PROCESS_PARENT_ID_MIRAKL_SELLER_PROCESS_ID": true
+        }
+    }
+}

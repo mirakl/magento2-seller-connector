@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="mirakl_seller_connection" resource="default" engine="innodb">
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="Connection Id"/>
+        <column xsi:type="varchar" name="name" length="255" nullable="false" comment="Connection Name"/>
+        <column xsi:type="varchar" name="api_url" length="255" nullable="false" comment="API URL"/>
+        <column xsi:type="varchar" name="api_key" length="255" nullable="false" comment="API KEY"/>
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false" default="0" comment="Magento Store ID"/>
+        <column xsi:type="int" name="shop_id" nullable="true" unsigned="true"  comment="Shop ID" />
+        <column xsi:type="varchar" name="sku_code" length="255" nullable="true" comment="SKU Code"/>
+        <column xsi:type="varchar" name="errors_code" length="255" nullable="true" comment="Errors Code"/>
+        <column xsi:type="varchar" name="success_sku_code" length="255" nullable="true" comment="Success SKU Code"/>
+        <column xsi:type="varchar" name="messages_code" length="255" nullable="true" comment="Message Code"/>
+        <column xsi:type="text" name="offer_additional_fields" nullable="false" comment="Offer Additional Fields"/>
+        <column xsi:type="varchar"
+                name="magento_tier_prices_apply_on"
+                length="18"
+                nullable="false"
+                default="VOLUME_PRICING"
+                comment="Choose how you would like Magento tier prices to be exported"/>
+        <column xsi:type="text" name="exportable_attributes" nullable="false" comment="Offer Additional Fields"/>
+        <column xsi:type="timestamp" name="last_orders_synchronization_date" nullable="true" comment="Last Orders Synchronization Date" />
+        <column xsi:type="varchar" name="exported_prices_attribute" length="255" nullable="false" comment="Exported Prices Attribute"/>
+        <column xsi:type="text" name="carriers_mapping" nullable="false" comment="Carriers Mapping"/>
+        <column xsi:type="varchar" name="shipment_source_algorithm" nullable="false" comment="Shipment Source Algorithm"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <index referenceId="MIRAKL_SELLER_CONNECTION_STORE_ID_IDX" indexType="btree">
+            <column name="store_id" />
+        </index>
+        <constraint xsi:type="foreign" referenceId="MIRAKL_SELLER_CONNECTION_STORE_ID_STORE_STORE_ID"
+                    table="mirakl_seller_connection"
+                    column="store_id"
+                    referenceTable="store"
+                    referenceColumn="store_id"
+                    onDelete="CASCADE"/>
+    </table>
+</schema>

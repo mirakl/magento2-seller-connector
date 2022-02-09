@@ -3,6 +3,7 @@ namespace MiraklSeller\Core\Helper;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\DB\Select;
 use Magento\Store\Model\StoreManagerInterface;
 use MiraklSeller\Core\Helper\Config as ConfigHelper;
 use MiraklSeller\Core\Helper\Listing\Process as ProcessHelper;
@@ -60,10 +61,10 @@ class Listing extends Data
         $collection->addPriceData($this->configHelper->getCustomerGroup(), $listing->getWebsiteId());
 
         if ($joinLeft) {
-            $fromPart = $collection->getSelect()->getPart(\Zend_Db_Select::FROM);
+            $fromPart = $collection->getSelect()->getPart(Select::FROM);
             if (isset($fromPart['price_index'])) {
                 $fromPart['price_index']['joinType'] = 'left join';
-                $collection->getSelect()->setPart(\Zend_Db_Select::FROM, $fromPart);
+                $collection->getSelect()->setPart(Select::FROM, $fromPart);
             }
         }
 

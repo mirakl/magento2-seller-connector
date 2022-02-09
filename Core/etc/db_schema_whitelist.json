@@ -1,0 +1,99 @@
+{
+    "mirakl_seller_listing": {
+        "column": {
+            "id": true,
+            "name": true,
+            "connection_id": true,
+            "is_active": true,
+            "builder_model": true,
+            "builder_params": true,
+            "product_id_type": true,
+            "product_id_value_attribute": true,
+            "variants_attributes": true,
+            "last_export_date": true,
+            "offer_state": true,
+            "offer_additional_fields_values": true
+        },
+        "index": {
+            "MIRAKL_SELLER_LISTING_IS_ACTIVE": true,
+            "MIRAKL_SELLER_LISTING_CONNECTION_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "MIRAKL_SELLER_LISTING_CONNECTION_ID_MIRAKL_SELLER_CONNECTION_ID": true
+        }
+    },
+    "mirakl_seller_offer": {
+        "column": {
+            "id": true,
+            "listing_id": true,
+            "product_id": true,
+            "product_import_id": true,
+            "product_import_status": true,
+            "product_import_message": true,
+            "offer_import_id": true,
+            "offer_import_status": true,
+            "offer_error_message": true,
+            "offer_hash": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "MIRAKL_SELLER_OFFER_LISTING_ID": true,
+            "MIRAKL_SELLER_OFFER_PRODUCT_ID": true,
+            "MIRAKL_SELLER_OFFER_PRODUCT_IMPORT_ID": true,
+            "MIRAKL_SELLER_OFFER_PRODUCT_IMPORT_STATUS": true,
+            "MIRAKL_SELLER_OFFER_OFFER_IMPORT_ID": true,
+            "MIRAKL_SELLER_OFFER_OFFER_IMPORT_STATUS": true,
+            "MIRAKL_SELLER_OFFER_OFFER_HASH": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "MIRAKL_SELLER_OFFER_LISTING_ID_MIRAKL_SELLER_LISTING_ID": true,
+            "MIRAKL_SELLER_OFFER_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID": true
+        }
+    },
+    "mirakl_seller_listing_tracking_product": {
+        "column": {
+            "id": true,
+            "listing_id": true,
+            "import_id": true,
+            "import_status": true,
+            "import_status_reason": true,
+            "transformation_error_report": true,
+            "integration_error_report": true,
+            "integration_success_report": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "MIRAKL_SELLER_LISTING_TRACKING_PRODUCT_LISTING_ID": true,
+            "MIRAKL_SELLER_LISTING_TRACKING_PRODUCT_IMPORT_STATUS": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "MIRAKL_SELLER_LISTING_TRACKING_PRODUCT_LISTING_ID_MIRAKL_SELLER_LISTING_ID": true,
+            "FK_134B5BDC5287419F3B2D6FBD5DC3AC77": true
+        }
+    },
+    "mirakl_seller_listing_tracking_offer": {
+        "column": {
+            "id": true,
+            "listing_id": true,
+            "import_id": true,
+            "import_status": true,
+            "error_report": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "MIRAKL_SELLER_LISTING_TRACKING_OFFER_LISTING_ID": true,
+            "MIRAKL_SELLER_LISTING_TRACKING_OFFER_IMPORT_STATUS": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "MIRAKL_SELLER_LISTING_TRACKING_OFFER_LISTING_ID_MIRAKL_SELLER_LISTING_ID": true,
+            "FK_F29A5CD2C7E57DA923E6A232E78A0F14": true
+        }
+    }
+}

@@ -1,0 +1,30 @@
+{
+    "mirakl_seller_connection": {
+        "column": {
+            "id": true,
+            "name": true,
+            "api_url": true,
+            "api_key": true,
+            "store_id": true,
+            "shop_id": true,
+            "sku_code": true,
+            "errors_code": true,
+            "success_sku_code": true,
+            "messages_code": true,
+            "offer_additional_fields": true,
+            "magento_tier_prices_apply_on": true,
+            "exportable_attributes": true,
+            "last_orders_synchronization_date": true,
+            "exported_prices_attribute": true,
+            "carriers_mapping": true,
+            "shipment_source_algorithm": true
+        },
+        "index": {
+            "MIRAKL_SELLER_CONNECTION_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "MIRAKL_SELLER_CONNECTION_STORE_ID_STORE_STORE_ID": true
+        }
+    }
+}

@@ -2,6 +2,7 @@
 namespace MiraklSeller\Core\Ui\Component\DataProvider\Listing\Tracking;
 
 use Magento\Framework\Api\Filter;
+use Magento\Framework\DB\Select;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider;
 
 class Product extends DataProvider
@@ -15,7 +16,7 @@ class Product extends DataProvider
         $searchResult = parent::getSearchResult();
 
         $searchResult->getSelect()
-            ->reset(\Zend_Db_Select::COLUMNS)
+            ->reset(Select::COLUMNS)
             ->columns([
                 'id',
                 'listing_id',

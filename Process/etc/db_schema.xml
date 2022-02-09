@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="mirakl_seller_process" resource="default" engine="innodb">
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="Process Id"/>
+        <column xsi:type="int" name="parent_id" unsigned="true" nullable="true"  comment="Parent Id"/>
+        <column xsi:type="varchar" name="type" length="100" nullable="false" comment="Type"/>
+        <column xsi:type="varchar" name="name" nullable="false" comment="Name"/>
+        <column xsi:type="varchar" name="status" length="50" nullable="false" default="pending" comment="Status"/>
+        <column xsi:type="varchar" name="mirakl_status" default="pending" comment="Mirakl Status"/>
+        <column xsi:type="int" name="synchro_id" unsigned="true" nullable="true"  comment="Synchro Id"/>
+        <column xsi:type="text" name="output" nullable="true"  comment="Output"/>
+        <column xsi:type="int" name="duration" unsigned="true" nullable="true"  comment="Duration"/>
+        <column xsi:type="text" name="file" nullable="true"  comment="File"/>
+        <column xsi:type="varchar" name="helper" length="100" nullable="true"  comment="Helper"/>
+        <column xsi:type="varchar" name="method" length="100" nullable="true"  comment="Method"/>
+        <column xsi:type="text" name="params" nullable="true"  comment="Parameters"/>
+        <column xsi:type="varchar" name="hash" length="32" nullable="true"  comment="Hash"/>
+        <column xsi:type="timestamp" name="created_at" nullable="true"  comment="Created Date" />
+        <column xsi:type="timestamp" name="updated_at" nullable="true"  comment="Updated Date" />
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <index referenceId="MIRAKL_SELLER_PROCESS_TYPE_IDX" indexType="btree">
+            <column name="type" />
+        </index>
+        <index referenceId="MIRAKL_SELLER_PROCESS_STATUS_IDX" indexType="btree">
+            <column name="status" />
+        </index>
+        <index referenceId="MIRAKL_SELLER_PROCESS_MIRAKL_STATUS_IDX" indexType="btree">
+            <column name="mirakl_status" />
+        </index>
+        <index referenceId="MIRAKL_SELLER_PROCESS_HASH_IDX" indexType="btree">
+            <column name="hash" />
+        </index>
+        <constraint xsi:type="foreign"
+                    referenceId="MIRAKL_SELLER_PROCESS_PARENT_ID_MIRAKL_SELLER_PROCESS_ID"
+                    table="mirakl_seller_process"
+                    column="parent_id"
+                    referenceTable="mirakl_seller_process"
+                    referenceColumn="id"
+                    onDelete="CASCADE"/>
+    </table>
+</schema>

@@ -1,6 +1,7 @@
 <?php
 namespace MiraklSeller\Core\Model\ResourceModel\Listing;
 
+use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use MiraklSeller\Api\Model\Connection;
 use MiraklSeller\Core\Model\Listing;
@@ -70,6 +71,6 @@ class Collection extends AbstractCollection
      */
     public function toOptionArray()
     {
-        return $this->setOrder('name', \Zend_Db_Select::SQL_ASC)->_toOptionArray('id', 'name');
+        return $this->setOrder('name', Select::SQL_ASC)->_toOptionArray('id', 'name');
     }
 }

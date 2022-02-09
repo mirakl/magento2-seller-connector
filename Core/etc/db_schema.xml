@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="mirakl_seller_listing" resource="default" engine="innodb">
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="Listing Id"/>
+        <column xsi:type="varchar" name="name" length="255" nullable="false" comment="Marketplace Name"/>
+        <column xsi:type="int" name="connection_id" nullable="false" unsigned="true" default="0" comment="Connection ID" />
+        <column xsi:type="boolean" name="is_active" default="1" nullable="false" comment="Is Listing Active" />
+        <column xsi:type="varchar" name="builder_model" length="255" nullable="true"  comment="Builder Model"/>
+        <column xsi:type="text" name="builder_params" nullable="true"  comment="Builder Parameters"/>
+        <column xsi:type="varchar" name="product_id_type" length="255" nullable="true" comment="Product Type ID"/>
+        <column xsi:type="varchar" name="product_id_value_attribute" length="255" nullable="true"  comment="Product ID Value Attribute"/>
+        <column xsi:type="text" name="variants_attributes" nullable="true"  comment="Variants Attributes"/>
+        <column xsi:type="timestamp" name="last_export_date" nullable="true"  comment="Last Export Date" />
+        <column xsi:type="smallint" name="offer_state" unsigned="true" nullable="false" default="11" comment="Offer State"/>
+        <column xsi:type="text" name="offer_additional_fields_values" nullable="false" comment="Offer Additional Fields Values"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <index referenceId="MIRAKL_SELLER_LISTING_IS_ACTIVE_IDX" indexType="btree">
+            <column name="is_active" />
+        </index>
+        <index referenceId="MIRAKL_SELLER_LISTING_CONNECTION_ID_IDX" indexType="btree">
+            <column name="connection_id" />
+        </index>
+        <constraint xsi:type="foreign" referenceId="MIRAKL_SELLER_LISTING_CONNECTION_ID_MIRAKL_SELLER_CONNECTION_ID"
+                    table="mirakl_seller_listing"
+                    column="connection_id"
+                    referenceTable="mirakl_seller_connection"
+                    referenceColumn="id"
+                    onDelete="CASCADE"/>
+    </table>
+    <table name="mirakl_seller_offer" resource="default" engine="innodb">
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="Magento Offer Id"/>
+        <column xsi:type="int" name="listing_id" unsigned="true" nullable="false" default="0" comment="Mirakl Listing Id"/>
+        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" default="0" comment="Product Id"/>
+        <column xsi:type="int" name="product_import_id" unsigned="true" nullable="true"  comment="Product Import ID"/>
+        <column xsi:type="varchar" name="product_import_status" length="50" nullable="true"  comment="Product Import Status"/>
+        <column xsi:type="varchar" name="product_import_message" nullable="true"  comment="Product Import Message"/>
+        <column xsi:type="int" name="offer_import_id" unsigned="true" nullable="true"  comment="Offer Import Id"/>
+        <column xsi:type="varchar" name="offer_import_status" length="50" nullable="false" comment="Offer Import Status"/>
+        <column xsi:type="text" name="offer_error_message" nullable="true"  comment="Offer Error Message"/>
+        <column xsi:type="varchar" name="offer_hash" length="40" nullable="false" comment="Offer Hash"/>
+        <column xsi:type="timestamp" name="created_at" nullable="true"  comment="Created Date" />
+        <column xsi:type="timestamp" name="updated_at" nullable="true"  comment="Updated Date" />
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <index referenceId="MIRAKL_SELLER_OFFER_LISTING_ID_IDX" indexType="btree">
+            <column name="listing_id" />
+        </index>
+        <index referenceId="MIRAKL_SELLER_OFFER_PRODUCT_ID_IDX" indexType="btree">
+            <column name="product_id" />
+        </index>
+        <index referenceId="MIRAKL_SELLER_OFFER_PRODUCT_IMPORT_ID_IDX" indexType="btree">
+            <column name="product_import_id" />
+        </index>
+        <index referenceId="MIRAKL_SELLER_OFFER_PRODUCT_IMPORT_STATUS_IDX" indexType="btree">
+            <column name="product_import_status" />
+        </index>
+        <index referenceId="MIRAKL_SELLER_OFFER_OFFER_IMPORT_ID_IDX" indexType="btree">
+            <column name="offer_import_id" />
+        </index>
+        <index referenceId="MIRAKL_SELLER_OFFER_OFFER_IMPORT_STATUS_IDX" indexType="btree">
+            <column name="offer_import_status" />
+        </index>
+        <index referenceId="MIRAKL_SELLER_OFFER_OFFER_HASH_IDX" indexType="btree">
+            <column name="offer_hash" />
+        </index>
+        <constraint xsi:type="foreign" referenceId="MIRAKL_SELLER_OFFER_LISTING_ID_MIRAKL_SELLER_LISTING_ID"
+                    table="mirakl_seller_offer"
+                    column="listing_id"
+                    referenceTable="mirakl_seller_listing"
+                    referenceColumn="id"
+                    onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="MIRAKL_SELLER_OFFER_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID"
+                    table="mirakl_seller_offer"
+                    column="product_id"
+                    referenceTable="catalog_product_entity"
+                    referenceColumn="entity_id"
+                    onDelete="CASCADE"/>
+    </table>
+    <table name="mirakl_seller_listing_tracking_product" resource="default" engine="innodb">
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="Magento Id"/>
+        <column xsi:type="int" name="listing_id" unsigned="true" nullable="false" default="0" comment="Mirakl Listing Id"/>
+        <column xsi:type="int" name="import_id" unsigned="true" nullable="true"  comment="Import ID"/>
+        <column xsi:type="varchar" name="import_status" length="50" nullable="true"  comment="Import Status"/>
+        <column xsi:type="varchar" name="import_status_reason" length="255" nullable="true"  comment="Import Status Reason"/>
+        <column xsi:type="text" name="transformation_error_report" nullable="true"  comment="Transformation Error Report"/>
+        <column xsi:type="text" name="integration_error_report" nullable="true"  comment="Integration Error Report"/>
+        <column xsi:type="text" name="integration_success_report" nullable="true"  comment="Integration Success Report"/>
+        <column xsi:type="timestamp" name="created_at" nullable="true"  comment="Created Date" />
+        <column xsi:type="timestamp" name="updated_at" nullable="true"  comment="Updated Date" />
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <index referenceId="MIRAKL_SELLER_LISTING_TRACKING_PRODUCT_LISTING_ID_IDX" indexType="btree">
+            <column name="listing_id" />
+        </index>
+        <index referenceId="MIRAKL_SELLER_LISTING_TRACKING_PRODUCT_IMPORT_STATUS_IDX" indexType="btree">
+            <column name="import_status" />
+        </index>
+        <constraint xsi:type="foreign" referenceId="MIRAKL_SELLER_LISTING_TRACKING_PRODUCT_LISTING_ID_MIRAKL_SELLER_LISTING_ID"
+                    table="mirakl_seller_listing_tracking_product"
+                    column="listing_id"
+                    referenceTable="mirakl_seller_listing"
+                    referenceColumn="id"
+                    onDelete="CASCADE"/>
+    </table>
+    <table name="mirakl_seller_listing_tracking_offer" resource="default" engine="innodb">
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="Magento Id"/>
+        <column xsi:type="int" name="listing_id" unsigned="true" nullable="false" default="0" comment="Mirakl Listing Id"/>
+        <column xsi:type="int" name="import_id" unsigned="true" nullable="true"  comment="Import ID"/>
+        <column xsi:type="varchar" name="import_status" length="50" nullable="true"  comment="Import Status"/>
+        <column xsi:type="text" name="error_report" nullable="true"  comment="Error Report"/>
+        <column xsi:type="timestamp" name="created_at" nullable="true"  comment="Created Date" />
+        <column xsi:type="timestamp" name="updated_at" nullable="true"  comment="Updated Date" />
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <index referenceId="MIRAKL_SELLER_LISTING_TRACKING_OFFER_LISTING_ID_IDX" indexType="btree">
+            <column name="listing_id" />
+        </index>
+        <index referenceId="MIRAKL_SELLER_LISTING_TRACKING_OFFER_IMPORT_STATUS_IDX" indexType="btree">
+            <column name="import_status" />
+        </index>
+        <constraint xsi:type="foreign" referenceId="MIRAKL_SELLER_LISTING_TRACKING_OFFER_LISTING_ID_MIRAKL_SELLER_LISTING_ID"
+                    table="mirakl_seller_listing_tracking_product"
+                    column="listing_id"
+                    referenceTable="mirakl_seller_listing"
+                    referenceColumn="id"
+                    onDelete="CASCADE"/>
+    </table>
+</schema>

@@ -1,32 +1,45 @@
 <?php
-namespace MiraklSeller\Sales\Setup;
+
+declare(strict_types=1);
+
+namespace MiraklSeller\Sales\Setup\Patch\Schema;
 
 use Magento\Framework\DB\Ddl\Table;
-use Magento\Framework\Setup\InstallDataInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\Patch\SchemaPatchInterface;
+use Magento\Sales\Setup\SalesSetup;
 use Magento\Sales\Setup\SalesSetupFactory;
 
-class InstallData implements InstallDataInterface
+class AddOrderAttributes implements SchemaPatchInterface
 {
+    /**
+     * @var ModuleDataSetupInterface
+     */
+    private $setup;
+
     /**
      * @var SalesSetupFactory
      */
     private $salesSetupFactory;
 
     /**
-     * @param   SalesSetupFactory   $salesSetupFactory
+     * @param ModuleDataSetupInterface $setup
+     * @param SalesSetupFactory        $salesSetupFactory
      */
-    public function __construct(SalesSetupFactory $salesSetupFactory)
-    {
+    public function __construct(
+        ModuleDataSetupInterface $setup,
+        SalesSetupFactory $salesSetupFactory
+    ) {
+        $this->setup = $setup;
         $this->salesSetupFactory = $salesSetupFactory;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function apply(): void
     {
+        $setup = $this->setup;
         $setup->startSetup();
 
         $attributes = [
@@ -42,18 +55,7 @@ class InstallData implements InstallDataInterface
                 ],
             ],
         ];
-        $this->addOrderAttributes($setup, $attributes);
 
-        $setup->endSetup();
-    }
-
-    /**
-     * @param   ModuleDataSetupInterface    $setup
-     * @param   array                       $attributes
-     * @return  $this
-     */
-    private function addOrderAttributes(ModuleDataSetupInterface $setup, array $attributes)
-    {
         $salesSetup = $this->getSalesSetup($setup);
 
         foreach ($attributes as $entityTypeId => $attrParams) {
@@ -63,15 +65,31 @@ class InstallData implements InstallDataInterface
             }
         }
 
-        return $this;
+        $setup->endSetup();
     }
 
     /**
-     * @param   ModuleDataSetupInterface    $setup
-     * @return  \Magento\Sales\Setup\SalesSetup
+     * @param ModuleDataSetupInterface $setup
+     * @return mixed
      */
     private function getSalesSetup(ModuleDataSetupInterface $setup)
     {
         return $this->salesSetupFactory->create(['setup' => $setup]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function getDependencies(): array
+    {
+        return [];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAliases(): array
+    {
+        return [];
     }
 }

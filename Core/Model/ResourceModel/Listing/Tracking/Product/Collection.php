@@ -1,6 +1,7 @@
 <?php
 namespace MiraklSeller\Core\Model\ResourceModel\Listing\Tracking\Product;
 
+use Magento\Framework\DB\Select;
 use MiraklSeller\Core\Model\Listing\Tracking\Product;
 use MiraklSeller\Core\Model\Listing\Tracking\Status\Product as ProductStatus;
 use MiraklSeller\Core\Model\ResourceModel\Listing\Tracking\AbstractCollection;
@@ -36,7 +37,7 @@ class Collection extends AbstractCollection
     public function getLastProductTrackingForListing($listingId)
     {
         $this->addExcludeProductStatusFinalFilter();
-        $this->getSelect()->order('created_at ' . \Zend_Db_Select::SQL_DESC);
+        $this->getSelect()->order('created_at ' . Select::SQL_DESC);
         $this->getSelect()->limit(1);
 
         return $this->addListingFilter($listingId);
