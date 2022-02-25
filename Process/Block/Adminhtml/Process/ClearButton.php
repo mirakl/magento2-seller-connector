@@ -27,6 +27,6 @@ class ClearButton extends GenericButton implements ButtonProviderInterface
      */
     protected function getClearAllUrl()
     {
-        return $this->getUrl('*/*/clear');
+        return $this->getUrl('*/*/clearAllHistory');
     }
 }

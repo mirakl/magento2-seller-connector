@@ -258,3 +258,4 @@
 "This table is used when the address country from the Mirakl order is not recognized automatically by Magento. You can manually add as many countries as you want and map them to the right countries in Magento.","Ce tableau est utilisé lorsque le pays de l'adresse de la commande Mirakl n'est pas reconnu automatiquement par Magento. Vous pouvez ajouter manuellement autant de pays que vous le souhaitez et les associer aux bons pays dans Magento."
 "Could not map country for label ""%1""","Impossible d'associer le pays pour le libellé ""%1"""
 "Please map the country label in ""Mirakl Seller > Configuration > Mirakl Orders > Mirakl Orders Import Settings > Country Labels Mapping""","Veuillez associer le libellé du pays dans ""Mirakl Seller > Configuration > Commandes Mirakl > Paramètres des imports de commandes Mirakl > Mapping des libellés de pays"""
+"Fulfillment Center","Centre d'expédition"

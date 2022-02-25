@@ -161,6 +161,19 @@ class MiraklInfo extends Template
     }
 
     /**
+     * @return string
+     */
+    public function getOrderFulfillmentCenter()
+    {
+        $magentoOrder = $this->getMagentoOrder();
+        if ($magentoOrder->getMiraklFulfillmentCenter() !== 'DEFAULT') {
+            return $magentoOrder->getMiraklFulfillmentCenter();
+        }
+
+        return '';
+    }
+
+    /**
      * @return  string
      */
     protected function _toHtml()

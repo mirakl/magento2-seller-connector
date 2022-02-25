@@ -4,6 +4,7 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="process" xsi:type="object">MiraklSeller\Process\Console\Command\ProcessCommand</item>
+                <item name="process:clear-history" xsi:type="object">MiraklSeller\Process\Console\Command\ClearHistoryCommand</item>
             </argument>
         </arguments>
     </type>

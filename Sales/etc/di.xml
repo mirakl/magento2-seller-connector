@@ -33,6 +33,7 @@
         <arguments>
             <argument name="columns">
                 <item name="mirakl_connection_id" xsi:type="string">sales_order.mirakl_connection_id</item>
+                <item name="mirakl_fulfillment_center" xsi:type="string">sales_order.mirakl_fulfillment_center</item>
             </argument>
         </arguments>
     </virtualType>

@@ -29,6 +29,16 @@
                     <validate>required-entry validate-greater-than-zero validate-number</validate>
                 </field>
             </group>
+            <group id="history" translate="label" sortOrder="15" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Mirakl Processes History</label>
+                <field id="clear_keep_days" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label><![CDATA[Clear History of Processes Created Before (days)]]></label>
+                    <validate>required-entry validate-greater-than-zero validate-number</validate>
+                </field>
+                <field id="clear" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="15" translate="button_label">
+                    <frontend_model>MiraklSeller\Process\Block\Adminhtml\System\Config\Button\ClearHistory</frontend_model>
+                </field>
+            </group>
         </section>
     </system>
 </config>

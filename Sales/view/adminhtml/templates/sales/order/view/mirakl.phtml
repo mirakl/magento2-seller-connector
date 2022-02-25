@@ -1,7 +1,7 @@
 <?php
 /** @var \MiraklSeller\Sales\Block\Adminhtml\Sales\Order\View\MiraklInfo $block */
-$_miraklOrder = $block->getMiraklOrder();
-if (!$_miraklOrder) return;
+$miraklOrder = $block->getMiraklOrder();
+if (!$miraklOrder) return;
 ?>
 <div class="admin__page-section-item mirakl">
     <div class="admin__page-section-item-title">
@@ -32,7 +32,7 @@ if (!$_miraklOrder) return;
             <tr>
                 <th><?= __('Incident') ?></th>
                 <td>
-                    <?php if ($_miraklOrder->getHasIncident()): ?>
+                    <?php if ($miraklOrder->getHasIncident()): ?>
                         <span class="incident"><?= __('An incident has been opened on this Mirakl order.') ?></span><br>
                         <a href="<?= $block->getViewMiraklOrderUrl() ?>" target="_blank"><?= __('See details in Mirakl') ?></a>
                     <?php else: ?>
@@ -43,7 +43,7 @@ if (!$_miraklOrder) return;
             <tr>
                 <th><?= __('Refund') ?></th>
                 <td>
-                    <?php if ($block->isMiraklOrderRefunded($_miraklOrder)): ?>
+                    <?php if ($block->isMiraklOrderRefunded($miraklOrder)): ?>
                         <span class="incident"><?= __('A refund has been issued on this Mirakl order.') ?></span><br>
                         <a href="<?= $block->getViewMiraklOrderUrl() ?>" target="_blank"><?= __('See details in Mirakl') ?></a>
                     <?php else: ?>
@@ -51,8 +51,17 @@ if (!$_miraklOrder) return;
                     <?php endif ?>
                 </td>
             </tr>
+            <?php $fulfillmentCenter = $block->getOrderFulfillmentCenter()?>
+            <?php if (!empty($fulfillmentCenter)) :?>
+                <tr>
+                    <th><?= __('Fulfillment Center') ?></th>
+                    <td>
+                        <?= $fulfillmentCenter ?>
+                    </td>
+                </tr>
+            <?php endif; ?>
             <?php /** @var \Mirakl\MMP\Common\Domain\AdditionalFieldValue $_field */ ?>
-            <?php foreach ($_miraklOrder->getOrderAdditionalFields() as $_field): ?>
+            <?php foreach ($miraklOrder->getOrderAdditionalFields() as $_field): ?>
                 <tr>
                     <th><?= $_field->getCode() ?></th>
                     <td><?= $block->escapeHtml(is_array($_field->getValue()) ? implode(', ', $_field->getValue()) : $_field->getValue()) ?></td>

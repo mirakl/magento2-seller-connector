@@ -7,6 +7,9 @@
                 <timeout_delay>240</timeout_delay>
                 <show_file_max_size>5</show_file_max_size>
             </general>
+            <history>
+                <clear_keep_days>90</clear_keep_days>
+            </history>
         </mirakl_seller_process>
     </default>
 </config>

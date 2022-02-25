@@ -20,5 +20,18 @@
                 <label translate="true">Source</label>
             </settings>
         </column>
+        <column name="mirakl_fulfillment_center" class="MiraklSeller\Sales\Ui\Component\Sales\Order\Grid\Column\MiraklFulfillmentCenter">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                </item>
+            </argument>
+            <settings>
+                <sortable>false</sortable>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <label translate="true">Fulfillment Center</label>
+                <item name="filter" xsi:type="string">text</item>
+            </settings>
+        </column>
     </columns>
 </listing>
