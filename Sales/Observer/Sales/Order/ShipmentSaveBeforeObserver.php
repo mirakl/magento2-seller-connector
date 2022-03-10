@@ -46,7 +46,7 @@ class ShipmentSaveBeforeObserver extends AbstractObserver implements ObserverInt
         foreach ($shipment->getAllItems() as $item) {
             $shipmentLine = new ShipmentLine();
             $shipmentLine->setOfferSku($item->getSku());
-            $shipmentLine->setQuantity($item->getQty());
+            $shipmentLine->setQuantity((int)$item->getQty());
             $shipmentLines->add($shipmentLine);
         }
 
