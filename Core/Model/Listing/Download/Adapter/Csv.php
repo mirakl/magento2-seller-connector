@@ -1,8 +1,7 @@
 <?php
 namespace MiraklSeller\Core\Model\Listing\Download\Adapter;
 
-class Csv extends \SplTempFileObject
-    implements AdapterInterface
+class Csv extends \SplTempFileObject implements AdapterInterface
 {
     /**
      * @var int
@@ -13,11 +12,12 @@ class Csv extends \SplTempFileObject
      * @param   int|null    $maxMemory
      * @param   string      $delimiter
      * @param   string      $enclosure
+     * @param   string      $escape
      */
-    public function __construct($maxMemory = null, $delimiter = ';', $enclosure = '"')
+    public function __construct($maxMemory = null, $delimiter = ';', $enclosure = '"', $escape = "\x80")
     {
         parent::__construct(is_int($maxMemory) ? $maxMemory : null);
-        $this->setCsvControl($delimiter, $enclosure);
+        $this->setCsvControl($delimiter, $enclosure, $escape);
     }
 
     /**

@@ -521,7 +521,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             'cataloginventory_stock_item',
             'product_id = entity_id',
             array_merge(
-                ['qty'],
+                ['qty', 'manage_stock', 'use_config_manage_stock'],
                 array_keys($this->orderConditionFields),
                 array_values($this->orderConditionFields)
             ),

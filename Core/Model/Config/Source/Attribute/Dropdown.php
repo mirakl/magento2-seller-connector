@@ -59,7 +59,7 @@ class Dropdown implements OptionSourceInterface
         $options = [];
 
         if ($this->withEmpty) {
-            $options[] = ['value' => '', 'label' => __('-- Please Select --')];
+            $options[] = ['value' => '', 'label' => __('-- Empty Value --')];
         }
 
         $collection = $this->getAttributeCollection();

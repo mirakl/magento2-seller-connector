@@ -15,18 +15,19 @@ trait CsvTrait
     /**
      * @param   string  $str
      * @param   string  $enclosure
+     * @param   string  $escape
      * @return  \SplTempFileObject
      */
-    public function createCsvFileFromString($str, $enclosure = '"')
+    public function createCsvFileFromString($str, $enclosure = '"', $escape = "\x80")
     {
         $file = \Mirakl\create_temp_file($str);
         $file->setFlags(\SplFileObject::READ_CSV);
-        $file->setCsvControl(';', $enclosure);
+        $file->setCsvControl(';', $enclosure, $escape);
 
         $delimiters = $this->_availableDelimiters[';'];
 
         while (1 === count($file->fgetcsv()) && $delimiter = current($delimiters)) {
-            $file->setCsvControl($delimiter, $enclosure);
+            $file->setCsvControl($delimiter, $enclosure, $escape);
             $file->rewind();
             next($delimiters);
         }

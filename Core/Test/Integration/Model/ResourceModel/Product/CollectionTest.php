@@ -171,13 +171,13 @@ class CollectionTest extends TestCase
     {
         return [
             [551, [551 => [
-                'entity_id' => '551', 'qty' => '100.0000', 'use_config_min_sale_qty' => '1',
+                'entity_id' => '551', 'qty' => '100.0000', 'manage_stock' => '0', 'use_config_manage_stock' => '1', 'use_config_min_sale_qty' => '1',
                 'use_config_max_sale_qty' => '1', 'use_config_enable_qty_inc' => '1',
                 'use_config_qty_increments' => '1', 'min_sale_qty' => '1.0000',
                 'max_sale_qty' => '0.0000', 'enable_qty_increments' => '0','qty_increments' => '0.0000',
             ]]],
             [378, [378 => [
-                'entity_id' => '378', 'qty' => '100.0000', 'use_config_min_sale_qty' => '1',
+                'entity_id' => '378', 'qty' => '100.0000', 'manage_stock' => '0', 'use_config_manage_stock' => '1', 'use_config_min_sale_qty' => '1',
                 'use_config_max_sale_qty' => '1', 'use_config_enable_qty_inc' => '1',
                 'use_config_qty_increments' => '1', 'min_sale_qty' => '1.0000',
                 'max_sale_qty' => '0.0000', 'enable_qty_increments' => '0','qty_increments' => '0.0000',
@@ -257,8 +257,8 @@ class CollectionTest extends TestCase
             [
                 11, 1, ['color', 'activity', 'style_bags'], [
                     11 => [
-                        'entity_id' => '11', 'color' => null, 'activity' => 'Gym', 'style_bags' => 'Backpack',
-                        'qty' => '100.0000', 'use_config_min_sale_qty' => '1', 'use_config_max_sale_qty' => '1',
+                        'entity_id' => '11', 'color' => null, 'activity' => 'Gym', 'style_bags' => 'Backpack', 'qty' => '100.0000', 'manage_stock' => '0', 'use_config_manage_stock' => '1',
+                        'use_config_min_sale_qty' => '1', 'use_config_max_sale_qty' => '1',
                         'use_config_enable_qty_inc' => '1', 'use_config_qty_increments' => '1',
                         'min_sale_qty' => '1.0000', 'max_sale_qty' => '0.0000', 'enable_qty_increments' => '0',
                         'qty_increments' => '0.0000', 'tier_prices' => '', 'price' => '33.000000',
@@ -271,8 +271,8 @@ class CollectionTest extends TestCase
                 18, 1, ['color', 'size', 'activity'], [
                     18 => [
                         'entity_id' => '18', 'color' => null, 'size' => null, 'activity' => 'Gym',
-                        'qty' => '100.0000', 'use_config_min_sale_qty' => '1', 'use_config_max_sale_qty' => '1',
-                        'use_config_enable_qty_inc' => '1', 'use_config_qty_increments' => '1',
+                        'qty' => '100.0000', 'manage_stock' => '0', 'use_config_manage_stock' => '1',
+                        'use_config_min_sale_qty' => '1', 'use_config_max_sale_qty' => '1', 'use_config_enable_qty_inc' => '1', 'use_config_qty_increments' => '1',
                         'min_sale_qty' => '1.0000', 'max_sale_qty' => '0.0000', 'enable_qty_increments' => '0',
                         'qty_increments' => '0.0000', 'tier_prices' => '', 'price' => '16.000000',
                         'tax_class_id' => '2', 'final_price' => '16.000000', 'minimal_price' => '16.000000',
@@ -284,7 +284,8 @@ class CollectionTest extends TestCase
                 361, 0, ['color', 'size', 'material'], [
                     361 => [
                         'entity_id' => '361', 'color' => 'Orange', 'size' => 'L', 'material' => null,
-                        'qty' => '100.0000', 'use_config_min_sale_qty' => '1', 'use_config_max_sale_qty' => '1',
+                        'qty' => '100.0000', 'manage_stock' => '0',
+                        'use_config_manage_stock' => '1','use_config_min_sale_qty' => '1', 'use_config_max_sale_qty' => '1',
                         'use_config_enable_qty_inc' => '1', 'use_config_qty_increments' => '1',
                         'min_sale_qty' => '1.0000', 'max_sale_qty' => '0.0000', 'enable_qty_increments' => '0',
                         'qty_increments' => '0.0000', 'tier_prices' => '', 'price' => '66.000000',

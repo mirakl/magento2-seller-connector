@@ -171,7 +171,7 @@ class ListingDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $data['subtotal']       = $miraklOrder->getPrice(); // Excl. Tax
 
             // Add total tax amount
-            $data['total_tax'] = $this->orderHelper->getMiraklOrderTaxAmount($miraklOrder, true);
+            $data['total_tax'] = $this->orderHelper->getMiraklOrderTaxAmount($miraklOrder, true, []);
 
             // Calculate grand total
             $data['grand_total'] = $miraklOrder->getTotalPrice() + $data['total_tax'];

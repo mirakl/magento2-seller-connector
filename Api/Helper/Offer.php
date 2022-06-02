@@ -6,9 +6,11 @@ use Mirakl\Core\Domain\FileWrapper;
 use Mirakl\MMP\OperatorShop\Domain\Offer\Importer\ImportMode;
 use Mirakl\MMP\OperatorShop\Domain\Offer\Importer\OfferImportResult;
 use Mirakl\MMP\OperatorShop\Domain\Offer\Importer\OfferProductImportTracking;
+use Mirakl\MMP\Shop\Domain\Collection\Offer\State\OfferStateCollection;
 use Mirakl\MMP\Shop\Request\Offer\Importer\OfferImportErrorReportRequest;
 use Mirakl\MMP\Shop\Request\Offer\Importer\OfferImportReportRequest;
 use Mirakl\MMP\Shop\Request\Offer\Importer\OfferImportRequest;
+use Mirakl\MMP\Shop\Request\Offer\State\GetOfferStateListRequest;
 use MiraklSeller\Api\Model\Connection;
 
 class Offer extends Client\MMP
@@ -34,7 +36,7 @@ class Offer extends Client\MMP
         $cols = array_keys(reset($data));
         array_unshift($data, $cols);
 
-        $file = \Mirakl\create_temp_csv_file($data);
+        $file = $this->toCsvFile($data);
         $request = new OfferImportRequest($file);
         $request->setImportMode($importMode);
         $request->setWithProducts($withProducts);
@@ -71,6 +73,19 @@ class Offer extends Client\MMP
     public function getOffersImportErrorReport(Connection $connection, $importId)
     {
         $request = new OfferImportErrorReportRequest($importId);
+
+        return $this->send($connection, $request);
+    }
+
+    /**
+     * (OF61) Get Mirakl offers conditions (states) list
+     *
+     * @param Connection $connection
+     * @return OfferStateCollection
+     */
+    public function getOffersStateList(Connection $connection)
+    {
+        $request = new GetOfferStateListRequest();
 
         return $this->send($connection, $request);
     }

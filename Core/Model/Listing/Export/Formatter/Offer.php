@@ -51,9 +51,12 @@ class Offer implements FormatterInterface
         );
 
         foreach ($this->config->getOfferFieldsMapping($listing->getStoreId()) as $key => $value) {
-            // Override default key by its configured mapping if value is available and not empty in $data
-            if (empty($data[$key]) || !empty($value)) {
-                $data[$key] = !empty($value) && !empty($data[$value]) ? $data[$value] : '';
+            if (empty($value) || empty($data[$value])) {
+                // Set empty value if no mapping defined or if mapping value is empty
+                $data[$key] = '';
+            } else {
+                // Override default key by its configured mapping value
+                $data[$key] = $data[$value];
             }
         }
 
@@ -95,7 +98,7 @@ class Offer implements FormatterInterface
             'price-additional-info' => $data['price_additional_info'],
             'quantity'              => isset($data['qty']) ? max(0, intval($data['qty'])) : '',
             'min-quantity-alert'    => $data['min_quantity_alert'],
-            'state'                 => $data['state'] ?: \MiraklSeller\Core\Model\Offer\State::DEFAULT_STATE,
+            'state'                 => $data['state'] ?: \MiraklSeller\Core\Model\Offer::DEFAULT_STATE,
             'available-start-date'  => self::formatDate($data['available_start_date']),
             'available-end-date'    => self::formatDate($data['available_end_date']),
             'logistic-class'        => $data['logistic_class'],

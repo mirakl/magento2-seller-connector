@@ -33,7 +33,7 @@ class Product extends Client\MCI
         $cols = array_keys(reset($data));
         array_unshift($data, $cols);
 
-        $file = \Mirakl\create_temp_csv_file($data);
+        $file = $this->toCsvFile($data);
         $request = new ProductImportRequest($file);
         $request->setFileName('MGT-P41-' . time() . '.csv');
 

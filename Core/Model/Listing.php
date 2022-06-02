@@ -28,7 +28,7 @@ use MiraklSeller\Core\Model\ResourceModel\OfferFactory as OfferResourceFactory;
  * @method  $this   setLastExportDate(string $lastExportDate)
  * @method  string  getName()
  * @method  $this   setName(string $name)
- * @method  $this   setOfferAdditionalFieldsValues(string $offerAdditionalFieldsValues)
+ * @method  $this   setOfferAdditionalFieldsValues(array|string $offerAdditionalFieldsValues)
  * @method  int     getOfferState()
  * @method  $this   setOfferState(int $offerState)
  * @method  string  getProductIdType()
@@ -249,6 +249,20 @@ class Listing extends AbstractModel
     {
         if ($connection = $this->getConnection()) {
             return $connection->getOfferAdditionalFields();
+        }
+
+        return [];
+    }
+
+    /**
+     * Return a list of possible offer states (conditions)
+     *
+     * @return array
+     */
+    public function getOfferStates()
+    {
+        if ($connection = $this->getConnection()) {
+            return $connection->getOfferStates();
         }
 
         return [];

@@ -14,6 +14,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use MiraklSeller\Api\Helper\Shop as ShopApi;
+use MiraklSeller\Api\Helper\Offer as OfferApi;
 
 /**
  * @method  string  getApiUrl()
@@ -34,7 +35,7 @@ use MiraklSeller\Api\Helper\Shop as ShopApi;
  * @method  $this   setMessagesCode(string $messagesCode)
  * @method  string  getName()
  * @method  $this   setName(string $name)
- * @method  $this   setOfferAdditionalFields(string $offerAdditionalFields)
+ * @method  $this   setOfferAdditionalFields(array|string $offerAdditionalFields)
  * @method  string  getShipmentSourceAlgorithm()
  * @method  $this   setShipmentSourceAlgorithm(string $shipmentSourceAlgorithm)
  * @method  int     getShopId()
@@ -82,14 +83,25 @@ class Connection extends AbstractModel
     protected $json;
 
     /**
+     * @var OfferApi
+     */
+    protected $offerApi;
+
+    /**
      * @var array
      */
     private $productAttributes = [];
 
     /**
+     * @var array
+     */
+    private $offerStates;
+
+    /**
      * @param Context                             $context
      * @param Registry                            $registry
      * @param ShopApi                             $shopApi
+     * @param OfferApi                            $offerApi
      * @param StoreManagerInterface               $storeManager
      * @param Json                                $json
      * @param ProductAttributeRepositoryInterface $attributeRepository
@@ -101,6 +113,7 @@ class Connection extends AbstractModel
         Context $context,
         Registry $registry,
         ShopApi $shopApi,
+        OfferApi $offerApi,
         StoreManagerInterface $storeManager,
         Json $json,
         ProductAttributeRepositoryInterface $attributeRepository,
@@ -116,6 +129,7 @@ class Connection extends AbstractModel
             $data
         );
         $this->shopApi = $shopApi;
+        $this->offerApi = $offerApi;
         $this->storeManager = $storeManager;
         $this->json = $json;
         $this->attributeRepository = $attributeRepository;
@@ -174,6 +188,21 @@ class Connection extends AbstractModel
         }
 
         return $fields;
+    }
+
+    /**
+     * Return a list of possible offer states (conditions)
+     *
+     * @return array
+     */
+    public function getOfferStates()
+    {
+        if (!isset($this->offerStates)) {
+            $offerStates = $this->offerApi->getOffersStateList($this);
+            $this->offerStates = $offerStates->toArray();
+        }
+
+        return $this->offerStates;
     }
 
     /**

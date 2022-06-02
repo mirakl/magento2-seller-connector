@@ -17,6 +17,8 @@ use MiraklSeller\Core\Model\ResourceModel\Product\CollectionFactory as ProductCo
 
 class Offers extends AbstractExport
 {
+    const NO_MANAGE_STOCK_QTY = 999;
+
     /**
      * @var AttributeFactory
      */
@@ -117,7 +119,7 @@ class Offers extends AbstractExport
         $collection->addTierPricesToSelect($listing->getWebsiteId(), $this->config->getCustomerGroup())
             ->addListingPriceData($listing)
             ->addQuantityToSelect()
-            ->addAttributeToSelect(['description', 'special_price', 'special_from_date', 'special_to_date']);
+            ->addAttributeToSelect(['special_price', 'special_from_date', 'special_to_date']);
 
         // Add offer fields mapped in config
         $this->addMappedFieldsToCollection($collection, $listing);
@@ -192,6 +194,9 @@ class Offers extends AbstractExport
      */
     public function overrideQty(array $product, $stockId)
     {
+        if (!$product['use_config_manage_stock'] && !$product['manage_stock']) {
+            return self::NO_MANAGE_STOCK_QTY;
+        }
         if ($product['offer_import_status'] == Offer::OFFER_DELETE) {
             // Set quantity to zero if offer has been flagged as "to delete"
             return 0;

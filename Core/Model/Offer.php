@@ -50,6 +50,8 @@ class Offer extends AbstractModel
     const OFFER_ERROR   = 'ERROR';
     const OFFER_DELETE  = 'DELETE';
 
+    const DEFAULT_STATE = '11'; // 11 = 'New' by default in Mirakl
+
     /**
      * @var array
      */

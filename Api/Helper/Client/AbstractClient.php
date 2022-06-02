@@ -67,6 +67,26 @@ abstract class AbstractClient extends AbstractHelper
     }
 
     /**
+     * @param   array   $data
+     * @param   string  $separator
+     * @param   string  $enclosure
+     * @param   string  $escape
+     * @return  \SplTempFileObject
+     */
+    protected function toCsvFile(array $data, $separator = ';', $enclosure = '"', $escape = "\x80")
+    {
+        $file = new \SplTempFileObject();
+        $file->setFlags(\SplFileObject::READ_CSV);
+        $file->setCsvControl($separator, $enclosure, $escape);
+        foreach ($data as $row) {
+            $file->fputcsv($row);
+        }
+        $file->rewind();
+
+        return $file;
+    }
+
+    /**
      * @return  string
      */
     abstract protected function getArea();

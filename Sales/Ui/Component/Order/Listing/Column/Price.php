@@ -45,7 +45,7 @@ class Price extends Column
                 $item[$fieldName] = $this->priceFormatter->format(
                     $item[$fieldName],
                     false,
-                    null,
+                    PriceCurrencyInterface::DEFAULT_PRECISION,
                     null,
                     $currencyCode
                 );

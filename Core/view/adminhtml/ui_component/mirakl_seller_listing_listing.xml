@@ -87,7 +87,6 @@
         <column name="offer_state" class="MiraklSeller\Core\Ui\Component\Listing\Column\OfferState">
             <settings>
                 <label translate="true">Products Condition</label>
-                <options class="MiraklSeller\Core\Model\Offer\State"/>
                 <filter>select</filter>
                 <dataType>select</dataType>
                 <sortable>false</sortable>

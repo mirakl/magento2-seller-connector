@@ -43,44 +43,44 @@
                 <label>Offer Fields Mapping</label>
                 <field id="description" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Description</label>
-                    <source_model>\MiraklSeller\Core\Model\Config\Source\Attribute\Dropdown</source_model>
+                    <source_model>MiraklSeller\Core\Model\Config\Source\Attribute\Dropdown</source_model>
                 </field>
                 <field id="internal_description" translate="label" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Internal Description</label>
-                    <source_model>\MiraklSeller\Core\Model\Config\Source\Attribute\Dropdown</source_model>
+                    <source_model>MiraklSeller\Core\Model\Config\Source\Attribute\Dropdown</source_model>
                 </field>
                 <field id="price_additional_info" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Price Additional Information</label>
-                    <source_model>\MiraklSeller\Core\Model\Config\Source\Attribute\Dropdown</source_model>
+                    <source_model>MiraklSeller\Core\Model\Config\Source\Attribute\Dropdown</source_model>
                 </field>
                 <field id="min_quantity_alert" translate="label comment" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Min Quantity Alert</label>
                     <comment><![CDATA[Magento attribute must be of type text field with input validation as integer number.]]></comment>
-                    <source_model>\MiraklSeller\Core\Model\Config\Source\Attribute\DropdownTextNumber</source_model>
+                    <source_model>MiraklSeller\Core\Model\Config\Source\Attribute\DropdownTextNumber</source_model>
                 </field>
                 <field id="available_start_date" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Available Start Date</label>
                     <comment><![CDATA[Magento attribute must be of type date.]]></comment>
-                    <source_model>\MiraklSeller\Core\Model\Config\Source\Attribute\DropdownDate</source_model>
+                    <source_model>MiraklSeller\Core\Model\Config\Source\Attribute\DropdownDate</source_model>
                 </field>
                 <field id="available_end_date" translate="label comment" type="select" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Available End Date</label>
                     <comment><![CDATA[Magento attribute must be of type date.]]></comment>
-                    <source_model>\MiraklSeller\Core\Model\Config\Source\Attribute\DropdownDate</source_model>
+                    <source_model>MiraklSeller\Core\Model\Config\Source\Attribute\DropdownDate</source_model>
                 </field>
                 <field id="leadtime_to_ship" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Leadtime to Ship</label>
                     <comment><![CDATA[Magento attribute must be of type text field with input validation as integer number.]]></comment>
-                    <source_model>\MiraklSeller\Core\Model\Config\Source\Attribute\DropdownTextNumber</source_model>
+                    <source_model>MiraklSeller\Core\Model\Config\Source\Attribute\DropdownTextNumber</source_model>
                 </field>
                 <field id="product_tax_code" translate="label comment" type="select" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Product Tax Code</label>
                     <comment><![CDATA[Magento attribute must be of type text field or dropdown.]]></comment>
-                    <source_model>\MiraklSeller\Core\Model\Config\Source\Attribute\DropdownTextOrSelect</source_model>
+                    <source_model>MiraklSeller\Core\Model\Config\Source\Attribute\DropdownTextOrSelect</source_model>
                 </field>
                 <field id="logistic_class" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Logistic Class</label>
-                    <source_model>\MiraklSeller\Core\Model\Config\Source\Attribute\Dropdown</source_model>
+                    <source_model>MiraklSeller\Core\Model\Config\Source\Attribute\Dropdown</source_model>
                 </field>
             </group>
             <group id="prices" translate="label" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
@@ -93,7 +93,7 @@
                 <field id="customer_group" translate="label comment" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Customer Group</label>
                     <comment><![CDATA[Select the customer group to use for price and quantity export.]]></comment>
-                    <source_model>\MiraklSeller\Core\Model\Config\Source\Customer\DropdownCustomerGroup</source_model>
+                    <source_model>MiraklSeller\Core\Model\Config\Source\Customer\DropdownCustomerGroup</source_model>
                 </field>
             </group>
         </section>

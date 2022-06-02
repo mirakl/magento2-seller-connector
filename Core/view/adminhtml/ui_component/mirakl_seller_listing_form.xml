@@ -133,7 +133,7 @@
             <formElements>
                 <select>
                     <settings>
-                        <options class="MiraklSeller\Core\Model\Offer\State"/>
+                        <options class="MiraklSeller\Core\Ui\Component\Listing\OfferStateOptions"/>
                     </settings>
                 </select>
             </formElements>

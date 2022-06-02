@@ -2,7 +2,7 @@
     "name": "mirakl/connector-magento2-seller-api",
     "description": "This is the official Mirakl extension for sellers using Magento 2.",
     "type": "magento2-module",
-    "version": "1.4.0",
+    "version": "1.4.1",
     "license": "proprietary",
     "require": {
         "mirakl/sdk-php-shop": "~1.13.6"
