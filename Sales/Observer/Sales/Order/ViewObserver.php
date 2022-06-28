@@ -35,6 +35,11 @@ class ViewObserver extends AbstractObserver implements ObserverInterface
             );
         }
 
+        if (!$order->getMiraklSync()) {
+            $this->messageManager->addNoticeMessage(__('Synchronization has been disabled for this order.'));
+            return;
+        }
+
         try {
             $updated = $this->synchronizeOrder->synchronize($order, $miraklOrder, $connection);
             $miraklOrderUrl = $this->connectionHelper->getMiraklOrderUrl($connection, $miraklOrder);

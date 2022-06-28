@@ -20,15 +20,13 @@ class Data extends ApiHelper
         }
 
         $currentDate = null !== $date ? $date : new \DateTime('today');
-        $fromDate    = new \DateTime($from);
-        $toDate      = new \DateTime($to);
 
         if (!$from) {
-            $isValid = $currentDate <= $toDate;
+            $isValid = $currentDate <= new \DateTime($to);
         } elseif (!$to) {
-            $isValid = $currentDate >= $fromDate;
+            $isValid = $currentDate >= new \DateTime($from);
         } else {
-            $isValid = $currentDate >= $fromDate && $currentDate <= $toDate;
+            $isValid = $currentDate >= new \DateTime($from) && $currentDate <= new \DateTime($to);
         }
 
         return $isValid;

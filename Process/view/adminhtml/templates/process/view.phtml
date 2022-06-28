@@ -73,35 +73,4 @@ $helper = $this->helper('MiraklSeller\Process\Helper\Data');
             </div>
         <?php endif ?>
     </div>
-
-    <?php if ($process->getMiraklStatus()): ?>
-        <div class="admin__page-section-title">
-            <strong class="title"><?php /* @escapeNotVerified */ echo __('Mirakl Information') ?></strong>
-        </div>
-        <div class="admin__page-section-content">
-            <table class="admin__table-secondary">
-                <tbody>
-                    <tr>
-                        <th><?php /* @escapeNotVerified */ echo __('Mirakl API Status') ?></th>
-                        <td><p class="report-status"><span class="<?php /* @escapeNotVerified */ echo $process->getStatusClass(true) ?>"><span><?php /* @escapeNotVerified */ echo __($process->getMiraklStatus()) ?></span></span></p></td>
-                    </tr>
-                    <tr>
-                        <th><?php /* @escapeNotVerified */ echo __('Synchro Id') ?></th>
-                        <td><?php /* @escapeNotVerified */ echo __($process->getSynchroId()) ?></td>
-                    </tr>
-                    <?php if ($url = $process->getDownloadFileUrl(true)): ?>
-                        <tr>
-                            <th><?php /* @escapeNotVerified */ echo __('Report File') ?></th>
-                            <td>
-                                <a href="<?php /* @escapeNotVerified */ echo $url ?>" title="<?php /* @escapeNotVerified */ echo $block->escapeHtml(__('Download')) ?>"><?php /* @escapeNotVerified */ echo $block->escapeHtml(__('Download')) ?></a><?php if ($fileSize = $process->getFileSizeFormatted('&nbsp;', true)): ?>&nbsp;(<?php echo $fileSize ?>)<?php endif ?>
-                                <?php if ($process->canShowFile(true)): ?>
-                                    <?php /* @escapeNotVerified */ echo __('or') ?> <a target="_blank" href="<?php /* @escapeNotVerified */ echo $block->getUrl('*/*/showFile', ['id' => $process->getId(), 'mirakl' => true]) ?>" title="<?php /* @escapeNotVerified */ echo $block->escapeHtml(__('Open in Browser')) ?>"><?php /* @escapeNotVerified */ echo $block->escapeHtml(__('open in browser')) ?></a>
-                                <?php endif ?>
-                            </td>
-                        </tr>
-                    <?php endif ?>
-                </tbody>
-            </table>
-        </div>
-    <?php endif ?>
 </section>

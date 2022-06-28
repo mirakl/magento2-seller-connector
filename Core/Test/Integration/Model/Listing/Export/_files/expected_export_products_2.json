@@ -1,6 +1,6 @@
 {
     "341": {
-        "image_1": "http://foobar.com/media/catalog/product/m/j/mj09-blue_main_3.jpg",
+        "image_1": "http://foobar.com/media/catalog/product/m/j/mj09-blue_main.jpg",
         "category": "Default Category/Men/Tops/Jackets",
         "variant_group_code": "MJ09",
         "activity": null,
@@ -47,7 +47,7 @@
         "tax_class_id": "2"
     },
     "342": {
-        "image_1": "http://foobar.com/media/catalog/product/m/j/mj09-white_main_3.jpg",
+        "image_1": "http://foobar.com/media/catalog/product/m/j/mj09-white_main.jpg",
         "category": "Default Category/Men/Tops/Jackets",
         "variant_group_code": "MJ09",
         "activity": null,
@@ -94,7 +94,7 @@
         "tax_class_id": "2"
     },
     "343": {
-        "image_1": "http://foobar.com/media/catalog/product/m/j/mj09-yellow_main_3.jpg",
+        "image_1": "http://foobar.com/media/catalog/product/m/j/mj09-yellow_main.jpg",
         "category": "Default Category/Men/Tops/Jackets",
         "variant_group_code": "MJ09",
         "activity": null,
@@ -141,7 +141,7 @@
         "tax_class_id": "2"
     },
     "344": {
-        "image_1": "http://foobar.com/media/catalog/product/m/j/mj09-blue_main_3.jpg",
+        "image_1": "http://foobar.com/media/catalog/product/m/j/mj09-blue_main.jpg",
         "category": "Default Category/Men/Tops/Jackets",
         "variant_group_code": "MJ09",
         "activity": null,
@@ -188,7 +188,7 @@
         "tax_class_id": "2"
     },
     "345": {
-        "image_1": "http://foobar.com/media/catalog/product/m/j/mj09-white_main_3.jpg",
+        "image_1": "http://foobar.com/media/catalog/product/m/j/mj09-white_main.jpg",
         "category": "Default Category/Men/Tops/Jackets",
         "variant_group_code": "MJ09",
         "activity": null,

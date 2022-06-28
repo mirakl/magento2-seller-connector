@@ -364,7 +364,7 @@ class Process extends AbstractModel
 
             $this->setStatus(self::STATUS_PROCESSING);
 
-            $helper = $this->getHelperInstance();
+            $helper = $this->getHelperInstance() ?? '';
             $method = $this->getMethod();
 
             if (!method_exists($helper, $method)) {

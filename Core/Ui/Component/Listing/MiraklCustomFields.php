@@ -71,6 +71,7 @@ class MiraklCustomFields extends Form
         $config = $component->getData('config');
         $config['marketplaceValue'] = [
             'label' => $additionalField['label'],
+            'type' => $this->getTypeLabel($additionalField['type']),
             'required' => $additionalField['required'],
         ];
         $component->setData('config', $config);
@@ -78,6 +79,15 @@ class MiraklCustomFields extends Form
         $this->transformChildComponent($component, $additionalField);
 
         return $component;
+    }
+
+    /**
+     * @param string $type
+     * @return string
+     */
+    private function getTypeLabel($type)
+    {
+        return __(ucfirst(strtolower(str_replace('_', ' ', $type))));
     }
 
     /**

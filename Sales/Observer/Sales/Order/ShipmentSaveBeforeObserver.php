@@ -36,6 +36,10 @@ class ShipmentSaveBeforeObserver extends AbstractObserver implements ObserverInt
             return; // Problem retrieving the associated order, abort
         }
 
+        if (!$order->getMiraklSync()) {
+            return; // We ignore orders not flagged mirakl_sync
+        }
+
         $connection  = $this->getConnectionById($order->getMiraklConnectionId());
         $miraklOrder = $this->getMiraklOrder($connection, $order->getMiraklOrderId());
 

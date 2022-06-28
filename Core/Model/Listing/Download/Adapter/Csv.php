@@ -16,7 +16,7 @@ class Csv extends \SplTempFileObject implements AdapterInterface
      */
     public function __construct($maxMemory = null, $delimiter = ';', $enclosure = '"', $escape = "\x80")
     {
-        parent::__construct(is_int($maxMemory) ? $maxMemory : null);
+        parent::__construct(is_int($maxMemory) ? $maxMemory : 2097152);
         $this->setCsvControl($delimiter, $enclosure, $escape);
     }
 

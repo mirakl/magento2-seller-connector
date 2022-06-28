@@ -30,6 +30,10 @@ class ShipmentSaveTrackBeforeObserver extends AbstractObserver implements Observ
                 return; // Not a Mirakl order, leave
             }
 
+            if (!$order->getMiraklSync()) {
+                return; // We ignore orders not flagged mirakl_sync
+            }
+
             $connection = $this->getConnectionById($order->getMiraklConnectionId());
 
             // Retrieve associated Magento shipment

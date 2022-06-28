@@ -785,7 +785,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
         return $attribute->usesSource() &&
             ($backend == 'int' && $model instanceof \Magento\Eav\Model\Entity\Attribute\Source\Table) ||
-            ($backend == 'varchar' && $attribute->getFrontendInput() == 'multiselect');
+            (($backend == 'varchar' || $backend == 'text') && $attribute->getFrontendInput() == 'multiselect');
     }
 
     /**

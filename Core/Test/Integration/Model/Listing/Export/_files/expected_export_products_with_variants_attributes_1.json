@@ -1,6 +1,6 @@
 {
     "267": {
-        "image_1": "http://foobar.com/media/catalog/product/m/j/mj01-orange_main_2.jpg",
+        "image_1": "http://foobar.com/media/catalog/product/m/j/mj01-orange_main.jpg",
         "category": "Default Category/Men/Tops/Jackets",
         "variant_group_code": "MJ01-Orange",
         "activity": null,
@@ -47,7 +47,7 @@
         "tax_class_id": "2"
     },
     "268": {
-        "image_1": "http://foobar.com/media/catalog/product/m/j/mj01-red_main_2.jpg",
+        "image_1": "http://foobar.com/media/catalog/product/m/j/mj01-red_main.jpg",
         "category": "Default Category/Men/Tops/Jackets",
         "variant_group_code": "MJ01-Red",
         "activity": null,
@@ -94,7 +94,7 @@
         "tax_class_id": "2"
     },
     "269": {
-        "image_1": "http://foobar.com/media/catalog/product/m/j/mj01-yellow_main_2.jpg",
+        "image_1": "http://foobar.com/media/catalog/product/m/j/mj01-yellow_main.jpg",
         "category": "Default Category/Men/Tops/Jackets",
         "variant_group_code": "MJ01-Yellow",
         "activity": null,

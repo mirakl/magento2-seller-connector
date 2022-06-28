@@ -1,11 +1,101 @@
 <?php
 namespace MiraklSeller\Core\Model\Listing\Export;
 
+use MiraklSeller\Core\Helper\Config;
+use MiraklSeller\Core\Helper\Listing\Product as ProductHelper;
 use MiraklSeller\Core\Model\Listing;
-use MiraklSeller\Core\Model\Listing\Export\Formatter\Product as ProductFormatter;
+use MiraklSeller\Core\Model\Listing\Export\Formatter;
+use MiraklSeller\Core\Model\ResourceModel\Product as ProductResource;
 
 class Products extends AbstractExport
 {
+    /**
+     * @var Config
+     */
+    protected $config;
+
+    /**
+     * @var ProductHelper
+     */
+    protected $productHelper;
+
+    /**
+     * @var ProductResource
+     */
+    protected $productResource;
+
+    /**
+     * @var Formatter\Product
+     */
+    protected $productFormatter;
+
+    /**
+     * @var Formatter\PageBuilder
+     */
+    protected $pageBuilderFormatter;
+
+    /**
+     * @param   Config                  $config
+     * @param   ProductHelper           $productHelper
+     * @param   ProductResource         $productResource
+     * @param   Formatter\Product       $productFormatter
+     * @param   Formatter\PageBuilder   $pageBuilderFormatter
+     */
+    public function __construct(
+        Config $config,
+        ProductHelper $productHelper,
+        ProductResource $productResource,
+        Formatter\Product $productFormatter,
+        Formatter\PageBuilder $pageBuilderFormatter
+    ) {
+        $this->config               = $config;
+        $this->productHelper        = $productHelper;
+        $this->productResource      = $productResource;
+        $this->productFormatter     = $productFormatter;
+        $this->pageBuilderFormatter = $pageBuilderFormatter;
+    }
+
+    /**
+     * @param   null|string $value
+     * @return  array
+     */
+    public function getDefaultProductData($value = null)
+    {
+        return array_fill_keys($this->productHelper->getAttributeCodes(), $value);
+    }
+
+    /**
+     * @param   Listing $listing
+     * @return  array
+     */
+    public function getListingProductsData(Listing $listing)
+    {
+        $chunkSize = $this->config->getAttributesChunkSize();
+        $collections = $this->productHelper->getProductsDataCollections($listing, $chunkSize);
+
+        $data = [];
+        /** @var \MiraklSeller\Core\Model\ResourceModel\Product\Collection $collection */
+        foreach ($collections as $collection) {
+            foreach ($collection as $product) {
+                $productId = $product['entity_id'];
+                if (!isset($data[$productId])) {
+                    $data[$productId] = [];
+                }
+                $data[$productId] += $product;
+            }
+        }
+
+        // Remove useless attribute from catalog_product_entity base table
+        $fields = $this->productResource->getProductBaseColumns();
+        foreach (array_diff($fields, ['sku', 'entity_id']) as $field) {
+            foreach ($data as &$product) {
+                unset($product[$field]);
+            }
+        }
+
+        return $data;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -45,9 +135,11 @@ class Products extends AbstractExport
                 $this->productFormatter->format($product, $listing)
             );
 
+            $data[$productId] = $this->pageBuilderFormatter->format($data[$productId], $listing);
+
             // Extend parent code for specific listings
-            if (!empty($data[$productId][ProductFormatter::VARIANT_GROUP_CODE_FIELD]) && count($variantsAttributes)) {
-                $parentSku = $data[$productId][ProductFormatter::VARIANT_GROUP_CODE_FIELD];
+            if (!empty($data[$productId][Formatter\Product::VARIANT_GROUP_CODE_FIELD]) && count($variantsAttributes)) {
+                $parentSku = $data[$productId][Formatter\Product::VARIANT_GROUP_CODE_FIELD];
                 $productAxis = $this->productHelper->getProductAttributeAxis($parentSku);
 
                 foreach ($variantsAttributes as $attributeCode) {
@@ -60,7 +152,7 @@ class Products extends AbstractExport
                     }
                 }
 
-                $data[$productId][ProductFormatter::VARIANT_GROUP_CODE_FIELD] = $parentSku;
+                $data[$productId][Formatter\Product::VARIANT_GROUP_CODE_FIELD] = $parentSku;
             }
         }
 

@@ -53,7 +53,7 @@ class InsertListing extends AbstractComponent
         $listing = $this->coreRegistry->registry('mirakl_seller_listing');
 
         $config = $this->getData('config');
-        $config['render_url'] = str_replace('%2A', $listing->getId(), $config['render_url']);
+        $config['render_url'] = str_replace('%2A', (string) $listing->getId(), $config['render_url']);
         $this->setData('config', $config);
     }
 }

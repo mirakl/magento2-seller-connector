@@ -186,7 +186,7 @@ class Listing extends DataProvider
      */
     public function decorateOutput(Process $process)
     {
-        $value = $process->getOutput();
+        $value = (string) $process->getOutput();
         if (strlen($value)) {
             $lines = array_slice(explode("\n", $value), 0, 6);
             if (count($lines) === 6) {

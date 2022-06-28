@@ -125,7 +125,7 @@ class Offer implements FormatterInterface
      */
     public static function formatDate($value)
     {
-        return substr($value, 0, 10);
+        return $value ? substr($value, 0, 10) : '';
     }
 
     /**

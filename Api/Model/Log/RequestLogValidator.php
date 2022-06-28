@@ -28,7 +28,7 @@ class RequestLogValidator
         $query = '';
         $queryParams = $request->getQueryParams();
         if (!empty($queryParams)) {
-            $query = '?' . http_build_query($queryParams, null, '&', PHP_QUERY_RFC3986);
+            $query = '?' . http_build_query($queryParams, '', '&', PHP_QUERY_RFC3986);
         }
 
         return 'api/' . urldecode($request->getUri() . $query);

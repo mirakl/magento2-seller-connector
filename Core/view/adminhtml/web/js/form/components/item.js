@@ -20,6 +20,10 @@ define([
 
         additionalFieldName: function () {
             return $t('Name:') + ' ' + this.marketplaceValue.label;
+        },
+
+        additionalFieldType: function () {
+            return $t('Type:') + ' ' + this.marketplaceValue.type;
         }
     });
 });

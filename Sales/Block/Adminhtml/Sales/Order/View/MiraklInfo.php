@@ -67,7 +67,6 @@ class MiraklInfo extends Template
         array $data = []
     ) {
         parent::__construct($context, $data);
-
         $this->registry                  = $registry;
         $this->salesHelper               = $salesHelper;
         $this->connectionFactory         = $connectionFactory;
@@ -171,6 +170,27 @@ class MiraklInfo extends Template
         }
 
         return '';
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMiraklSync()
+    {
+        return $this->getMagentoOrder()->getMiraklSync();
+    }
+
+    /**
+     * @return string
+     */
+    public function getMiraklUnsyncUrl()
+    {
+        return $this->getUrl(
+            'mirakl_seller/order/unsync',
+            [
+                'order_id' => $this->getMagentoOrder()->getId(),
+            ]
+        );
     }
 
     /**

@@ -24,7 +24,7 @@ class Config extends \MiraklSeller\Api\Helper\Config
      */
     public function getAllowedStatusesForOrdersImport()
     {
-        $statuses = $this->getValue(self::XML_PATH_AUTO_ORDERS_IMPORT_ALLOWED_STATUSES);
+        $statuses = (string) $this->getValue(self::XML_PATH_AUTO_ORDERS_IMPORT_ALLOWED_STATUSES);
 
         return strlen($statuses) ? explode(',', $statuses) : [];
     }

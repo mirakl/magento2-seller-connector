@@ -158,6 +158,11 @@ class Process extends AbstractHelper
     protected function synchronizeMiraklOrder(ProcessModel $process, Connection $connection, ShopOrder $miraklOrder)
     {
         if ($order = $this->orderHelper->getOrderByMiraklOrderId($miraklOrder->getId())) {
+            if (!$order->getMiraklSync()) {
+                // We ignore orders not flagged mirakl_sync
+                $process->output(__('Synchronization is disabled in Magento for this order, skipping.'));
+                return $process;
+            }
             // Synchronize Magento order if already imported
             if ($this->synchronizeOrder->synchronize($order, $miraklOrder, $connection)) {
                 $process->output(__('Mirakl order has been synchronized with Magento'));

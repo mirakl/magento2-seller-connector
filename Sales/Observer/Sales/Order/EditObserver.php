@@ -17,6 +17,10 @@ class EditObserver extends AbstractObserver implements ObserverInterface
             return; // Do not do anything if it's not an imported Mirakl order
         }
 
+        if (!$order->getMiraklSync()) {
+            return; // We ignore orders not flagged mirakl_sync
+        }
+
         /** @var \Magento\Backend\App\Action $action */
         $action = $observer->getEvent()->getControllerAction();
 

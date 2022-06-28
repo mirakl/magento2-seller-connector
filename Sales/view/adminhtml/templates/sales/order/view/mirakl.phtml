@@ -60,6 +60,18 @@ if (!$miraklOrder) return;
                     </td>
                 </tr>
             <?php endif; ?>
+            <?php $isMiraklSync = $block->isMiraklSync() ;?>
+            <tr id="mirakl-sync-section">
+                <th><?= __('Sync Status') ?></th>
+                <td>
+                    <?php if ($isMiraklSync): ?>
+                        <?= __('Order synced with Mirakl') ?>
+                        <br><a id="mirakl-sync-link" href=""><?= __('Click here to unsync the order') ?></a>
+                    <?php else: ?>
+                        <?= __('Synchronization with Mirakl has been disabled for this order.') ?>
+                    <?php endif; ?>
+                </td>
+            </tr>
             <?php /** @var \Mirakl\MMP\Common\Domain\AdditionalFieldValue $_field */ ?>
             <?php foreach ($miraklOrder->getOrderAdditionalFields() as $_field): ?>
                 <tr>
@@ -70,3 +82,12 @@ if (!$miraklOrder) return;
         </table>
     </div>
 </div>
+<script type="text/x-magento-init">
+    {
+        "#mirakl-sync-section": {
+            "MiraklSeller_Sales/js/order/view/mirakl-sync": {
+                "unsyncUrl": "<?= $block->getMiraklUnsyncUrl()?>"
+            }
+        }
+    }
+</script>

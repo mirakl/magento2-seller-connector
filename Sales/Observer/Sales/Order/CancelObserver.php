@@ -19,6 +19,10 @@ class CancelObserver extends AbstractObserver implements ObserverInterface
             return; // Do not do anything if it's not an imported Mirakl order
         }
 
+        if (!$order->getMiraklSync()) {
+            return; // We ignore orders not flagged mirakl_sync
+        }
+
         $connection    = $this->getConnectionById($order->getMiraklConnectionId());
         $miraklOrderId = $order->getMiraklOrderId();
         $miraklOrder   = $this->getMiraklOrder($connection, $miraklOrderId);

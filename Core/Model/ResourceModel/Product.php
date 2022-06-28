@@ -53,6 +53,7 @@ class Product
         'special_from_date',
         'special_to_date',
         'quantity_and_stock_status',
+        'mirakl_.*',
     ];
 
     /**

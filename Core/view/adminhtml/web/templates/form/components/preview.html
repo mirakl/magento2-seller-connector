@@ -1,13 +1,14 @@
 <div>
-    <strong text="$data.additionalFieldName()"/><br />
+    <strong text="$data.additionalFieldName()"></strong><br>
+    <strong text="$data.additionalFieldType()"></strong><br>
     <if args="$data.marketplaceValue.required">
-        <span translate="'Required'"/><br>
+        <span translate="'Required'"></span><br>
     </if>
     <ifnot args="$data.marketplaceValue.required">
-        <span translate="'Not Required'"/><br>
+        <span translate="'Not Required'"></span><br>
     </ifnot>
     <div class="mirakl-additional-field-values">
-        <strong translate="'Your values'"/><br>
+        <strong translate="'Your values'"></strong><br>
         <each args="{
             data: formatPreviews([
                 {
@@ -22,8 +23,8 @@
             as: '$preview'}"
         >
             <div class="mirakl-field-item">
-                <span html="$parent.buildPreview($preview)"/>
-                <ifnot args="$parent.hasPreview($preview)"><span translate="'Not set'" class="not-set"/></ifnot>
+                <span html="$parent.buildPreview($preview)"></span>
+                <ifnot args="$parent.hasPreview($preview)"><span translate="'Not set'" class="not-set"></span></ifnot>
             </div>
         </each>
     </div>

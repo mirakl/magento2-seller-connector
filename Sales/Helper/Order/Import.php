@@ -106,6 +106,7 @@ class Import extends AbstractHelper
         // Save some Mirakl information to be able to associate actions on it later
         $order->setMiraklConnectionId($connection->getId());
         $order->setMiraklOrderId($miraklOrder->getId());
+        $order->setMiraklSync(true);
 
         $fulfillment = $miraklOrder->getFulfillment();
         if ($fulfillment && $center = $fulfillment->getCenter()) {
@@ -114,7 +115,7 @@ class Import extends AbstractHelper
 
         /** @var \Magento\Sales\Model\ResourceModel\Order $orderResource */
         $orderResource = $this->orderResourceFactory->create();
-        $orderResource->saveAttribute($order, ['mirakl_connection_id', 'mirakl_order_id', 'mirakl_fulfillment_center']);
+        $orderResource->saveAttribute($order, ['mirakl_connection_id', 'mirakl_order_id', 'mirakl_sync', 'mirakl_fulfillment_center']);
 
         if ($this->salesConfig->isAutoCreateInvoice()
             && ($this->orderHelper->isMiraklOrderInvoiced($miraklOrder) || $this->orderHelper->isAutoPayInvoice($miraklOrder))

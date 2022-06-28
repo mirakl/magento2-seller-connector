@@ -101,6 +101,7 @@ class ProductsTest extends TestCase
         $listingMock->expects($this->any())
             ->method('getProductIds')
             ->willReturn($productIds);
+
         $listingMock->expects($this->any())
             ->method('getVariantsAttributes')
             ->willReturn($variantsAttributes);
@@ -155,6 +156,10 @@ class ProductsTest extends TestCase
         $listingMock->expects($this->any())
             ->method('getConnection')
             ->willReturn($connectionMock);
+
+        $listingMock->expects($this->any())
+            ->method('getVariantsAttributes')
+            ->willReturn([]);
 
         $result = $this->exportModel->export($listingMock);
 
