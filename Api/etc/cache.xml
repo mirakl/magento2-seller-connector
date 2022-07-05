@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Cache/etc/cache.xsd">
+    <type name="mirakl_offer_conditions_api" translate="label,description" instance="MiraklSeller\Api\Model\Cache\Type\OfferConditions">
+        <label>Mirakl Offer Conditions</label>
+        <description>Mirakl offer conditions API cache</description>
+    </type>
+</config>

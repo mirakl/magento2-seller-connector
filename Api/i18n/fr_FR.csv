@@ -86,3 +86,5 @@
 "Mirakl cannot be reached","Mirakl n'est pas accessible"
 "Source Algorithm for Shipment Creation","Algorithme de sélection de la source pour la création des expéditions"
 "Only used when multi-source inventory is enabled. The selected source algorithm will be used automatically when importing order shipments from Mirakl.","Utilisé uniquement si la gestion de stock multi-sources est activée. L'algorithme sélectionné sera utilisé automatiquement lors de la création des expéditions provenant de Mirakl.
+"Mirakl Offer Conditions","Conditions des offres Mirakl"
+"Mirakl offer conditions API cache","Cache de l'API de conditions des offres Mirakl"
