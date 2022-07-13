@@ -169,7 +169,9 @@ class Standard implements BuilderInterface
             ['form_namespace' => $formName]
         );
 
-        $renderer = $this->rendererFieldset->setTemplate('MiraklSeller_Core::listing/filter-products-fieldset.phtml')
+        $renderer = $this->rendererFieldset
+            ->setNameInLayout('mirakl_fieldset_renderer')
+            ->setTemplate('MiraklSeller_Core::listing/filter-products-fieldset.phtml')
             ->setNewChildUrl($newChildUrl)
             ->setFieldSetId($conditionsFieldSetId);
 
