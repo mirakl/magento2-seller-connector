@@ -55,6 +55,7 @@ class PageBuilder implements FormatterInterface
             }
 
             if (!empty($value)
+                && method_exists($attribute->getExtensionAttributes(), 'getIsPagebuilderEnabled')
                 && $attribute->getExtensionAttributes()->getIsPagebuilderEnabled()
                 && $attribute->getIsHtmlAllowedOnFront()
                 && $attribute->getIsWysiwygEnabled()
