@@ -51,7 +51,7 @@ class AddMiraklSyncFlag implements SchemaPatchInterface
 
         $connection = $salesSetup->getConnection();
         $connection->update(
-            $connection->getTableName('sales_order'),
+            $salesSetup->getTable('sales_order'),
             ['mirakl_sync' => 1],
             'mirakl_order_id IS NOT NULL'
         );
