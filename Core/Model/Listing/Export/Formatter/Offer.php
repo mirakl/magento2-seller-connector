@@ -60,7 +60,7 @@ class Offer implements FormatterInterface
             }
         }
 
-        $dataPriceRanges = $this->computePriceRanges($data['tier_prices'], $listing);
+        $dataPriceRanges = $this->computePriceRanges($data, $listing);
 
         $packageQuantity = 1;
         if ($this->inventory->isEnabledQtyIncrements(
@@ -195,23 +195,35 @@ class Offer implements FormatterInterface
     /**
      * Compute price ranges with connection configuration
      *
-     * @param   string  $tierPrices
+     * @param   array   $offerData
      * @param   Listing $listing
      * @return  array
      */
-    public function computePriceRanges($tierPrices, Listing $listing)
+    public function computePriceRanges($offerData, Listing $listing)
     {
         $data = [
             'price_ranges'    => '',
             'discount_ranges' => '',
         ];
 
+        $tierPrices = $offerData['tier_prices'];
+
         if (!empty($tierPrices)) {
             $connection = $listing->getConnection();
+            $originalPrice = $offerData['price'] ?? false;
             if ($connection->getMagentoTierPricesApplyOn() == \MiraklSeller\Api\Model\Connection::VOLUME_PRICING) {
                 $data['price_ranges'] = $tierPrices;
-            } else {
-                $data['discount_ranges'] = $tierPrices;
+            } elseif ($originalPrice) {
+                $discountRanges = [];
+                $ranges = explode(',', $tierPrices);
+                foreach ($ranges as $range) {
+                    list ($qty, $percent) = explode('|', $range);
+                    // we calculate discount tier prices for every quantity
+                    $discountPrice = $originalPrice - ($originalPrice * $percent / 100);
+                    $discountPrice = self::formatPrice($discountPrice);
+                    $discountRanges[] = "$qty|$discountPrice";
+                }
+                $data['discount_ranges'] = implode(',', $discountRanges);
             }
         }
 

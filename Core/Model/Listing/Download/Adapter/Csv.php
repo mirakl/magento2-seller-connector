@@ -48,6 +48,13 @@ class Csv extends \SplTempFileObject implements AdapterInterface
         }
         $this->count++;
 
+        foreach ($data as $key => $value) {
+            // Format multi-option values to string with separated values
+            if (is_array($value)) {
+                $data[$key] = implode(',', $value);
+            }
+        }
+
         return $this->fputcsv($data);
     }
 }

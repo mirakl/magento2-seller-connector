@@ -3,9 +3,11 @@ namespace MiraklSeller\Core\Model\ResourceModel\Product;
 
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
+use Magento\Customer\Model\Group as CustomerGroup;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\LocalizedException;
+use MiraklSeller\Api\Model\Connection as MiraklConnection;
 use MiraklSeller\Core\Helper\Config as ConfigHelper;
 use MiraklSeller\Core\Helper\Listing as ListingHelper;
 use MiraklSeller\Core\Model\Listing;
@@ -54,6 +56,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         'use_config_enable_qty_inc' => 'enable_qty_increments',
         'use_config_qty_increments' => 'qty_increments',
     ];
+
+    /**
+     * @var string[]
+     */
+    protected $multiSelectAttributes = [];
 
     /**
      * {@inheritdoc}
@@ -126,8 +133,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $attributeCode = $attribute->getAttributeCode();
         $entityLinkColumn = $this->getEntity()->getLinkField();
 
+        if ($attribute->getFrontendInput() == 'multiselect') {
+            $this->multiSelectAttributes[] = $attributeCode;
+        }
+
         $valueTable1 = $attributeCode . '_t1';
         $valueTable2 = $attributeCode . '_t2';
+
         $this->getSelect()
             ->joinLeft(
                 [$valueTable1 => $attribute->getBackend()->getTable()],
@@ -152,8 +164,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
         $optionTable1   = $attributeCode . '_option_value_t1';
         $optionTable2   = $attributeCode . '_option_value_t2';
-        $tableJoinCond1 = "{$optionTable1}.option_id = {$valueExpr} AND {$optionTable1}.store_id = 0";
-        $tableJoinCond2 = "{$optionTable2}.option_id = {$valueExpr} AND {$optionTable2}.store_id = {$storeId}";
+        $tableJoinCond1 = "FIND_IN_SET({$optionTable1}.option_id, {$valueExpr}) AND {$optionTable1}.store_id = 0";
+        $tableJoinCond2 = "FIND_IN_SET({$optionTable2}.option_id, {$valueExpr}) AND {$optionTable2}.store_id = {$storeId}";
         $valueExpr      = $this->_conn->getCheckSql("{$optionTable2}.value_id IS NULL",
             "{$optionTable1}.value",
             "{$optionTable2}.value"
@@ -479,18 +491,25 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * @param   int $websiteId
-     * @param   int $groupId
+     * @param   int     $websiteId
+     * @param   int     $groupId
+     * @param   string  $tierPricesApplyOn
      * @return  $this
      */
-    public function addTierPricesToSelect($websiteId, $groupId = \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID)
-    {
+    public function addTierPricesToSelect(
+        $websiteId,
+        $groupId = CustomerGroup::NOT_LOGGED_IN_ID,
+        $tierPricesApplyOn = MiraklConnection::VOLUME_PRICING
+    ) {
         if ($this->getFlag('tier_prices_added')) {
             return $this;
         }
 
+        // value field is set to 0 by Magento when a volume discount is applied
+        $valueField = $tierPricesApplyOn === MiraklConnection::VOLUME_DISCOUNTS ? 'percentage_value' : 'value';
+
         $entityLinkColumn = $this->getEntity()->getLinkField();
-        $tierPricesSql = new \Zend_Db_Expr("GROUP_CONCAT(DISTINCT CONCAT_WS('|', FLOOR(tier_prices.qty), ROUND(tier_prices.value, 2)) SEPARATOR ',')");
+        $tierPricesSql = new \Zend_Db_Expr("GROUP_CONCAT(DISTINCT CONCAT_WS('|', FLOOR(tier_prices.qty), ROUND(tier_prices.$valueField, 2)) SEPARATOR ',')");
         $this->getSelect()
             ->joinLeft(
                 ['tier_prices' => $this->getTable('catalog_product_entity_tier_price')],
@@ -973,12 +992,27 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $entityIdField = $this->getEntity()->getEntityIdField();
         foreach ($rows as $row) {
             $entityId = $row[$entityIdField];
-            $this->_items[$entityId] = $row;
             if (isset($this->_itemsById[$entityId])) {
                 $this->_itemsById[$entityId][] = $row;
             } else {
                 $this->_itemsById[$entityId] = [$row];
             }
+            foreach ($this->multiSelectAttributes as $attrCode) {
+                if (!isset($row[$attrCode])) {
+                    continue;
+                }
+
+                $row[$attrCode] = (array) $row[$attrCode];
+
+                if (isset($this->_items[$entityId][$attrCode])) {
+                    $row[$attrCode] = array_values(
+                        array_unique(
+                            array_merge($row[$attrCode], $this->_items[$entityId][$attrCode])
+                        )
+                    );
+                }
+            }
+            $this->_items[$entityId] = $row;
         }
 
         return $this;

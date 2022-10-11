@@ -14,7 +14,7 @@ use Mirakl\MMP\Shop\Request\Offer\Importer\OfferImportErrorReportRequest;
 use Mirakl\MMP\Shop\Request\Offer\Importer\OfferImportReportRequest;
 use Mirakl\MMP\Shop\Request\Offer\Importer\OfferImportRequest;
 use Mirakl\MMP\Shop\Request\Offer\State\GetOfferStateListRequest;
-use MiraklSeller\Api\Model\Cache\Type\OfferConditions;
+use MiraklSeller\Api\Model\Cache\Type\MiraklApi;
 use MiraklSeller\Api\Model\Client\Manager;
 use MiraklSeller\Api\Model\Connection;
 use MiraklSeller\Api\Model\Log\LoggerManager;
@@ -22,6 +22,8 @@ use MiraklSeller\Api\Model\Log\RequestLogValidator;
 
 class Offer extends Client\MMP
 {
+    const OFFER_STATES_CACHE_PREFIX = 'offer_states';
+
     /**
      * @var CacheInterface
      */
@@ -130,7 +132,8 @@ class Offer extends Client\MMP
      */
     public function getOffersStateList(Connection $connection)
     {
-        $offerConditionsData = $this->cache->load(OfferConditions::TYPE_IDENTIFIER);
+        $cacheId = MiraklApi::TYPE_IDENTIFIER . '_' . self::OFFER_STATES_CACHE_PREFIX . '_' . $connection->getId();
+        $offerConditionsData = $this->cache->load($cacheId);
 
         // load() method returns false when cache content is expired
         if ($offerConditionsData === false) {
@@ -138,12 +141,12 @@ class Offer extends Client\MMP
             $offerConditions = $this->send($connection, $request);
             $this->cache->save(
                 $this->serializer->serialize($offerConditions->toArray()),
-                OfferConditions::TYPE_IDENTIFIER,
-                [OfferConditions::CACHE_TAG],
-                OfferConditions::CACHE_LIFETIME
+                $cacheId,
+                [MiraklApi::CACHE_TAG],
+                MiraklApi::CACHE_LIFETIME
             );
         } else {
-            $offerConditionsData = $this->serializer->unserialize($this->cache->load(OfferConditions::TYPE_IDENTIFIER));
+            $offerConditionsData = $this->serializer->unserialize($this->cache->load($cacheId));
             $offerConditions = new OfferStateCollection($offerConditionsData);
         }
 

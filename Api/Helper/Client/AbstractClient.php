@@ -79,6 +79,12 @@ abstract class AbstractClient extends AbstractHelper
         $file->setFlags(\SplFileObject::READ_CSV);
         $file->setCsvControl($separator, $enclosure, $escape);
         foreach ($data as $row) {
+            foreach ($row as $key => $value) {
+                // Format multi-option values to string with separated values
+                if (is_array($value)) {
+                    $row[$key] = implode(',', $value);
+                }
+            }
             $file->fputcsv($row);
         }
         $file->rewind();

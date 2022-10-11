@@ -6,11 +6,11 @@ namespace MiraklSeller\Api\Model\Cache\Type;
 use Magento\Framework\App\Cache\Type\FrontendPool;
 use Magento\Framework\Cache\Frontend\Decorator\TagScope;
 
-class OfferConditions extends TagScope
+class MiraklApi extends TagScope
 {
-    const TYPE_IDENTIFIER = 'mirakl_offer_conditions_api';
-    const CACHE_TAG = 'MIRAKL_OFFER_CONDITIONS_API';
-    const CACHE_LIFETIME = 86400; // 24 hours as recommended by Mirakl
+    const TYPE_IDENTIFIER = 'mirakl_api';
+    const CACHE_TAG = 'MIRAKL_API';
+    const CACHE_LIFETIME = 86400;
 
     /**
      * @param FrontendPool $cacheFrontendPool

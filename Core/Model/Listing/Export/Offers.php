@@ -204,7 +204,9 @@ class Offers extends AbstractExport
     public function export(Listing $listing)
     {
         $collection = $this->productHelper->getProductCollection($listing);
-        $collection->addTierPricesToSelect($listing->getWebsiteId(), $this->config->getCustomerGroup())
+        $customerGroupId = $this->config->getCustomerGroup();
+        $tierPricesApplyOn = $listing->getConnection()->getMagentoTierPricesApplyOn();
+        $collection->addTierPricesToSelect($listing->getWebsiteId(), $customerGroupId, $tierPricesApplyOn)
             ->addListingPriceData($listing)
             ->addQuantityToSelect()
             ->addAttributeToSelect(['special_price', 'special_from_date', 'special_to_date']);

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace MiraklSeller\Sales\Setup\Patch\Schema;
@@ -7,7 +6,6 @@ namespace MiraklSeller\Sales\Setup\Patch\Schema;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\SchemaPatchInterface;
-use Magento\Sales\Setup\SalesSetup;
 use Magento\Sales\Setup\SalesSetupFactory;
 
 class AddOrderAttributes implements SchemaPatchInterface

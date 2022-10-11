@@ -51,16 +51,32 @@ if (!$miraklOrder) return;
                     <?php endif ?>
                 </td>
             </tr>
-            <?php $fulfillmentCenter = $block->getOrderFulfillmentCenter()?>
-            <?php if (!empty($fulfillmentCenter)) :?>
+
+            <?php $fulfillmentCenter = $block->getOrderFulfillmentCenter() ?>
+            <?php if (!empty($fulfillmentCenter)): ?>
                 <tr>
                     <th><?= __('Fulfillment Center') ?></th>
-                    <td>
-                        <?= $fulfillmentCenter ?>
-                    </td>
+                    <td><?= $fulfillmentCenter ?></td>
                 </tr>
-            <?php endif; ?>
-            <?php $isMiraklSync = $block->isMiraklSync() ;?>
+            <?php endif ?>
+
+            <?php $shippingDeadline = $block->getShippingDeadline() ?>
+            <?php if (!empty($shippingDeadline)): ?>
+                <tr>
+                    <th><?= __('Shipping Deadline') ?></th>
+                    <td><?= $shippingDeadline ?></td>
+                </tr>
+            <?php endif ?>
+
+            <?php $expectedDeliveryDate = $block->getExpectedDeliveryDate() ?>
+            <?php if (!empty($expectedDeliveryDate)): ?>
+                <tr>
+                    <th><?= __('Expected Delivery Date') ?></th>
+                    <td><?= $expectedDeliveryDate ?></td>
+                </tr>
+            <?php endif ?>
+
+            <?php $isMiraklSync = $block->isMiraklSync() ?>
             <tr id="mirakl-sync-section">
                 <th><?= __('Sync Status') ?></th>
                 <td>
@@ -69,9 +85,10 @@ if (!$miraklOrder) return;
                         <br><a id="mirakl-sync-link" href=""><?= __('Click here to unsync the order') ?></a>
                     <?php else: ?>
                         <?= __('Synchronization with Mirakl has been disabled for this order.') ?>
-                    <?php endif; ?>
+                    <?php endif ?>
                 </td>
             </tr>
+
             <?php /** @var \Mirakl\MMP\Common\Domain\AdditionalFieldValue $_field */ ?>
             <?php foreach ($miraklOrder->getOrderAdditionalFields() as $_field): ?>
                 <tr>
@@ -86,7 +103,7 @@ if (!$miraklOrder) return;
     {
         "#mirakl-sync-section": {
             "MiraklSeller_Sales/js/order/view/mirakl-sync": {
-                "unsyncUrl": "<?= $block->getMiraklUnsyncUrl()?>"
+                "unsyncUrl": "<?= $block->getMiraklUnsyncUrl() ?>"
             }
         }
     }

@@ -3,8 +3,17 @@
         "image_1": "http://foobar.com/media/catalog/product/m/g/mg04-bk-0.jpg",
         "category": "Default Category/Gear/Watches",
         "variant_group_code": "",
-        "activity": "Recreation",
-        "category_gear": "Electronic",
+        "activity": [
+            "Outdoor",
+            "Recreation",
+            "Gym",
+            "Sports"
+        ],
+        "category_gear": [
+            "Electronic",
+            "Exercise",
+            "Timepiece"
+        ],
         "climate": null,
         "collar": null,
         "color": null,
@@ -14,10 +23,15 @@
         "erin_recommends": null,
         "features_bags": null,
         "format": null,
-        "gender": "Men",
+        "gender": [
+            "Men"
+        ],
         "gift_message_available": null,
         "manufacturer": null,
-        "material": "Plastic",
+        "material": [
+            "Plastic",
+            "Rubber"
+        ],
         "meta_description": null,
         "meta_keyword": null,
         "meta_title": null,
@@ -50,8 +64,15 @@
         "image_1": "http://foobar.com/media/catalog/product/m/g/mg01-bk-0.jpg",
         "category": "Default Category/Gear/Watches",
         "variant_group_code": "",
-        "activity": "Recreation",
-        "category_gear": "Electronic",
+        "activity": [
+            "Recreation",
+            "Athletic"
+        ],
+        "category_gear": [
+            "Electronic",
+            "Exercise",
+            "Timepiece"
+        ],
         "climate": null,
         "collar": null,
         "color": null,
@@ -61,10 +82,16 @@
         "erin_recommends": null,
         "features_bags": null,
         "format": null,
-        "gender": "Men",
+        "gender": [
+            "Men"
+        ],
         "gift_message_available": null,
         "manufacturer": null,
-        "material": "Metal",
+        "material": [
+            "Metal",
+            "Rubber",
+            "Silicone"
+        ],
         "meta_description": null,
         "meta_keyword": null,
         "meta_title": null,
@@ -97,8 +124,18 @@
         "image_1": "http://foobar.com/media/catalog/product/m/g/mg03-br-0.jpg",
         "category": "Default Category/Collections/New Luma Yoga Collection",
         "variant_group_code": "",
-        "activity": "Recreation",
-        "category_gear": "Electronic",
+        "activity": [
+            "Outdoor",
+            "Recreation",
+            "Gym",
+            "Athletic",
+            "Sports"
+        ],
+        "category_gear": [
+            "Electronic",
+            "Exercise",
+            "Timepiece"
+        ],
         "climate": null,
         "collar": null,
         "color": null,
@@ -108,10 +145,18 @@
         "erin_recommends": null,
         "features_bags": null,
         "format": null,
-        "gender": "Men",
+        "gender": [
+            "Men",
+            "Women",
+            "Unisex"
+        ],
         "gift_message_available": null,
         "manufacturer": null,
-        "material": "Metal",
+        "material": [
+            "Metal",
+            "Plastic",
+            "Silicone"
+        ],
         "meta_description": null,
         "meta_keyword": null,
         "meta_title": null,

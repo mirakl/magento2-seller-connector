@@ -85,8 +85,8 @@ class CollectionTest extends TestCase
                 [13, 21],
                 ['activity', 'material', 'category_gear'],
                 [
-                    13 => ['entity_id' => '13', 'activity' => 'Overnight', 'material' => 'Leather', 'category_gear' => null],
-                    21 => ['entity_id' => '21', 'activity' => 'Yoga', 'material' => 'Foam', 'category_gear' => 'Exercise'],
+                    13 => ['entity_id' => '13', 'activity' => ['Overnight', 'Travel'], 'material' => ['Leather', 'Nylon', 'Polyester'], 'category_gear' => null],
+                    21 => ['entity_id' => '21', 'activity' => ['Yoga', 'Recreation', 'Gym', 'Sports'], 'material' => ['Foam'], 'category_gear' => ['Exercise']],
                 ]
             ],
         ];
@@ -257,8 +257,9 @@ class CollectionTest extends TestCase
             [
                 11, 1, ['color', 'activity', 'style_bags'], [
                     11 => [
-                        'entity_id' => '11', 'color' => null, 'activity' => 'Gym', 'style_bags' => 'Backpack', 'qty' => '100.0000', 'manage_stock' => '0', 'use_config_manage_stock' => '1',
-                        'use_config_min_sale_qty' => '1', 'use_config_max_sale_qty' => '1',
+                        'entity_id' => '11', 'color' => null, 'activity' => ['Urban'],
+                        'style_bags' => ['Laptop'], 'qty' => '100.0000', 'manage_stock' => '0',
+                        'use_config_manage_stock' => '1', 'use_config_min_sale_qty' => '1', 'use_config_max_sale_qty' => '1',
                         'use_config_enable_qty_inc' => '1', 'use_config_qty_increments' => '1',
                         'min_sale_qty' => '1.0000', 'max_sale_qty' => '0.0000', 'enable_qty_increments' => '0',
                         'qty_increments' => '0.0000', 'tier_prices' => '', 'price' => '33.000000',
@@ -270,9 +271,10 @@ class CollectionTest extends TestCase
             [
                 18, 1, ['color', 'size', 'activity'], [
                     18 => [
-                        'entity_id' => '18', 'color' => null, 'size' => null, 'activity' => 'Gym',
+                        'entity_id' => '18', 'color' => null, 'size' => null, 'activity' => ['Gym'],
                         'qty' => '100.0000', 'manage_stock' => '0', 'use_config_manage_stock' => '1',
-                        'use_config_min_sale_qty' => '1', 'use_config_max_sale_qty' => '1', 'use_config_enable_qty_inc' => '1', 'use_config_qty_increments' => '1',
+                        'use_config_min_sale_qty' => '1', 'use_config_max_sale_qty' => '1',
+                        'use_config_enable_qty_inc' => '1', 'use_config_qty_increments' => '1',
                         'min_sale_qty' => '1.0000', 'max_sale_qty' => '0.0000', 'enable_qty_increments' => '0',
                         'qty_increments' => '0.0000', 'tier_prices' => '', 'price' => '16.000000',
                         'tax_class_id' => '2', 'final_price' => '16.000000', 'minimal_price' => '16.000000',

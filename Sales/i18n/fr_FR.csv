@@ -273,3 +273,8 @@
 "Synchronization has been disabled for this order.","La synchronisation a été désactivée pour cette commande."
 "This order no longer exists.","Cette commande n'existe plus."
 "Synchronization with Mirakl has been disabled for this order.","La synchronisation avec Mirakl a été désactivée pour cette commande."
+"After %1","Après %1"
+"Before %1","Avant %1"
+"%1 to %2","%1 au %2"
+"Shipping Deadline","Date limite d'expédition"
+"Expected Delivery Date","Date de livraison prévue"
