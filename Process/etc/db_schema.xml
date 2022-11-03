@@ -11,6 +11,7 @@
         <column xsi:type="text" name="output" nullable="true"  comment="Output"/>
         <column xsi:type="int" name="duration" unsigned="true" nullable="true"  comment="Duration"/>
         <column xsi:type="text" name="file" nullable="true"  comment="File"/>
+        <column xsi:type="text" name="mirakl_file" nullable="true"  comment="Mirakl File"/>
         <column xsi:type="varchar" name="helper" length="100" nullable="true"  comment="Helper"/>
         <column xsi:type="varchar" name="method" length="100" nullable="true"  comment="Method"/>
         <column xsi:type="text" name="params" nullable="true"  comment="Parameters"/>

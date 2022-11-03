@@ -11,6 +11,7 @@
             "output": true,
             "duration": true,
             "file": true,
+            "mirakl_file": true,
             "helper": true,
             "method": true,
             "params": true,

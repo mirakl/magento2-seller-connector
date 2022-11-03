@@ -179,7 +179,7 @@ class View extends Template
      */
     public function getShippingTaxAmount()
     {
-        return $this->orderHelper->getMiraklOrderShippingTaxAmount($this->getMiraklOrder());
+        return $this->orderHelper->getMiraklOrderShippingTaxAmount($this->getMiraklOrder(), []);
     }
 
     /**
@@ -188,7 +188,7 @@ class View extends Template
      */
     public function getTaxAmount($withShipping = false)
     {
-        return $this->orderHelper->getMiraklOrderTaxAmount($this->getMiraklOrder(), $withShipping);
+        return $this->orderHelper->getMiraklOrderTaxAmount($this->getMiraklOrder(), $withShipping, []);
     }
 
     /**

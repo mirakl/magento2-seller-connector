@@ -214,8 +214,11 @@ class Order extends AbstractHelper
      * @param array     $excludeStatuses
      * @return float
      */
-    public function getMiraklOrderTaxAmount(ShopOrder $miraklOrder, $withShipping = false, $excludeStatuses = [OrderState::REFUSED, OrderState::CANCELED])
-    {
+    public function getMiraklOrderTaxAmount(
+        ShopOrder $miraklOrder,
+        $withShipping = false,
+        $excludeStatuses = [OrderState::REFUSED, OrderState::CANCELED]
+    ) {
         $taxAmount = 0;
 
         foreach ($miraklOrder->getOrderLines() as $orderLine) {
@@ -231,12 +234,15 @@ class Order extends AbstractHelper
      * @param array         $excludeStatuses
      * @return float
      */
-    public function getMiraklOrderLineTaxAmount(ShopOrderLine $miraklOrderLine, $withShipping = false, $excludeStatuses = [OrderState::REFUSED, OrderState::CANCELED])
-    {
+    public function getMiraklOrderLineTaxAmount(
+        ShopOrderLine $miraklOrderLine,
+        $withShipping = false,
+        $excludeStatuses = [OrderState::REFUSED, OrderState::CANCELED]
+    ) {
         $taxAmount = 0;
 
         if (!in_array($miraklOrderLine->getStatus()->getState(), $excludeStatuses)) {
-            /** @var OrderTaxAmount $shippingTax */
+            /** @var OrderTaxAmount $tax */
             foreach ($miraklOrderLine->getTaxes() as $tax) {
                 $taxAmount += $tax->getAmount();
             }
@@ -250,12 +256,14 @@ class Order extends AbstractHelper
      * @param array         $excludeStatuses
      * @return float
      */
-    public function getMiraklOrderLineShippingTaxAmount(ShopOrderLine $miraklOrderLine, $excludeStatuses = [OrderState::REFUSED, OrderState::CANCELED])
-    {
+    public function getMiraklOrderLineShippingTaxAmount(
+        ShopOrderLine $miraklOrderLine,
+        $excludeStatuses = [OrderState::REFUSED, OrderState::CANCELED]
+    ) {
         $taxAmount = 0;
 
         if (!in_array($miraklOrderLine->getStatus()->getState(), $excludeStatuses)) {
-            /** @var OrderTaxAmount $shippingTax */
+            /** @var OrderTaxAmount $tax */
             foreach ($miraklOrderLine->getShippingTaxes() as $tax) {
                 $taxAmount += $tax->getAmount();
             }
@@ -265,15 +273,18 @@ class Order extends AbstractHelper
     }
 
     /**
-     * @param   ShopOrder   $miraklOrder
-     * @return  float
+     * @param ShopOrder $miraklOrder
+     * @param array     $excludeStatuses
+     * @return float
      */
-    public function getMiraklOrderShippingTaxAmount(ShopOrder $miraklOrder)
-    {
+    public function getMiraklOrderShippingTaxAmount(
+        ShopOrder $miraklOrder,
+        $excludeStatuses = [OrderState::REFUSED, OrderState::CANCELED]
+    ) {
         $taxAmount = 0;
 
         foreach ($miraklOrder->getOrderLines() as $orderLine) {
-            $taxAmount += $this->getMiraklOrderLineShippingTaxAmount($orderLine);
+            $taxAmount += $this->getMiraklOrderLineShippingTaxAmount($orderLine, $excludeStatuses);
         }
 
         return $taxAmount;

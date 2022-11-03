@@ -202,7 +202,7 @@ class ItemsDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $data['status']            = $orderLine->getStatus()->getState();
             $data['unit_price']        = $orderLine->getOffer()->getPrice();
             $data['subtotal']          = $orderLine->getPrice();
-            $data['tax']               = $this->orderHelper->getMiraklOrderLineTaxAmount($orderLine, true);
+            $data['tax']               = $this->orderHelper->getMiraklOrderLineTaxAmount($orderLine, true, []);
             $data['total_price']       = $data['subtotal'] + $data['shipping_price'] + $data['tax'];
             $data['product']           = null;
             $data['product_id']        = null;
