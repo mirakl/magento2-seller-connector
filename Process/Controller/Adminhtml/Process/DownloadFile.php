@@ -1,10 +1,41 @@
 <?php
 namespace MiraklSeller\Process\Controller\Adminhtml\Process;
 
-use MiraklSeller\Process\Controller\Result\Download;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\Framework\View\Result\PageFactory;
+use MiraklSeller\Process\Helper\Data as ProcessHelper;
 
 class DownloadFile extends AbstractProcess
 {
+    /**
+     * @var Filesystem
+     */
+    protected $filesystem;
+
+    /**
+     * @var ProcessHelper
+     */
+    protected $processHelper;
+
+    /**
+     * @param Context       $context
+     * @param PageFactory   $resultPageFactory
+     * @param Filesystem    $filesystem
+     * @param ProcessHelper $processHelper
+     */
+    public function __construct(
+        Context $context,
+        PageFactory $resultPageFactory,
+        Filesystem $filesystem,
+        ProcessHelper $processHelper
+    ) {
+        parent::__construct($context, $resultPageFactory);
+        $this->filesystem = $filesystem;
+        $this->processHelper = $processHelper;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -16,24 +47,27 @@ class DownloadFile extends AbstractProcess
             return $this->redirectError(__('This process no longer exists.'));
         }
 
-        $file = $this->getRequest()->getParam('mirakl', false) ? $process->getMiraklFile() : $process->getFile();
-        if (!$file) {
+        $path = $this->getRequest()->getParam('mirakl', false) ? $process->getMiraklFile() : $process->getFile();
+        if (!$path) {
             return $this->redirectError(__('File does not exist.'), true);
         }
 
-        $fileName = pathinfo($file, PATHINFO_BASENAME);
+        $directory = $this->filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
+        $file = $directory->openFile($path);
 
-        /** @var Download $result */
-        $result = $this->resultFactory->create(Download::TYPE_DOWNLOAD);
-        $result->setHttpResponseCode(200)
+        $fileName = pathinfo($path, PATHINFO_BASENAME);
+
+        $this->getResponse()->setHttpResponseCode(200)
             ->setHeader('Pragma', 'public', true)
-            ->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true)
+            ->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0',true)
             ->setHeader('Content-type', 'application/octet-stream', true)
+            ->setHeader('Content-Length', $this->processHelper->getFileSize($path))
             ->setHeader('Content-Disposition', 'attachment; filename=' . $fileName);
-        $result->setFile($file);
+
+        $this->getResponse()->clearBody();
+        $this->getResponse()->sendHeaders();
 
         $this->_session->writeClose();
-
-        return $result;
+        print_r($file->readAll());
     }
 }

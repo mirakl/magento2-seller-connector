@@ -1,8 +1,11 @@
 <?php
 namespace MiraklSeller\Process\Helper;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
 use MiraklSeller\Api\Helper\Data as ApiHelper;
 use MiraklSeller\Process\Model\Process;
 use MiraklSeller\Process\Model\ResourceModel\Process\CollectionFactory;
@@ -20,16 +23,26 @@ class Data extends AbstractHelper
     private $collectionFactory;
 
     /**
-     * @param   Context             $context
-     * @param   ApiHelper           $apiHelper
-     * @param   CollectionFactory   $collectionFactory
-     *
+     * @var Filesystem
      */
-    public function __construct(Context $context, ApiHelper $apiHelper, CollectionFactory $collectionFactory)
-    {
+    private $filesystem;
+
+    /**
+     * @param Context           $context
+     * @param ApiHelper         $apiHelper
+     * @param CollectionFactory $collectionFactory
+     * @param Filesystem        $filesystem
+     */
+    public function __construct(
+        Context $context,
+        ApiHelper $apiHelper,
+        CollectionFactory $collectionFactory,
+        Filesystem $filesystem
+    ) {
         parent::__construct($context);
         $this->apiHelper = $apiHelper;
         $this->collectionFactory =  $collectionFactory;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -151,12 +164,21 @@ class Data extends AbstractHelper
     /**
      * Removes base dir from specified file path
      *
-     * @param   string  $filePath
-     * @return  string
+     * @param  string         $path
+     * @param  ReadInterface  $directory
+     * @return string
      */
-    public function getRelativePath($filePath)
+    public function getRelativePath($path, ReadInterface $directory = null)
     {
-        return trim(str_replace(BP, '', $filePath), DIRECTORY_SEPARATOR);
+        if ($directory === null) {
+            $directory = $this->filesystem->getDirectoryRead(DirectoryList::ROOT);
+        }
+
+        if (strpos($path, $directory->getAbsolutePath()) === 0) {
+            return substr($path, strlen($directory->getAbsolutePath()));
+        }
+
+        return $path;
     }
 
     /**
@@ -195,5 +217,22 @@ class Data extends AbstractHelper
         }
 
         return mb_substr($message, 0, $length, $encoding).$suffix;
+    }
+
+    /**
+     * @param  string $path
+     * @return int
+     */
+    public function getFileSize($path)
+    {
+        $directory = $this->filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
+
+        if (!$directory->isFile($path)) {
+            return 0;
+        }
+
+        $stat =  $directory->stat($path);
+
+        return $stat['size'];
     }
 }

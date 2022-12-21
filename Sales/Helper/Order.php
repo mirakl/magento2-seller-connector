@@ -336,6 +336,7 @@ class Order extends AbstractHelper
             'PAY_ON_DELIVERY',
             'PAY_ON_DUE_DATE',
             'PAY_ON_SHIPMENT',
+            'NO_CUSTOMER_PAYMENT_CONFIRMATION',
         ]);
     }
 

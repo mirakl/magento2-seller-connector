@@ -58,8 +58,9 @@ class Error extends AbstractHelper
      */
     public function deleteProcessError(Process $process)
     {
-        if (($file = $this->getProcessErrorFile($process)) && file_exists($file)) {
-            return unlink($file);
+        $varDir = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        if (($filePath = $this->getProcessErrorFile($process)) && $varDir->isFile($filePath)) {
+            return $varDir->delete($filePath);
         }
 
         return true;
@@ -72,10 +73,10 @@ class Error extends AbstractHelper
      */
     public function getErrorPath()
     {
-        $varPath = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $path = $varPath->getAbsolutePath() . DIRECTORY_SEPARATOR . 'mirakl' . DIRECTORY_SEPARATOR . 'process';
+        $varDir = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $path = $varDir->getAbsolutePath() . DIRECTORY_SEPARATOR . 'mirakl' . DIRECTORY_SEPARATOR . 'process';
 
-        if ($varPath->create($path)) {
+        if ($varDir->create($path)) {
             return false;
         }
 
@@ -105,8 +106,11 @@ class Error extends AbstractHelper
      */
     public function getProcessErrorReport(Process $process)
     {
-        if (($file = $this->getProcessErrorFile($process)) && file_exists($file)) {
-            return json_decode(file_get_contents($file), true);
+        $varDir = $this->filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
+        if (($filePath = $this->getProcessErrorFile($process)) && $varDir->isFile($filePath)) {
+            $file = $varDir->openFile($filePath);
+
+            return json_decode($file->readAll($file), true);
         }
 
         return false;
@@ -121,8 +125,9 @@ class Error extends AbstractHelper
      */
     public function logProcessError(Process $process, array $error)
     {
-        if ($file = $this->getProcessErrorFile($process)) {
-            return file_put_contents($file, json_encode($error, JSON_PRETTY_PRINT));
+        $varDir = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        if (($filePath = $this->getProcessErrorFile($process)) && $varDir->isFile($filePath)) {
+            return $varDir->writeFile($filePath, json_encode($error, JSON_PRETTY_PRINT));
         }
 
         return false;

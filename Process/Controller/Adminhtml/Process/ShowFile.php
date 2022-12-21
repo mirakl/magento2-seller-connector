@@ -1,10 +1,37 @@
 <?php
 namespace MiraklSeller\Process\Controller\Adminhtml\Process;
+
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Filesystem;
+use Magento\Framework\View\Result\PageFactory;
 
 class ShowFile extends AbstractProcess
 {
+    /**
+     * @var Filesystem
+     */
+    protected $filesystem;
+
+    /**
+     * @param Context     $context
+     * @param PageFactory $resultPageFactory
+     * @param Filesystem  $filesystem
+     */
+    public function __construct(
+        Context $context,
+        PageFactory $resultPageFactory,
+        Filesystem $filesystem
+    ) {
+        parent::__construct(
+            $context,
+            $resultPageFactory
+        );
+        $this->filesystem = $filesystem;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -16,22 +43,23 @@ class ShowFile extends AbstractProcess
             return $this->redirectError(__('This process no longer exists.'));
         }
 
-        $file = $this->getRequest()->getParam('mirakl', false) ? $process->getMiraklFile() : $process->getFile();
+        $varDir = $this->filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
+        $path = $this->getRequest()->getParam('mirakl', false) ? $process->getMiraklFile() : $process->getFile();
+        $file = $varDir->openFile($path);
 
-        if (pathinfo($file, PATHINFO_EXTENSION) === 'json') {
+        if (pathinfo($path, PATHINFO_EXTENSION) === 'json') {
             // Show a JSON file
-            $contents = json_decode(file_get_contents($file), true);
+            $contents = json_decode($file->readAll(), true);
             $body = '<pre>' . htmlentities(json_encode($contents, JSON_PRETTY_PRINT)) . '</pre>';
         } else {
             // Try to show a CSV file
-            $fh = fopen($file, 'r');
-            $fgetcsv = function () use ($fh) {
-                return fgetcsv($fh, 0, ';', '"');
+            $fgetcsv = function () use ($file) {
+                return $file->readCsv( 0, ';', '"');
             };
 
             if (count($fgetcsv()) > 1) {
                 // Parse CSV and show as HTML table
-                fseek($fh, 0);
+                $file->seek(0);
                 $body = '<table border="1" cellpadding="2" style="border-collapse: collapse; border: 1px solid #aaa;">';
                 while ($data = $fgetcsv()) {
                     $body .= sprintf('<tr>%s</tr>', implode('', array_map(function ($value) {
@@ -47,7 +75,7 @@ class ShowFile extends AbstractProcess
                 $body .= '</table>';
             } else {
                 // Show raw contents
-                $body = '<pre>' . htmlentities(file_get_contents($file)) . '</pre>';
+                $body = '<pre>' . htmlentities($file->readAll()) . '</pre>';
             }
         }
 

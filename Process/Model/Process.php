@@ -1,7 +1,9 @@
 <?php
 namespace MiraklSeller\Process\Model;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Data\Collection\AbstractDb as AbstractDbCollection;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
@@ -159,6 +161,11 @@ class Process extends AbstractModel
     private $outputFactory;
 
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * @var string
      */
     protected $decodeMethod = 'unserialize';
@@ -178,6 +185,7 @@ class Process extends AbstractModel
      * @param   ProcessResourceFactory      $processResourceFactory
      * @param   ProcessCollectionFactory    $processCollectionFactory
      * @param   OutputFactory               $outputFactory
+     * @param   Filesystem                  $filesystem
      * @param   array                       $data
      */
     public function __construct(
@@ -193,6 +201,7 @@ class Process extends AbstractModel
         ProcessResourceFactory $processResourceFactory,
         ProcessCollectionFactory $processCollectionFactory,
         OutputFactory $outputFactory,
+        Filesystem $filesystem,
         AbstractResource $resource = null,
         AbstractDbCollection $resourceCollection = null,
         array $data = []
@@ -208,6 +217,7 @@ class Process extends AbstractModel
         $this->processResourceFactory = $processResourceFactory;
         $this->processCollectionFactory = $processCollectionFactory;
         $this->outputFactory = $outputFactory;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -428,14 +438,13 @@ class Process extends AbstractModel
     {
         $file = $isMirakl ? $this->getMiraklFile() : $this->getFile();
 
-        if (!$file || !file_exists($file)) {
+        if (!$file) {
             return false;
         }
 
-        return $this->urlBuilder->getUrl('mirakl/process/downloadFile', [
-            'id' => $this->getId(),
-            'mirakl' => $isMirakl,
-        ]);
+        return $this->urlBuilder->getUrl('mirakl_seller/process/downloadFile',
+            ['id' => $this->getId(), 'mirakl' => $isMirakl]
+        );
     }
 
     /**
@@ -475,12 +484,15 @@ class Process extends AbstractModel
     public function getFileSize($isMirakl = false)
     {
         $filePath = $isMirakl ? $this->getMiraklFile() : $this->getFile();
+        $varDir = $this->filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
 
-        if (strlen($filePath) && is_file($filePath)) {
-            return filesize($filePath);
+        if (!$varDir->isFile($filePath)) {
+            return 0;
         }
 
-        return false;
+        $stat =  $varDir->stat($filePath);
+
+        return $stat['size'];
     }
 
     /**

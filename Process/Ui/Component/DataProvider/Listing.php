@@ -140,17 +140,17 @@ class Listing extends DataProvider
         $isMirakl = strstr($column, 'mirakl') === false ? false : true;
         $html = '';
         if ($fileSize = $process->getFileSizeFormatted('&nbsp;', $isMirakl)) {
+            $downloadFileUrl = $this->getUrl('mirakl_seller/process/downloadFile', ['id' => $process->getId(), 'mirakl' => $isMirakl]);
             $html = sprintf(
-                '<a href="%s">%s</a>&nbsp;(%s)',
-                $this->getUrl('mirakl_seller/process/downloadFile', ['id' => $process->getId(), 'mirakl' => $isMirakl ? '1' : '0']),
+                "<a onclick=\"window.open('$downloadFileUrl', '_blank'); return false\" href=''>%s</a>&nbsp;(%s)",
                 __('Download'),
                 $fileSize
             );
             if ($process->canShowFile($isMirakl)) {
+                $showFileUrl = $this->getUrl('mirakl_seller/process/showFile', ['id' => $process->getId(), 'mirakl' => $isMirakl]);
                 $html .= sprintf(
-                    '<br/> %s <a target="_blank" href="%s" title="%s">%s</a>',
+                    "<br/> %s <a onclick=\"window.open('$showFileUrl', '_blank'); return false;\" href='javascript:;' title='%s'>%s</a>",
                     __('or'),
-                    $this->getUrl('mirakl_seller/process/showFile', ['id' => $process->getId()]),
                     __('Open in Browser'),
                     __('open in browser')
                 );
