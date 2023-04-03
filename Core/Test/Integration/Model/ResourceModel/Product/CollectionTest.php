@@ -307,11 +307,36 @@ class CollectionTest extends TestCase
      * @param   array   $productIds
      * @param   bool    $fallbackToParent
      * @param   array   $expectedItems
-     * @dataProvider getTestAddCategoryIdsDataProvider
+     * @dataProvider getTestAddCategoryIdsWithDefaultStoreDataProvider
      * @magentoDataFixture ../../../../vendor/mirakl/connector-magento2-seller/Core/Test/Integration/Model/_fixtures/products_categories.php
      * @magentoDbIsolation enabled
      */
-    public function testAddCategoryIds($productIds, $fallbackToParent, $expectedItems)
+    public function testAddCategoryIdsWithDefaultStore($productIds, $fallbackToParent, $expectedItems)
+    {
+        $this->productCollection->addIdFilter($productIds);
+        $this->productCollection->load();
+        $storeId = $this->productCollection->getStoreId();
+        // check category ids for default store
+        $this->productCollection->setStoreId(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
+        $this->productCollection->addCategoryIds($fallbackToParent);
+
+        $data = $this->removeBaseAttribute($this->productCollection->getItems());
+
+        $this->assertSame($expectedItems, $data);
+
+        $this->productCollection->setStoreId($storeId);
+    }
+
+    /**
+     * @covers ::addCategoryIds
+     * @param   array   $productIds
+     * @param   bool    $fallbackToParent
+     * @param   array   $expectedItems
+     * @dataProvider getTestAddCategoryIdsWithSpecificStoreDataProvider
+     * @magentoDataFixture ../../../../vendor/mirakl/connector-magento2-seller/Core/Test/Integration/Model/_fixtures/products_categories.php
+     * @magentoDbIsolation enabled
+     */
+    public function testAddCategoryIdsWithSpecificStore($productIds, $fallbackToParent, $expectedItems)
     {
         $this->productCollection->addIdFilter($productIds);
         $this->productCollection->load();
@@ -325,7 +350,7 @@ class CollectionTest extends TestCase
     /**
      * @return  array
      */
-    public function getTestAddCategoryIdsDataProvider()
+    public function getTestAddCategoryIdsWithDefaultStoreDataProvider()
     {
         return [
             [
@@ -362,6 +387,53 @@ class CollectionTest extends TestCase
                     554 => ['entity_id' => '554', 'category_ids' => [16]],
                     555 => ['entity_id' => '555', 'category_ids' => [16]],
                 ],
+            ],
+            [
+                [], true, [],
+            ],
+        ];
+    }
+
+    /**
+     * @return  array
+     */
+    public function getTestAddCategoryIdsWithSpecificStoreDataProvider()
+    {
+        return [
+            [
+                [12, 14, 17], true, [
+                12 => ['entity_id' => '12', 'category_ids' => [2, 3, 4]],
+                14 => ['entity_id' => '14', 'category_ids' => [2, 3, 4, 7]],
+                17 => ['entity_id' => '17', 'category_ids' => [2, 3, 5]],
+            ],
+            ],
+            [
+                [255, 256, 257], true, [
+                255 => ['entity_id' => '255', 'category_ids' => [2, 12, 14]],
+                256 => ['entity_id' => '256', 'category_ids' => [2, 12, 14]],
+                257 => ['entity_id' => '257', 'category_ids' => [2, 12, 14]],
+            ],
+            ],
+            [
+                [549, 550, 551, 552, 553, 554], true, [
+                549 => ['entity_id' => '549', 'category_ids' => [2, 12, 16]],
+                550 => ['entity_id' => '550', 'category_ids' => [2, 12, 16]],
+                551 => ['entity_id' => '551', 'category_ids' => [2, 12, 16]],
+                552 => ['entity_id' => '552', 'category_ids' => [2, 12, 16]],
+                553 => ['entity_id' => '553', 'category_ids' => [2, 12, 16]],
+                554 => ['entity_id' => '554', 'category_ids' => [2, 12, 16]],
+            ],
+            ],
+            [
+                [549, 550, 551, 552, 553, 554, 555], false, [
+                549 => ['entity_id' => '549'],
+                550 => ['entity_id' => '550'],
+                551 => ['entity_id' => '551'],
+                552 => ['entity_id' => '552'],
+                553 => ['entity_id' => '553'],
+                554 => ['entity_id' => '554'],
+                555 => ['entity_id' => '555'],
+            ],
             ],
             [
                 [], true, [],

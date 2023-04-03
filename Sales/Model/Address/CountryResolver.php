@@ -73,9 +73,16 @@ class CountryResolver
             return $countryId;
         }
 
-        $countries = $this->orderHelper->getCountryList($locale);
+        $countryCollection = $this->countryCollectionFactory->create();
 
-        return array_search($countryLabel, $countries);
+        foreach ($countryCollection as $country) {
+            /** @var $country \Magento\Directory\Model\Country */
+            if ($countryLabel === $country->getName($locale)) {
+                return $country->getCountryId();
+            }
+        }
+
+        return false;
     }
 
     /**

@@ -47,17 +47,6 @@ class OrderTest extends TestCase
     }
 
     /**
-     * @covers  ::getCountryByCode
-     * @param   string  $code
-     * @param   bool    $expected
-     * @dataProvider getTestGetCountryByCodeDataProvider
-     */
-    public function testGetCountryByCode($code, $expected)
-    {
-        $this->assertSame($expected, $this->orderHelper->getCountryByCode($code));
-    }
-
-    /**
      * @covers  ::isMiraklOrderShipped
      * @param   string  $state
      * @param   bool    $expected
@@ -85,20 +74,6 @@ class OrderTest extends TestCase
             [OrderState::WAITING_DEBIT_PAYMENT, false],
             [OrderState::CANCELED, false],
             [OrderState::RECEIVED, false],
-        ];
-    }
-
-    /**
-     * @return  array
-     */
-    public function getTestGetCountryByCodeDataProvider()
-    {
-        return [
-            ['FR', 'France'],
-            ['US', 'United States'],
-            ['RU', 'Russia'],
-            ['ES', 'Spain'],
-            ['DE', 'Germany'],
         ];
     }
 

@@ -287,19 +287,16 @@ class Offers extends AbstractExport
         if (!$product['use_config_manage_stock'] && !$product['manage_stock']) {
             return self::NO_MANAGE_STOCK_QTY;
         }
+
         if ($product['offer_import_status'] == Offer::OFFER_DELETE) {
             // Set quantity to zero if offer has been flagged as "to delete"
             return 0;
         } elseif ($this->isMsiEnabled) {
-            /** @var \Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface $isSingleSourceMode */
-            $isSingleSourceMode = $this->objectManager->get('Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface');
-            if (!$isSingleSourceMode->execute()) {
-                // Handle multi-source inventory if enabled
-                /** @var \Magento\InventorySalesApi\Api\GetProductSalableQtyInterface $getProductSalableQty */
-                $getProductSalableQty = $this->objectManager->get('Magento\InventorySalesApi\Api\GetProductSalableQtyInterface');
+            // Handle multi-source inventory if enabled
+            /** @var \Magento\InventorySalesApi\Api\GetProductSalableQtyInterface $getProductSalableQty */
+            $getProductSalableQty = $this->objectManager->get('Magento\InventorySalesApi\Api\GetProductSalableQtyInterface');
 
-                return $getProductSalableQty->execute($product['sku'], $stockId);
-            }
+            return $getProductSalableQty->execute($product['sku'], $stockId);
         }
 
         return $product['qty'];

@@ -77,22 +77,22 @@ class Product extends BaseProductDataProvider
     ];
 
     /**
-     * @param string                            $name
-     * @param string                            $primaryFieldName
-     * @param string                            $requestFieldName
-     * @param Registry                          $coreRegistry
-     * @param ConfigHelper                      $configHelper
-     * @param ListingFactory                    $listingFactory
-     * @param ListingModelFactory               $listingModelFactory
-     * @param CollectionFactory                 $collectionFactory
-     * @param RequestInterface                  $request
-     * @param OfferResourceFactory              $offerResourceFactory
-     * @param OfferFormatter                    $offerFormatter
-     * @param AddFieldToCollectionInterface[]   $addFieldStrategies
-     * @param AddFilterToCollectionInterface[]  $addFilterStrategies
-     * @param PoolInterface|null                $modifiersPool
-     * @param array                             $meta
-     * @param array                             $data
+     * @param string                           $name
+     * @param string                           $primaryFieldName
+     * @param string                           $requestFieldName
+     * @param Registry                         $coreRegistry
+     * @param ConfigHelper                     $configHelper
+     * @param ListingFactory                   $listingFactory
+     * @param ListingModelFactory              $listingModelFactory
+     * @param CollectionFactory                $collectionFactory
+     * @param RequestInterface                 $request
+     * @param OfferResourceFactory             $offerResourceFactory
+     * @param OfferFormatter                   $offerFormatter
+     * @param PoolInterface                    $modifiersPool
+     * @param AddFieldToCollectionInterface[]  $addFieldStrategies
+     * @param AddFilterToCollectionInterface[] $addFilterStrategies
+     * @param array                            $meta
+     * @param array                            $data
      */
     public function __construct(
         $name,

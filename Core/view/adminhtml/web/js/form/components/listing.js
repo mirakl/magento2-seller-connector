@@ -74,7 +74,7 @@ define([
 
             if (messages.length) {
                 var block = $('[data-role=insert-listing-message]');
-                if (block.size()) {
+                if (block !== undefined && block.length) {
                     block.html('');
                 } else {
                     block = $('<div data-role="insert-listing-message" class="messages"></div>');

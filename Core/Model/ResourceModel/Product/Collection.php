@@ -710,9 +710,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function getProductCategoryIds(array $productIds)
     {
+        $storeId = $this->getStoreId();
+        $table = $this->getUseStoreTable($storeId)
+            ? $this->getTable('catalog_category_product_index_store' . $storeId)
+            : $this->_productCategoryTable;
+
         $select = $this->_conn
             ->select()
-            ->from($this->_productCategoryTable, ['product_id', 'category_id'])
+            ->from($table, ['product_id', 'category_id'])
             ->where('product_id IN (?)', $productIds);
 
         $categoryIds = [];
@@ -730,6 +735,24 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         unset($stmt);
 
         return $categoryIds;
+    }
+
+    /**
+     * Check if we should use store category/product index tables
+     * We should use these tables with multi-website structure when listing store_id is different from default store_id
+     *
+     * @param   int|null    $storeId
+     * @return  bool
+     */
+    protected function getUseStoreTable($storeId = null)
+    {
+        if ($storeId === null || $storeId == $this->getDefaultStoreId()) {
+            return false;
+        }
+
+        $storeTable = $this->getTable('catalog_category_product_index_store' . $storeId);
+
+        return $this->_conn->isTableExists($storeTable);
     }
 
     /**

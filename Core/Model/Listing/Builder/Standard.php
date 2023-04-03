@@ -49,15 +49,13 @@ class Standard implements BuilderInterface
      * @param   ListingRuleFactory  $listingRuleFactory,
      * @param   ConditionsBlock     $conditions
      * @param   Fieldset            $rendererFieldset
-     * @param   array               $data
      */
     public function __construct(
         Registry $registry,
         FormFactory $formFactory,
         ListingRuleFactory $listingRuleFactory,
         ConditionsBlock $conditions,
-        Fieldset $rendererFieldset,
-        array $data = []
+        Fieldset $rendererFieldset
     ) {
         $this->coreRegistry = $registry;
         $this->formFactory = $formFactory;

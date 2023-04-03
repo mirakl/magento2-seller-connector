@@ -251,7 +251,7 @@ class ProcessTest extends TestCase
         $builderMock = $this->createMock(Standard::class);
         $builderMock->expects($this->once())
             ->method('build')
-            ->willReturn([231, 232, 233, 237, 238, 239]);
+            ->willReturn([231, 232, 233, 237, 239]);
 
         $listing->setBuilder($builderMock);
 
@@ -267,29 +267,29 @@ class ProcessTest extends TestCase
 
         /**
          * Current listing products:
-         * +----------------+-----+-----+-----+-----+-----+-----+
-         * | Product Id     | 231 | 232 | 233 | 237 | 238 | 239 |
-         * +----------------+-----+-----+-----+-----+-----+-----+
-         * | Product Status | NEW | NEW | NEW | NEW | NEW | NEW |
-         * +----------------+-----+-----+-----+-----+-----+-----+
-         * | Offer Status   | NEW | NEW | NEW | NEW | NEW | NEW |
-         * +----------------+-----+-----+-----+-----+-----+-----+
+         * +----------------+-----+-----+-----+-----+-----+
+         * | Product Id     | 231 | 232 | 233 | 237 | 239 |
+         * +----------------+-----+-----+-----+-----+-----+
+         * | Product Status | NEW | NEW | NEW | NEW | NEW |
+         * +----------------+-----+-----+-----+-----+-----+
+         * | Offer Status   | NEW | NEW | NEW | NEW | NEW |
+         * +----------------+-----+-----+-----+-----+-----+
          */
 
         $this->offerResource->updateOffersStatus($listing->getId(), [237], Offer::OFFER_PENDING);
-        $this->offerResource->updateOffersStatus($listing->getId(), [231, 233, 238], Offer::OFFER_SUCCESS);
-        $this->offerResource->updateProductsStatus($listing->getId(), [231, 233, 237, 238], Offer::PRODUCT_SUCCESS);
+        $this->offerResource->updateOffersStatus($listing->getId(), [231, 233], Offer::OFFER_SUCCESS);
+        $this->offerResource->updateProductsStatus($listing->getId(), [231, 233, 237], Offer::PRODUCT_SUCCESS);
         $this->offerResource->updateOffersStatus($listing->getId(), [239], Offer::OFFER_DELETE);
 
         /**
          * Expected listing products:
-         * +----------------+---------+-----+---------+---------+---------+--------+
-         * | Product Id     | 231     | 232 | 233     | 237     | 238     | 239    |
-         * +----------------+---------+-----+---------+---------+---------+--------+
-         * | Product Status | SUCCESS | NEW | SUCCESS | SUCCESS | SUCCESS | NEW    |
-         * +----------------+---------+-----+---------+---------+---------+--------+
-         * | Offer Status   | SUCCESS | NEW | SUCCESS | PENDING | SUCCESS | DELETE |
-         * +----------------+---------+-----+---------+---------+---------+--------+
+         * +----------------+---------+-----+---------+---------+--------+
+         * | Product Id     | 231     | 232 | 233     | 237     | 239    |
+         * +----------------+---------+-----+---------+---------+--------+
+         * | Product Status | SUCCESS | NEW | SUCCESS | SUCCESS | NEW    |
+         * +----------------+---------+-----+---------+---------+--------+
+         * | Offer Status   | SUCCESS | NEW | SUCCESS | PENDING | DELETE |
+         * +----------------+---------+-----+---------+---------+--------+
          */
 
         $cols = ['product_id', 'product_import_status', 'offer_import_status'];
@@ -314,11 +314,6 @@ class ProcessTest extends TestCase
                 'product_id' => '237',
                 'product_import_status' => Offer::PRODUCT_SUCCESS,
                 'offer_import_status' => Offer::OFFER_PENDING,
-            ],
-            238 => [
-                'product_id' => '238',
-                'product_import_status' => Offer::PRODUCT_SUCCESS,
-                'offer_import_status' => Offer::OFFER_SUCCESS,
             ],
             239 => [
                 'product_id' => '239',
@@ -366,13 +361,6 @@ class ProcessTest extends TestCase
                 'offer_import_id' => null,
                 'offer_import_status' => Offer::OFFER_PENDING,
             ],
-            238 => [
-                'product_id' => '238',
-                'product_import_id' => null,
-                'product_import_status' => Offer::PRODUCT_SUCCESS,
-                'offer_import_id' => '2028',
-                'offer_import_status' => Offer::OFFER_PENDING,
-            ],
         ];
         $this->assertSame($expectedOffers, $offers);
 
@@ -400,7 +388,7 @@ class ProcessTest extends TestCase
         $builderMock = $this->createMock(Standard::class);
         $builderMock->expects($this->once())
             ->method('build')
-            ->willReturn([392, 393, 394, 395, 396, 397, 398, 399, 400]);
+            ->willReturn([392, 393, 394, 395, 396, 397, 399, 400]);
 
         $listing->setBuilder($builderMock);
 
@@ -417,13 +405,13 @@ class ProcessTest extends TestCase
 
         /**
          * Current listing products:
-         * +----------------+-----+-----+-----+-----+-----+-----+-----+-----+-----+
-         * | Product Id     | 392 | 393 | 394 | 395 | 396 | 397 | 398 | 399 | 400 |
-         * +----------------+-----+-----+-----+-----+-----+-----+-----+-----+-----+
-         * | Product Status | NEW | NEW | NEW | NEW | NEW | NEW | NEW | NEW | NEW |
-         * +----------------+-----+-----+-----+-----+-----+-----+-----+-----+-----+
-         * | Offer Status   | NEW | NEW | NEW | NEW | NEW | NEW | NEW | NEW | NEW |
-         * +----------------+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+         * +----------------+-----+-----+-----+-----+-----+-----+-----+-----+
+         * | Product Id     | 392 | 393 | 394 | 395 | 396 | 397 | 399 | 400 |
+         * +----------------+-----+-----+-----+-----+-----+-----+-----+-----+
+         * | Product Status | NEW | NEW | NEW | NEW | NEW | NEW | NEW | NEW |
+         * +----------------+-----+-----+-----+-----+-----+-----+-----+-----+
+         * | Offer Status   | NEW | NEW | NEW | NEW | NEW | NEW | NEW | NEW |
+         * +----------------+-----+-----+-----+-----+-----+-----+-----+-----+
          */
 
         $this->helperParamMocks['offerApi']->expects($this->once())
@@ -437,13 +425,13 @@ class ProcessTest extends TestCase
 
         /**
          * Expected listing products:
-         * +----------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
-         * | Product Id     |   392   |   393   |   394   |   395   |   396   |   397   |   398   |   399   |   400   |
-         * +----------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
-         * | Product Status |   NEW   |   NEW   |   NEW   |   NEW   |   NEW   |   NEW   |   NEW   |   NEW   |   NEW   |
-         * +----------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
-         * | Offer Status   | PENDING | PENDING | PENDING | PENDING | PENDING | PENDING | PENDING | PENDING | PENDING |
-         * +----------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
+         * +----------------+---------+---------+---------+---------+---------+---------+---------+---------+
+         * | Product Id     |   392   |   393   |   394   |   395   |   396   |   397   |   399   |   400   |
+         * +----------------+---------+---------+---------+---------+---------+---------+---------+---------+
+         * | Product Status |   NEW   |   NEW   |   NEW   |   NEW   |   NEW   |   NEW   |   NEW   |   NEW   |
+         * +----------------+---------+---------+---------+---------+---------+---------+---------+---------+
+         * | Offer Status   | PENDING | PENDING | PENDING | PENDING | PENDING | PENDING | PENDING | PENDING |
+         * +----------------+---------+---------+---------+---------+---------+---------+---------+---------+
          */
 
         $expectedOffers = [
@@ -484,13 +472,6 @@ class ProcessTest extends TestCase
             ],
             397 => [
                 'product_id' => '397',
-                'product_import_id' => null,
-                'product_import_status' => Offer::PRODUCT_NEW,
-                'offer_import_id' => '2378',
-                'offer_import_status' => Offer::OFFER_PENDING,
-            ],
-            398 => [
-                'product_id' => '398',
                 'product_import_id' => null,
                 'product_import_status' => Offer::PRODUCT_NEW,
                 'offer_import_id' => '2378',
@@ -542,7 +523,7 @@ class ProcessTest extends TestCase
         $builderMock = $this->createMock(Standard::class);
         $builderMock->expects($this->once())
             ->method('build')
-            ->willReturn([231, 232, 233, 237, 238, 239, 240]);
+            ->willReturn([231, 232, 233, 237, 239, 240, 241]);
 
         $listing->setBuilder($builderMock);
 
@@ -558,26 +539,26 @@ class ProcessTest extends TestCase
 
         /**
          * Current listing products:
-         * +----------------+-----+-----+-----+-----+-----+-----+
-         * | Product Id     | 231 | 232 | 233 | 237 | 238 | 239 |
-         * +----------------+-----+-----+-----+-----+-----+-----+
-         * | Product Status | NEW | NEW | NEW | NEW | NEW | NEW |
-         * +----------------+-----+-----+-----+-----+-----+-----+
-         * | Offer Status   | NEW | NEW | NEW | NEW | NEW | NEW |
-         * +----------------+-----+-----+-----+-----+-----+-----+
+         * +----------------+-----+-----+-----+-----+-----+-----+-----+
+         * | Product Id     | 231 | 232 | 233 | 237 | 239 | 240 | 241 |
+         * +----------------+-----+-----+-----+-----+-----+-----+-----+
+         * | Product Status | NEW | NEW | NEW | NEW | NEW | NEW | NEW |
+         * +----------------+-----+-----+-----+-----+-----+-----+-----+
+         * | Offer Status   | NEW | NEW | NEW | NEW | NEW | NEW | NEW |
+         * +----------------+-----+-----+-----+-----+-----+-----+-----+
          */
 
         $this->offerResource->updateProductsStatus($listing->getId(), [232], Offer::PRODUCT_PENDING);
         $this->offerResource->updateProductsStatus($listing->getId(), [233], Offer::PRODUCT_TRANSFORMATION_ERROR);
         $this->offerResource->updateProductsStatus($listing->getId(), [237], Offer::PRODUCT_WAITING_INTEGRATION);
-        $this->offerResource->updateProductsStatus($listing->getId(), [238], Offer::PRODUCT_INTEGRATION_COMPLETE);
-        $this->offerResource->updateProductsStatus($listing->getId(), [239], Offer::PRODUCT_INTEGRATION_ERROR);
-        $this->offerResource->updateProductsStatus($listing->getId(), [240], Offer::PRODUCT_SUCCESS);
+        $this->offerResource->updateProductsStatus($listing->getId(), [239], Offer::PRODUCT_INTEGRATION_COMPLETE);
+        $this->offerResource->updateProductsStatus($listing->getId(), [240], Offer::PRODUCT_INTEGRATION_ERROR);
+        $this->offerResource->updateProductsStatus($listing->getId(), [241], Offer::PRODUCT_SUCCESS);
 
         /**
          * Expected listing products:
          * +----------------+-----+---------+---------------+--------------+---------------+------------+---------+
-         * | Product Id     | 231 | 232     | 233           | 237          | 238           | 239        |         |
+         * | Product Id     | 231 | 232     | 233           | 237          | 239           | 240        | 241     |
          * +----------------+-----+---------+---------------+--------------+---------------+------------+---------+
          * | Product Status | NEW | PENDING | TRANSF._ERROR | WAITING_INT. | INT._COMPLETE | INT._ERROR | SUCCESS |
          * +----------------+-----+---------+---------------+--------------+---------------+------------+---------+
@@ -594,7 +575,7 @@ class ProcessTest extends TestCase
         /**
          * Expected listing products:
          * +-------------------+---------+---------+---------+--------------+---------------+---------+---------+
-         * | Product Id        | 231     | 232     | 233     | 237          | 238           | 239     | 240     |
+         * | Product Id        | 231     | 232     | 233     | 237          | 239           | 240     | 241     |
          * +-------------------+---------+---------+---------+--------------+---------------+---------+---------+
          * | Product Import Id | 2033    | NULL    | 2033    | NULL         | NULL          | 2033    | NULL    |
          * +-------------------+---------+---------+---------+--------------+---------------+---------+---------+
@@ -635,22 +616,22 @@ class ProcessTest extends TestCase
                 'offer_import_id' => null,
                 'offer_import_status' => Offer::OFFER_NEW,
             ],
-            238 => [
-                'product_id' => '238',
+            239 => [
+                'product_id' => '239',
                 'product_import_id' => null,
                 'product_import_status' => Offer::PRODUCT_INTEGRATION_COMPLETE,
                 'offer_import_id' => null,
                 'offer_import_status' => Offer::OFFER_NEW,
             ],
-            239 => [
-                'product_id' => '239',
+            240 => [
+                'product_id' => '240',
                 'product_import_id' => null,
                 'product_import_status' => Offer::PRODUCT_INTEGRATION_ERROR,
                 'offer_import_id' => null,
                 'offer_import_status' => Offer::OFFER_NEW,
             ],
-            240 => [
-                'product_id' => '240',
+            241 => [
+                'product_id' => '241',
                 'product_import_id' => null,
                 'product_import_status' => Offer::PRODUCT_SUCCESS,
                 'offer_import_id' => null,

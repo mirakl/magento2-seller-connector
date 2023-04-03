@@ -1,8 +1,11 @@
 <?php
 namespace MiraklSeller\Sales\Helper;
 
+use Magento\Directory\Model\CountryFactory;
+use Magento\Directory\Model\ResourceModel\Country as CountryResource;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Sales\Model\Order as OrderModel;
 use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
@@ -27,6 +30,16 @@ class Order extends AbstractHelper
     protected $orderCollectionFactory;
 
     /**
+     * @var CountryResource
+     */
+    protected $countryResource;
+
+    /**
+     * @var CountryFactory
+     */
+    protected $countryFactory;
+
+    /**
      * @var Config
      */
     protected $config;
@@ -36,18 +49,23 @@ class Order extends AbstractHelper
      * @param   ResolverInterface       $localeResolver
      * @param   OrderCollectionFactory  $orderCollectionFactory
      * @param   Config                  $config
+     * @param   CountryResource         $countryResource
+     * @param   CountryFactory          $countryFactory
      */
     public function __construct(
         Context $context,
         ResolverInterface $localeResolver,
         OrderCollectionFactory $orderCollectionFactory,
-        Config $config
+        Config $config,
+        CountryResource $countryResource,
+        CountryFactory $countryFactory
     ) {
         parent::__construct($context);
-
         $this->localeResolver = $localeResolver;
         $this->orderCollectionFactory = $orderCollectionFactory;
         $this->config = $config;
+        $this->countryResource = $countryResource;
+        $this->countryFactory = $countryFactory;
     }
 
     /**
@@ -65,22 +83,17 @@ class Order extends AbstractHelper
      */
     public function getCountryByCode($code)
     {
-        $countries = $this->getCountryList();
+        $country = $this->countryFactory->create();
 
-        return isset($countries[$code]) ? $countries[$code] : $code;
-    }
-
-    /**
-     * @param   string|null $locale
-     * @return  array
-     */
-    public function getCountryList($locale = null)
-    {
-        if (null === $locale) {
-            $locale = $this->localeResolver->getLocale();
+        try {
+            $this->countryResource->loadByCode($country, $code);
+        } catch (LocalizedException $e) {
+            return $code;
         }
 
-        return \Zend_Locale::getTranslationList('territory', $locale, 2);
+        $locale = $this->localeResolver->getLocale();
+
+        return $country->getId() ? $country->getName($locale) : $code;
     }
 
     /**
