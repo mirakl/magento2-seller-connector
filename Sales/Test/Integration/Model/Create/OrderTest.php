@@ -140,7 +140,7 @@ class OrderTest extends TestCase
         $this->assertEquals(7.82, $orderItem1->getPrice());
         $this->assertEquals(7.82, $orderItem1->getBasePrice());
         $this->assertEquals(7.82, $orderItem1->getOriginalPrice());
-        $this->assertEquals(26.60, $orderItem1->getTaxPercent());
+        $this->assertEquals(27.0, $orderItem1->getTaxPercent());
         $this->assertEquals(4.16, $orderItem1->getTaxAmount());
         $this->assertEquals(4.16, $orderItem1->getBaseTaxAmount());
         $this->assertEquals(15.64, $orderItem1->getRowTotal());

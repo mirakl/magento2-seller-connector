@@ -97,7 +97,17 @@ class QuoteItem
                 $quoteItem->setRowTotalInclTax($quoteItem->getRowTotal() + $taxAmount);
                 $quoteItem->setBasePriceInclTax($quoteItem->getBasePrice() + ($taxAmount / $quoteItem->getQty()));
                 $quoteItem->setPriceInclTax($quoteItem->getPrice() + ($taxAmount / $quoteItem->getQty()));
-                $quoteItem->setTaxPercent(round(($taxAmount / $quoteItem->getRowTotal()) * 100, 2));
+
+                $rate = 0;
+                if ($orderLine->getTaxes()->count() === 1) {
+                    // Try to retrieve an unique rate from Mirakl OR11 payload if present
+                    $rate = $orderLine->getTaxes()->first()->getRate();
+                }
+                if (!$rate) {
+                    // If no rate is found, calculate it
+                    $rate = round(($taxAmount / $quoteItem->getRowTotal()) * 100);
+                }
+                $quoteItem->setTaxPercent($rate);
             } else {
                 $quoteItem->setTaxAmount(0);
                 $quoteItem->setBaseTaxAmount(0);
