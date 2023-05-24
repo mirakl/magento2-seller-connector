@@ -2,7 +2,11 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="before.body.end">
-            <block class="Magento\Backend\Block\Template" name="adminhtml.process.async" template="MiraklSeller_Process::process/async.phtml"/>
+            <block class="Magento\Backend\Block\Template" name="adminhtml.process.async" template="MiraklSeller_Process::process/async.phtml">
+                <arguments>
+                    <argument name="viewModel" xsi:type="object">MiraklSeller\Process\ViewModel\AdminUserRole</argument>
+                </arguments>
+            </block>
         </referenceContainer>
     </body>
 </page>

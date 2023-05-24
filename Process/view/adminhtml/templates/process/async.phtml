@@ -1,6 +1,9 @@
 <?php
 /** @var \Magento\Backend\Block\Template $block */
+$viewModel = $block->getData('viewModel');
+$isAllowed = $viewModel->isAllowed();
 ?>
+<?php if ($isAllowed): ?>
 <script>
 require([
     'jquery'
@@ -29,3 +32,4 @@ require([
     });
 });
 </script>
+<?php endif; ?>
