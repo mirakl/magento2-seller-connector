@@ -1,6 +1,7 @@
 <?php
 namespace MiraklSeller\Process\Console\Command;
 
+use Magento\Framework\Console\Cli;
 use MiraklSeller\Process\Helper\Config;
 use MiraklSeller\Process\Model\HistoryClearer;
 use MiraklSeller\Process\Model\Process;
@@ -73,7 +74,8 @@ class ClearHistoryCommand extends Command
 
         if ($beforeDate && !preg_match('(^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$)', $beforeDate)) {
             $output->writeln('<error>--before parameter must have yyyy-mm-dd format</error>');
-            return;
+
+            return Cli::RETURN_FAILURE;
         }
 
         $beforeDate = $beforeDate ? $beforeDate .' 00:00:00' : $this->config->getProcessClearHistoryBeforeDate();
@@ -90,5 +92,7 @@ class ClearHistoryCommand extends Command
         $process->addOutput('cli');
 
         $process->run();
+
+        return Cli::RETURN_SUCCESS;
     }
 }

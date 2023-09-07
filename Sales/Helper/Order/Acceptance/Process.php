@@ -8,6 +8,8 @@ use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
+use Mirakl\MMP\Common\Domain\Order\Tax\OrderTaxAmount;
+use Mirakl\MMP\Common\Domain\Order\Tax\OrderTaxMode;
 use Mirakl\MMP\Shop\Domain\Order\ShopOrder;
 use MiraklSeller\Api\Helper\Order as ApiOrder;
 use MiraklSeller\Api\Model\Connection;
@@ -83,18 +85,18 @@ class Process extends AbstractHelper
     protected $isMsiEnabled;
 
     /**
-     * @param   Context                     $context
-     * @param   ProductRepositoryInterface  $productRepository
-     * @param   StockRegistryInterface      $stockRegistry
-     * @param   ApiOrder                    $apiOrder
-     * @param   Config                      $config
-     * @param   ConnectionFactory           $connectionFactory
-     * @param   ConnectionResourceFactory   $connectionResourceFactory
-     * @param   Backorder                   $backorderHandler
-     * @param   InsufficientStock           $insufficientStockHandler
-     * @param   PricesVariations            $pricesVariationsHandler
-     * @param   PriceHelper                 $priceHelper
-     * @param   ObjectManagerInterface      $objectManager
+     * @param Context                    $context
+     * @param ProductRepositoryInterface $productRepository
+     * @param StockRegistryInterface     $stockRegistry
+     * @param ApiOrder                   $apiOrder
+     * @param Config                     $config
+     * @param ConnectionFactory          $connectionFactory
+     * @param ConnectionResourceFactory  $connectionResourceFactory
+     * @param Backorder                  $backorderHandler
+     * @param InsufficientStock          $insufficientStockHandler
+     * @param PricesVariations           $pricesVariationsHandler
+     * @param PriceHelper                $priceHelper
+     * @param ObjectManagerInterface     $objectManager
      */
     public function __construct(
         Context $context,
@@ -127,9 +129,9 @@ class Process extends AbstractHelper
     }
 
     /**
-     * @param   ProcessModel    $process
-     * @param   int             $connectionId
-     * @return  ProcessModel
+     * @param ProcessModel $process
+     * @param int          $connectionId
+     * @return ProcessModel
      */
     public function acceptConnectionOrders(ProcessModel $process, $connectionId)
     {
@@ -162,10 +164,10 @@ class Process extends AbstractHelper
     }
 
     /**
-     * @param   ProcessModel    $process
-     * @param   Connection      $connection
-     * @param   ShopOrder       $miraklOrder
-     * @return  ProcessModel
+     * @param ProcessModel $process
+     * @param Connection   $connection
+     * @param ShopOrder    $miraklOrder
+     * @return ProcessModel
      */
     public function acceptMiraklOrder(ProcessModel $process, Connection $connection, ShopOrder $miraklOrder)
     {
@@ -178,6 +180,8 @@ class Process extends AbstractHelper
             $stockId = $stockByWebsiteId->execute($connection->getWebsiteId())->getStockId();
         }
 
+        $priceIncludesTax = $this->priceHelper->priceIncludesTax($connection->getStoreId());
+
         /** @var \Mirakl\MMP\Common\Domain\Order\ShopOrderLine $orderLine */
         foreach ($miraklOrder->getOrderLines() as $orderLine) {
             $accepted = true; // Order line is accepted by default
@@ -188,11 +192,19 @@ class Process extends AbstractHelper
                 /** @var Product $product */
                 $product = $this->productRepository->get($offerSku);
 
-                $magentoPrice = $this->priceHelper->getMagentoPrice($product, $connection, $orderLine->getQuantity());
+                $magentoPrice = (float) $this->priceHelper->getMagentoPrice($product, $connection, $orderLine->getQuantity());
+                $miraklPrice = (float) $orderLine->getOffer()->getPrice();
+
+                // Add taxes to Mirakl price excluding tax if Magento prices are including tax
+                if ($priceIncludesTax && $miraklOrder->getOrderTaxMode() === OrderTaxMode::TAX_EXCLUDED) {
+                    /** @var OrderTaxAmount $tax */
+                    foreach ($orderLine->getTaxes() as $tax) {
+                        $miraklPrice += $tax->getAmount();
+                    }
+                }
 
                 // Handle allowed prices variations on product
-                $miraklPrice = $orderLine->getOffer()->getPrice();
-                if (!$this->pricesVariationsHandler->isPriceVariationValid((float) $magentoPrice, (float) $miraklPrice)) {
+                if (!$this->pricesVariationsHandler->isPriceVariationValid($magentoPrice, $miraklPrice)) {
                     return $process->output(__('Product with SKU "%1" has an invalid price variation. Please handle order manually.', $offerSku));
                 }
 
@@ -265,8 +277,8 @@ class Process extends AbstractHelper
     /**
      * Retrieves Mirakl connection by specified id
      *
-     * @param   int $connectionId
-     * @return  Connection
+     * @param int $connectionId
+     * @return Connection
      */
     protected function getConnectionById($connectionId)
     {

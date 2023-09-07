@@ -102,11 +102,13 @@
                 {
                     "amount": 0.52,
                     "code": "TVA5.5",
+                    "rate": 5.5,
                     "tax_calculation_rule": "NONE"
                 },
                 {
                     "amount": 1.58,
                     "code": "TVA20",
+                    "rate": 20.0,
                     "tax_calculation_rule": "NONE"
                 }
             ],
@@ -114,11 +116,13 @@
                 {
                     "amount": 1.03,
                     "code": "TVA5.5",
+                    "rate": 5.5,
                     "tax_calculation_rule": "NONE"
                 },
                 {
                     "amount": 3.13,
                     "code": "TVA20",
+                    "rate": 20.0,
                     "tax_calculation_rule": "NONE"
                 }
             ],
@@ -187,11 +191,13 @@
                 {
                     "amount": 0.10,
                     "code": "TVA5.5",
+                    "rate": 5.5,
                     "tax_calculation_rule": "NONE"
                 },
                 {
                     "amount": 0.32,
                     "code": "TVA20",
+                    "rate": 20,
                     "tax_calculation_rule": "NONE"
                 }
             ],

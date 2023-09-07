@@ -105,7 +105,7 @@ class OrderTaxes
                         continue;
                     }
 
-                    foreach ($taxDetails as $code => $amount) {
+                    foreach ($taxDetails as $code => $tax) {
                         if ($code !== $orderTax->getCode()) {
                             continue;
                         }
@@ -113,12 +113,12 @@ class OrderTaxes
                         $data = [
                             'item_id'            => $taxableItemType == 'product' ? $orderItem->getId() : null,
                             'tax_id'             => $orderTax->getId(),
-                            'tax_percent'        => 0,
+                            'tax_percent'        => $tax['rate'],
                             'associated_item_id' => null,
-                            'amount'             => $amount,
-                            'base_amount'        => $amount,
-                            'real_amount'        => $amount,
-                            'real_base_amount'   => $amount,
+                            'amount'             => $tax['amount'],
+                            'base_amount'        => $tax['amount'],
+                            'real_amount'        => $tax['amount'],
+                            'real_base_amount'   => $tax['amount'],
                             'taxable_item_type'  => $taxableItemType,
                         ];
 

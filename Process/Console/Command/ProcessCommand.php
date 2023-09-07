@@ -1,6 +1,7 @@
 <?php
 namespace MiraklSeller\Process\Console\Command;
 
+use Magento\Framework\Console\Cli;
 use MiraklSeller\Process\Helper\Data as Helper;
 use MiraklSeller\Process\Model\ProcessFactory;
 use MiraklSeller\Process\Model\ResourceModel\ProcessFactory as ProcessResourceFactory;
@@ -119,5 +120,7 @@ class ProcessCommand extends Command
         } else {
             $output->writeln('<error>Please provide an option or use help</error>');
         }
+
+        return Cli::RETURN_SUCCESS;
     }
 }

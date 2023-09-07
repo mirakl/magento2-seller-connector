@@ -1,6 +1,7 @@
 <?php
 namespace MiraklSeller\Core\Console\Command;
 
+use Magento\Framework\Console\Cli;
 use MiraklSeller\Api\Model\Connection;
 use MiraklSeller\Api\Model\ConnectionFactory;
 use MiraklSeller\Api\Model\ResourceModel\Connection as ConnectionResource;
@@ -173,6 +174,8 @@ class ListingExportCommand extends Command
                 ));
             }
         }
+
+        return cli::RETURN_SUCCESS;
     }
 
     /**

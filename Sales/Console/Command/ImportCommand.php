@@ -3,6 +3,7 @@ namespace MiraklSeller\Sales\Console\Command;
 
 use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
+use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\NoSuchEntityException;
 use MiraklSeller\Api\Model\Connection;
 use MiraklSeller\Process\Model\Process;
@@ -148,6 +149,8 @@ class ImportCommand extends Command
         } else {
             $output->writeln('<error>Please provide an option or use help</error>');
         }
+
+        return cli::RETURN_SUCCESS;
     }
 
     /**

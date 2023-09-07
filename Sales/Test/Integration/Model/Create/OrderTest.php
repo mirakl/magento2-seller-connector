@@ -180,6 +180,7 @@ class OrderTest extends TestCase
         $this->assertSame(0.52, (float) $orderTaxItem1['real_base_amount']);
         $this->assertSame('TVA5.5', $orderTaxItem1['code']);
         $this->assertSame('TVA5.5', $orderTaxItem1['title']);
+        $this->assertSame(5.5, (float) $orderTaxItem1['tax_percent']);
 
         $orderTaxItem2 = $orderTaxItems[1];
         $this->assertSame('shipping', $orderTaxItem2['taxable_item_type']);
@@ -187,6 +188,7 @@ class OrderTest extends TestCase
         $this->assertSame(0.10, (float) $orderTaxItem2['real_base_amount']);
         $this->assertSame('TVA5.5', $orderTaxItem2['code']);
         $this->assertSame('TVA5.5', $orderTaxItem2['title']);
+        $this->assertSame(5.5, (float) $orderTaxItem2['tax_percent']);
 
         $orderTaxItem3 = $orderTaxItems[2];
         $this->assertSame('product', $orderTaxItem3['taxable_item_type']);
@@ -194,6 +196,7 @@ class OrderTest extends TestCase
         $this->assertSame(1.03, (float) $orderTaxItem3['real_base_amount']);
         $this->assertSame('TVA5.5', $orderTaxItem3['code']);
         $this->assertSame('TVA5.5', $orderTaxItem3['title']);
+        $this->assertSame(5.5, (float) $orderTaxItem3['tax_percent']);
 
         $orderTaxItem4 = $orderTaxItems[3];
         $this->assertSame('shipping', $orderTaxItem4['taxable_item_type']);
@@ -201,6 +204,7 @@ class OrderTest extends TestCase
         $this->assertSame(1.58, (float) $orderTaxItem4['real_base_amount']);
         $this->assertSame('TVA20', $orderTaxItem4['code']);
         $this->assertSame('TVA20', $orderTaxItem4['title']);
+        $this->assertSame(20.0, (float) $orderTaxItem4['tax_percent']);
 
         $orderTaxItem5 = $orderTaxItems[4];
         $this->assertSame('shipping', $orderTaxItem5['taxable_item_type']);
@@ -208,6 +212,7 @@ class OrderTest extends TestCase
         $this->assertSame(0.32, (float) $orderTaxItem5['real_base_amount']);
         $this->assertSame('TVA20', $orderTaxItem5['code']);
         $this->assertSame('TVA20', $orderTaxItem5['title']);
+        $this->assertSame(20.0, (float) $orderTaxItem5['tax_percent']);
 
         $orderTaxItem6 = $orderTaxItems[5];
         $this->assertSame('product', $orderTaxItem6['taxable_item_type']);
@@ -215,6 +220,7 @@ class OrderTest extends TestCase
         $this->assertSame(3.13, (float) $orderTaxItem6['real_base_amount']);
         $this->assertSame('TVA20', $orderTaxItem6['code']);
         $this->assertSame('TVA20', $orderTaxItem6['title']);
+        $this->assertSame(20.0, (float) $orderTaxItem6['tax_percent']);
     }
 
     public function testCreateOrderWithCountryNotFound()

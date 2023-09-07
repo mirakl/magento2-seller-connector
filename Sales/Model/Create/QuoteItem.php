@@ -7,6 +7,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\ResourceModel\Quote\Item as QuoteItemResource;
 use Magento\Quote\Model\ResourceModel\Quote\ItemFactory as QuoteItemResourceFactory;
@@ -31,18 +32,26 @@ class QuoteItem
     protected $orderHelper;
 
     /**
-     * @param   ProductRepositoryInterface  $productRepository
-     * @param   QuoteItemResourceFactory    $quoteItemResourceFactory
-     * @param   OrderHelper                 $orderHelper
+     * @var Json
+     */
+    protected $json;
+
+    /**
+     * @param ProductRepositoryInterface $productRepository
+     * @param QuoteItemResourceFactory   $quoteItemResourceFactory
+     * @param OrderHelper                $orderHelper
+     * @param Json                       $json
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
         QuoteItemResourceFactory $quoteItemResourceFactory,
-        OrderHelper $orderHelper
+        OrderHelper $orderHelper,
+        Json $json
     ) {
         $this->productRepository        = $productRepository;
         $this->quoteItemResourceFactory = $quoteItemResourceFactory;
         $this->orderHelper              = $orderHelper;
+        $this->json                     = $json;
     }
 
     /**
@@ -82,6 +91,10 @@ class QuoteItem
 
         try {
             $quoteItem = $quote->addProduct($product, new DataObject(['qty' => $orderLine->getQuantity()]));
+
+            // Save order line id to be used later in shipment creation, etc...
+            $additionalData = $this->json->serialize(['mirakl_order_line_id' => $orderLine->getId()]);
+            $quoteItem->setAdditionalData($additionalData);
 
             // Force quote item price fields to match Mirakl order line prices
             $quoteItem->setBasePrice($offerPrice);

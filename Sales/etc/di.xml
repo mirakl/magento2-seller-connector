@@ -9,6 +9,9 @@
     <type name="Magento\CatalogInventory\Model\StockStateProvider">
         <plugin name="mirakl_seller_sales" type="MiraklSeller\Sales\Plugin\Model\CatalogInventory\StockStateProviderPlugin" />
     </type>
+    <type name="Magento\Quote\Model\Quote\Item">
+        <plugin name="mirakl_seller_represent_product_plugin" type="MiraklSeller\Sales\Plugin\Model\Quote\Item\RepresentProductPlugin" />
+    </type>
     <type name="MiraklSeller\Sales\Model\Create\Quote">
         <arguments>
             <argument name="addressMapper" xsi:type="object">MiraklSeller\Sales\Model\Mapper\Address</argument>

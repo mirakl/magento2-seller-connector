@@ -6,6 +6,7 @@ use Magento\CatalogRule\Model\RuleFactory;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Tax\Helper\Data as MagentoTaxHelper;
 use MiraklSeller\Api\Model\Connection;
 use MiraklSeller\Core\Helper\Config;
 
@@ -27,28 +28,36 @@ class Price extends AbstractHelper
     protected $config;
 
     /**
-     * @param   Context                 $context
-     * @param   StoreManagerInterface   $storeManager
-     * @param   RuleFactory             $ruleFactory
-     * @param   Config                  $config
+     * @var MagentoTaxHelper
+     */
+    protected $magentoTaxHelper;
+
+    /**
+     * @param Context               $context
+     * @param StoreManagerInterface $storeManager
+     * @param RuleFactory           $ruleFactory
+     * @param Config                $config
+     * @param MagentoTaxHelper      $magentoTaxHelper
      */
     public function __construct(
         Context $context,
         StoreManagerInterface $storeManager,
         RuleFactory $ruleFactory,
-        Config $config
+        Config $config,
+        MagentoTaxHelper $magentoTaxHelper
     ) {
         parent::__construct($context);
-        $this->storeManager = $storeManager;
-        $this->ruleFactory  = $ruleFactory;
-        $this->config       = $config;
+        $this->storeManager     = $storeManager;
+        $this->ruleFactory      = $ruleFactory;
+        $this->config           = $config;
+        $this->magentoTaxHelper = $magentoTaxHelper;
     }
 
     /**
-     * @param   Product     $product
-     * @param   Connection  $connection
-     * @param   null|int    $qty
-     * @return  float
+     * @param Product    $product
+     * @param Connection $connection
+     * @param null|int   $qty
+     * @return float
      */
     public function getMagentoPrice(Product $product, Connection $connection, $qty = null)
     {
@@ -70,9 +79,9 @@ class Price extends AbstractHelper
     }
 
     /**
-     * @param   Product $product
-     * @param   mixed   $store
-     * @return  float|null
+     * @param Product $product
+     * @param mixed   $store
+     * @return float|null
      */
     public function getDiscountPrice(Product $product, $store = null)
     {
@@ -88,10 +97,19 @@ class Price extends AbstractHelper
     }
 
     /**
-     * @return  int
+     * @return int
      */
     public function getCustomerGroupId()
     {
         return $this->config->getCustomerGroup();
+    }
+
+    /**
+     * @param mixed $store
+     * @return bool
+     */
+    public function priceIncludesTax($store = null)
+    {
+        return $this->magentoTaxHelper->priceIncludesTax($store);
     }
 }

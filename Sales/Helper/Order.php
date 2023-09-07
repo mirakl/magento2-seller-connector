@@ -131,32 +131,33 @@ class Order extends AbstractHelper
 
     /**
      * Will return Mirakl order tax details like that:
+     *
      * <code>
      * [
      *     'product' => [
      *         'sku_1' => [
-     *             'tax_code_1' => 7.20,
-     *             'tax_code_2' => 2.08,
+     *             'tax_code_1' => ['amount' => 7.20, 'rate' => 5.5],
+     *             'tax_code_2' => ['amount' => 2.08, 'rate' => 1.5],
      *         ],
      *         'sku_2' => [
-     *             'tax_code_1' => 3.81,
-     *             'tax_code_2' => 0.87,
-     *             'tax_code_3' => 0.19,
+     *             'tax_code_1' => ['amount' => 3.81, 'rate' => 20],
+     *             'tax_code_2' => ['amount' => 0.87, 'rate' => 9.2],
+     *             'tax_code_3' => ['amount' => 0.19, 'rate' => 3.4],
      *         ],
      *     ],
      *     'shipping' => [
      *         'sku_1' => [
-     *             'tax_code_1' => 1.78,
+     *             'tax_code_1' => ['amount' => 1.78, 'rate' => 8.9],
      *         ],
      *         'sku_2' => [
-     *             'tax_code_1' => 0.99,
+     *             'tax_code_1' => ['amount' => 0.99, 'rate' => 0.67],
      *         ],
      *     ],
      * ]
      * </code>
      *
      * @param   ShopOrder   $miraklOrder
-     * @para    array       $excludeStatuses
+     * @param   array       $excludeStatuses
      * @return  array
      */
     public function getMiraklOrderTaxDetails($miraklOrder, $excludeStatuses = [OrderState::REFUSED, OrderState::CANCELED])
@@ -174,16 +175,22 @@ class Order extends AbstractHelper
             /** @var \Mirakl\MMP\Common\Domain\Order\Tax\OrderTaxAmount $tax */
             foreach ($orderLine->getTaxes() as $tax) {
                 if (!isset($result['product'][$sku][$tax->getCode()])) {
-                    $result['product'][$sku][$tax->getCode()] = 0;
+                    $result['product'][$sku][$tax->getCode()] = [
+                        'amount' => 0,
+                        'rate'   => $tax->getRate(),
+                    ];
                 }
-                $result['product'][$sku][$tax->getCode()] += $tax->getAmount();
+                $result['product'][$sku][$tax->getCode()]['amount'] += $tax->getAmount();
             }
 
             foreach ($orderLine->getShippingTaxes() as $tax) {
                 if (!isset($result['shipping'][$sku][$tax->getCode()])) {
-                    $result['shipping'][$sku][$tax->getCode()] = 0;
+                    $result['shipping'][$sku][$tax->getCode()] = [
+                        'amount' => 0,
+                        'rate'   => $tax->getRate(),
+                    ];
                 }
-                $result['shipping'][$sku][$tax->getCode()] += $tax->getAmount();
+                $result['shipping'][$sku][$tax->getCode()]['amount'] += $tax->getAmount();
             }
         }
 
@@ -209,11 +216,11 @@ class Order extends AbstractHelper
 
         foreach ($this->getMiraklOrderTaxDetails($miraklOrder) as $orderLineTaxes) {
             foreach ($orderLineTaxes as $taxDetails) {
-                foreach ($taxDetails as $code => $amount) {
+                foreach ($taxDetails as $code => $tax) {
                     if (!isset($result[$code])) {
                         $result[$code] = 0;
                     }
-                    $result[$code] += $amount;
+                    $result[$code] += $tax['amount'];
                 }
             }
         }
