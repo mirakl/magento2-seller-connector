@@ -70,7 +70,7 @@ class Connection extends Data
     public function getMiraklOrderUrl(Model $connection, MiraklOrder $miraklOrder)
     {
         $url = sprintf(
-            '%s/mmp/shop/order/%s/information',
+            '%s/mmp/shop/order/%s',
             $connection->getBaseUrl(),
             $miraklOrder->getId()
         );

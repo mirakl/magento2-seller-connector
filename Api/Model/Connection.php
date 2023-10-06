@@ -198,8 +198,12 @@ class Connection extends AbstractModel
     public function getOfferStates()
     {
         if (!isset($this->offerStates)) {
-            $offerStates = $this->offerApi->getOffersStateList($this);
-            $this->offerStates = $offerStates->toArray();
+            try {
+                $offerStates = $this->offerApi->getOffersStateList($this);
+                $this->offerStates = $offerStates->toArray();
+            } catch (\Exception $e) {
+                $this->offerStates = [];
+            }
         }
 
         return $this->offerStates;

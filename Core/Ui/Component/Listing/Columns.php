@@ -37,7 +37,7 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     }
 
     /**
-     * {@inheridoc}
+     * {@inheritdoc}
      */
     public function prepare()
     {
