@@ -190,7 +190,7 @@ class Process extends AbstractHelper
 
             try {
                 /** @var Product $product */
-                $product = $this->productRepository->get($offerSku);
+                $product = $this->productRepository->get($offerSku, false, $connection->getStoreId() ?: null);
 
                 $magentoPrice = (float) $this->priceHelper->getMagentoPrice($product, $connection, $orderLine->getQuantity());
                 $miraklPrice = (float) $orderLine->getOffer()->getPrice();
