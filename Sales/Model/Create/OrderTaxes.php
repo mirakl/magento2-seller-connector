@@ -78,19 +78,19 @@ class OrderTaxes
         $orderTaxItemResource = $this->orderTaxItemResourceFactory->create();
 
         // Save order taxes by code
-        foreach ($computedTaxes as $code => $amount) {
+        foreach ($computedTaxes as $code => $computedTax) {
             $data = [
                 'order_id'         => $order->getId(),
                 'code'             => $code,
                 'title'            => $code,
                 'hidden'           => 0,
-                'percent'          => 0,
+                'percent'          => $computedTax['rate'],
                 'priority'         => 0,
                 'position'         => 0,
                 'process'          => 0,
-                'amount'           => $amount,
-                'base_amount'      => $amount,
-                'base_real_amount' => $amount,
+                'amount'           => $computedTax['amount'],
+                'base_amount'      => $computedTax['amount'],
+                'base_real_amount' => $computedTax['amount'],
             ];
 
             /** @var OrderTax $orderTax */

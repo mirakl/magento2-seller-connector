@@ -201,9 +201,9 @@ class Order extends AbstractHelper
      * Will return Mirakl order tax details like that:
      * <code>
      * [
-     *     'tax_code_1' => 13.78,
-     *     'tax_code_2' => 2.95,
-     *     'tax_code_3' => 0.19,
+     *     'tax_code_1' => ['amount' => 13.78, 'rate' => 10],
+     *     'tax_code_2' => ['amount' => 2.95, 'rate' => 5.5],
+     *     'tax_code_3' => ['amount' => 0.19, 'rate' => 8.9],
      * ]
      * </code>
      *
@@ -218,9 +218,12 @@ class Order extends AbstractHelper
             foreach ($orderLineTaxes as $taxDetails) {
                 foreach ($taxDetails as $code => $tax) {
                     if (!isset($result[$code])) {
-                        $result[$code] = 0;
+                        $result[$code] = [
+                            'amount' => 0,
+                            'rate'   => $tax['rate'] ?? 0,
+                        ];
                     }
-                    $result[$code] += $tax['amount'];
+                    $result[$code]['amount'] += $tax['amount'];
                 }
             }
         }
