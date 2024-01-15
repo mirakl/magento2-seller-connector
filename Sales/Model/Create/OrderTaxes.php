@@ -1,6 +1,7 @@
 <?php
 namespace MiraklSeller\Sales\Model\Create;
 
+use Magento\Framework\App\Language\Dictionary;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Tax\Item as OrderTaxItem;
 use Magento\Sales\Model\Order\Tax\ItemFactory as OrderTaxItemFactory;
@@ -41,24 +42,32 @@ class OrderTaxes
     protected $orderHelper;
 
     /**
+     * @var Dictionary
+     */
+    protected $dictionary;
+
+    /**
      * @param OrderTaxFactory             $orderTaxFactory
      * @param OrderTaxItemFactory         $orderTaxItemFactory
      * @param OrderTaxResourceFactory     $orderTaxResourceFactory
      * @param OrderTaxItemResourceFactory $orderTaxItemResourceFactory
      * @param OrderHelper                 $orderHelper
+     * @param Dictionary                  $dictionary
      */
     public function __construct(
         OrderTaxFactory $orderTaxFactory,
         OrderTaxItemFactory $orderTaxItemFactory,
         OrderTaxResourceFactory $orderTaxResourceFactory,
         OrderTaxItemResourceFactory $orderTaxItemResourceFactory,
-        OrderHelper $orderHelper
+        OrderHelper $orderHelper,
+        Dictionary $dictionary
     ) {
         $this->orderTaxFactory             = $orderTaxFactory;
         $this->orderTaxItemFactory         = $orderTaxItemFactory;
         $this->orderTaxResourceFactory     = $orderTaxResourceFactory;
         $this->orderTaxItemResourceFactory = $orderTaxItemResourceFactory;
         $this->orderHelper                 = $orderHelper;
+        $this->dictionary                  = $dictionary;
     }
 
     /**
@@ -77,55 +86,63 @@ class OrderTaxes
         /** @var OrderTaxItemResource $orderTaxItemResource */
         $orderTaxItemResource = $this->orderTaxItemResourceFactory->create();
 
+        $orderLocale = $this->orderHelper->getOrderLocale($order);
+        $title = $this->dictionary->getDictionary($orderLocale)['Tax Rate'] ?? 'VAT';
+
         // Save order taxes by code
-        foreach ($computedTaxes as $code => $computedTax) {
-            $data = [
-                'order_id'         => $order->getId(),
-                'code'             => $code,
-                'title'            => $code,
-                'hidden'           => 0,
-                'percent'          => $computedTax['rate'],
-                'priority'         => 0,
-                'position'         => 0,
-                'process'          => 0,
-                'amount'           => $computedTax['amount'],
-                'base_amount'      => $computedTax['amount'],
-                'base_real_amount' => $computedTax['amount'],
-            ];
+        foreach ($computedTaxes as $computedTaxesCode => $computedTaxByRate) {
+            $i = 1;
+            foreach ($computedTaxByRate as $computedTax) {
+                $data = [
+                    'order_id'         => $order->getId(),
+                    'code'             => $computedTaxesCode . '_' . $i++,
+                    'title'            => $title,
+                    'hidden'           => 0,
+                    'percent'          => $computedTax['rate'],
+                    'priority'         => 0,
+                    'position'         => 0,
+                    'process'          => 0,
+                    'amount'           => $computedTax['amount'],
+                    'base_amount'      => $computedTax['amount'],
+                    'base_real_amount' => $computedTax['amount'],
+                ];
 
-            /** @var OrderTax $orderTax */
-            $orderTax = $this->orderTaxFactory->create();
-            $orderTax->setData($data);
-            $orderTaxResource->save($orderTax);
+                /** @var OrderTax $orderTax */
+                $orderTax = $this->orderTaxFactory->create();
+                $orderTax->setData($data);
+                $orderTaxResource->save($orderTax);
 
-            // Save order item taxes by code
-            foreach ($itemsTaxes as $taxableItemType => $itemTaxDetails) {
-                foreach ($itemTaxDetails as $sku => $taxDetails) {
-                    if (null === ($orderItem = $this->orderHelper->getOrderItemBySku($order, $sku))) {
-                        continue;
-                    }
-
-                    foreach ($taxDetails as $code => $tax) {
-                        if ($code !== $orderTax->getCode()) {
+                // Save order item taxes by code
+                foreach ($itemsTaxes as $taxableItemType => $itemTaxDetails) {
+                    foreach ($itemTaxDetails as $sku => $taxDetails) {
+                        if (null === ($orderItem = $this->orderHelper->getOrderItemBySku($order, $sku))) {
                             continue;
                         }
 
-                        $data = [
-                            'item_id'            => $taxableItemType == 'product' ? $orderItem->getId() : null,
-                            'tax_id'             => $orderTax->getId(),
-                            'tax_percent'        => $tax['rate'],
-                            'associated_item_id' => null,
-                            'amount'             => $tax['amount'],
-                            'base_amount'        => $tax['amount'],
-                            'real_amount'        => $tax['amount'],
-                            'real_base_amount'   => $tax['amount'],
-                            'taxable_item_type'  => $taxableItemType,
-                        ];
+                        foreach ($taxDetails as $taxDetailsCode => $taxByRate) {
+                            foreach ($taxByRate as $tax) {
+                                if ($taxDetailsCode !== $computedTaxesCode || $tax['rate'] != $computedTax['rate']) {
+                                    continue;
+                                }
 
-                        /** @var OrderTaxItem $orderTaxItem */
-                        $orderTaxItem = $this->orderTaxItemFactory->create();
-                        $orderTaxItem->setData($data);
-                        $orderTaxItemResource->save($orderTaxItem);
+                                $data = [
+                                    'item_id'            => $taxableItemType == 'product' ? $orderItem->getId() : null,
+                                    'tax_id'             => $orderTax->getId(),
+                                    'tax_percent'        => $tax['rate'],
+                                    'associated_item_id' => null,
+                                    'amount'             => $tax['amount'],
+                                    'base_amount'        => $tax['amount'],
+                                    'real_amount'        => $tax['amount'],
+                                    'real_base_amount'   => $tax['amount'],
+                                    'taxable_item_type'  => $taxableItemType,
+                                ];
+
+                                /** @var OrderTaxItem $orderTaxItem */
+                                $orderTaxItem = $this->orderTaxItemFactory->create();
+                                $orderTaxItem->setData($data);
+                                $orderTaxItemResource->save($orderTaxItem);
+                            }
+                        }
                     }
                 }
             }

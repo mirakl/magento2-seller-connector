@@ -136,21 +136,35 @@ class Order extends AbstractHelper
      * [
      *     'product' => [
      *         'sku_1' => [
-     *             'tax_code_1' => ['amount' => 7.20, 'rate' => 5.5],
-     *             'tax_code_2' => ['amount' => 2.08, 'rate' => 1.5],
+     *             'tax_code_1' => [
+     *                 '5.5' => ['amount' => 7.20, 'rate' => 5.5],
+     *             ],
+     *             'tax_code_2' => [
+     *                 '1.5' => ['amount' => 2.08, 'rate' => 1.5],
+     *             ],
      *         ],
      *         'sku_2' => [
-     *             'tax_code_1' => ['amount' => 3.81, 'rate' => 20],
-     *             'tax_code_2' => ['amount' => 0.87, 'rate' => 9.2],
-     *             'tax_code_3' => ['amount' => 0.19, 'rate' => 3.4],
+     *             'tax_code_1' => [
+     *                 '20' => ['amount' => 3.81, 'rate' => 20],
+     *             ],
+     *             'tax_code_2' => [
+     *                 '9.2' => ['amount' => 0.87, 'rate' => 9.2],
+     *             ],
+     *             'tax_code_3' => [
+     *                 '3.4' => ['amount' => 0.19, 'rate' => 3.4],
+     *             ],
      *         ],
      *     ],
      *     'shipping' => [
      *         'sku_1' => [
-     *             'tax_code_1' => ['amount' => 1.78, 'rate' => 8.9],
+     *             'tax_code_1' => [
+     *                 '8.9' => ['amount' => 1.78, 'rate' => 8.9],
+     *             ],
      *         ],
      *         'sku_2' => [
-     *             'tax_code_1' => ['amount' => 0.99, 'rate' => 0.67],
+     *             'tax_code_1' => [
+     *                 '0.67' => ['amount' => 0.99, 'rate' => 0.67],
+     *             ],
      *         ],
      *     ],
      * ]
@@ -174,23 +188,27 @@ class Order extends AbstractHelper
 
             /** @var \Mirakl\MMP\Common\Domain\Order\Tax\OrderTaxAmount $tax */
             foreach ($orderLine->getTaxes() as $tax) {
-                if (!isset($result['product'][$sku][$tax->getCode()])) {
-                    $result['product'][$sku][$tax->getCode()] = [
+                $code = $tax->getCode();
+                $rate = $tax->getRate();
+                if (!isset($result['product'][$sku][$code][(string) $rate])) {
+                    $result['product'][$sku][$code][(string) $rate] = [
                         'amount' => 0,
-                        'rate'   => $tax->getRate(),
+                        'rate'   => $rate,
                     ];
                 }
-                $result['product'][$sku][$tax->getCode()]['amount'] += $tax->getAmount();
+                $result['product'][$sku][$code][(string) $rate]['amount'] += $tax->getAmount();
             }
 
             foreach ($orderLine->getShippingTaxes() as $tax) {
-                if (!isset($result['shipping'][$sku][$tax->getCode()])) {
-                    $result['shipping'][$sku][$tax->getCode()] = [
+                $code = $tax->getCode();
+                $rate = $tax->getRate();
+                if (!isset($result['shipping'][$sku][$code][(string) $rate])) {
+                    $result['shipping'][$sku][$code][(string) $rate] = [
                         'amount' => 0,
-                        'rate'   => $tax->getRate(),
+                        'rate'   => $rate,
                     ];
                 }
-                $result['shipping'][$sku][$tax->getCode()]['amount'] += $tax->getAmount();
+                $result['shipping'][$sku][$code][(string) $rate]['amount'] += $tax->getAmount();
             }
         }
 
@@ -199,11 +217,18 @@ class Order extends AbstractHelper
 
     /**
      * Will return Mirakl order tax details like that:
+     *
      * <code>
      * [
-     *     'tax_code_1' => ['amount' => 13.78, 'rate' => 10],
-     *     'tax_code_2' => ['amount' => 2.95, 'rate' => 5.5],
-     *     'tax_code_3' => ['amount' => 0.19, 'rate' => 8.9],
+     *     'tax_code_1' => [
+     *         '10' => ['amount' => 13.78, 'rate' => 10],
+     *     ],
+     *     'tax_code_2' => [
+     *         '5.5' => ['amount' => 2.95, 'rate' => 5.5],
+     *     ],
+     *     'tax_code_3' => [
+     *         '8.9' => ['amount' => 0.19, 'rate' => 8.9],
+     *     ],
      * ]
      * </code>
      *
@@ -216,14 +241,16 @@ class Order extends AbstractHelper
 
         foreach ($this->getMiraklOrderTaxDetails($miraklOrder) as $orderLineTaxes) {
             foreach ($orderLineTaxes as $taxDetails) {
-                foreach ($taxDetails as $code => $tax) {
-                    if (!isset($result[$code])) {
-                        $result[$code] = [
-                            'amount' => 0,
-                            'rate'   => $tax['rate'] ?? 0,
-                        ];
+                foreach ($taxDetails as $code => $taxesByRate) {
+                    foreach ($taxesByRate as $rate => $tax) {
+                        if (!isset($result[$code][$rate])) {
+                            $result[$code][$rate] = [
+                                'amount' => 0,
+                                'rate'   => $tax['rate'] ?? 0,
+                            ];
+                        }
+                        $result[$code][$rate]['amount'] += $tax['amount'];
                     }
-                    $result[$code]['amount'] += $tax['amount'];
                 }
             }
         }
@@ -386,5 +413,18 @@ class Order extends AbstractHelper
             OrderStatus::RECEIVED,
             OrderStatus::CLOSED,
         ]);
+    }
+
+    /**
+     * @param   OrderModel  $order
+     * @return  string
+     */
+    public function getOrderLocale(OrderModel $order)
+    {
+        return $this->scopeConfig->getValue(
+            'general/locale/code',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $order->getStore()
+        );
     }
 }
