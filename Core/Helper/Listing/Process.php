@@ -186,7 +186,8 @@ class Process extends Data
     ) {
         /** @var Listing $listing */
         $listing = $this->listingFactory->create();
-        $this->listingResourceFactory->create()->load($listing, $listingId);
+        $listingResource = $this->listingResourceFactory->create();
+        $listingResource->load($listing, $listingId);
         $listing->validate();
 
         // Retrieve product ids associated with the listing and with offer import status set to NEW, SUCCESS, ERROR or DELETE
@@ -253,8 +254,9 @@ class Process extends Data
         $offerResource->markOffersAsPending($listing->getId(), $exportedProductIds, $result->getImportId());
 
         // Update listing last export date
+        $listingResource->load($listing, $listingId);  // Reload listing to get data updated during job execution
         $listing->setLastExportDate(date('Y-m-d H:i:s'));
-        $this->listingResourceFactory->create()->save($listing);
+        $listingResource->save($listing);
 
         // Create a tracking if needed
         if ($createTracking) {
@@ -281,7 +283,8 @@ class Process extends Data
         $createTracking = true
     ) {
         $listing = $this->listingFactory->create();
-        $this->listingResourceFactory->create()->load($listing, $listingId);
+        $listingResource = $this->listingResourceFactory->create();
+        $listingResource->load($listing, $listingId);
         $listing->validate();
 
         if ($productMode == Listing::PRODUCT_MODE_ALL) {
@@ -338,8 +341,9 @@ class Process extends Data
         $offerResource->markProductsAsPending($listing->getId(), $exportedProductIds, $result->getImportId());
 
         // Update listing last export date
+        $listingResource->load($listing, $listingId);  // Reload listing to get data updated during job execution
         $listing->setLastExportDate(date('Y-m-d H:i:s'));
-        $this->listingResourceFactory->create()->save($listing);
+        $listingResource->save($listing);
 
         // Create a tracking if needed
         if ($createTracking) {

@@ -127,6 +127,7 @@ class Process extends AbstractHelper
             }
         }
 
+        $connection = $this->getConnectionById($connectionId);  // Reload connection to get data updated during job execution
         $connection->setLastOrdersSynchronizationDate($now);
         $this->connectionResourceFactory->create()->save($connection);
 
